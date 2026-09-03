@@ -1,0 +1,88 @@
+services:
+  app:
+    image: ${APP_IMAGE_NAME:-booking_app_app}
+    build:
+      context: .
+      dockerfile: ./docker/server/Dockerfile
+      args:
+        user: ${USER}
+        uid: ${UID}
+    container_name: ${APP_CONTAINER_NAME}
+    ports:
+      - "${APP_PORT}:80"
+    working_dir: /var/www/html
+    volumes:
+      - ${PROJECT_PATH}:/var/www/html:cached
+      - ./docker/server/apache/sites-enabled:/etc/apache2/sites-enabled
+      - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
+      - ./docker/server/php/opcache.ini:/usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+    depends_on:
+      - db
+      - redis
+    networks:
+      - proxynet
+
+  queue:
+    image: ${APP_IMAGE_NAME:-booking_app_app}
+    container_name: ${QUEUE_CONTAINER_NAME}
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=1 --tries=3 --timeout=90
+    working_dir: /var/www/html
+    volumes:
+      - ${PROJECT_PATH}:/var/www/html:cached
+    depends_on:
+      - db
+      - redis
+    networks:
+      - proxynet
+
+  db:
+    image: mysql:8.0
+    container_name: ${DB_CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - proxynet
+
+  adminer:
+    image: adminer
+    container_name: ${ADMINER_CONTAINER_NAME}
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ADMINER_DESIGN: ${ADMINER_DESIGN}
+    ports:
+      - "${ADMINER_PORT}:8080"
+    networks:
+      - proxynet
+
+  redis:
+    image: redis:7-alpine
+    container_name: ${REDIS_CONTAINER_NAME}
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    name: ${NETWORK_NAME}
+
+volumes:
+  db_data:
+    name: ${DB_VOLUME_NAME}
+  redis_data:
+    name: ${REDIS_VOLUME_NAME}
