@@ -1,0 +1,51 @@
+erDiagram
+    LOCATIONS {
+        int id PK
+        date schedule_date UK "One entry per calendar date"
+        varchar location_name
+        varchar address
+        varchar landmark_note "Nullable"
+        time start_time
+        time end_time
+        decimal latitude
+        decimal longitude
+        varchar map_pin_note "Nullable"
+        varchar transit_note "Nullable"
+        boolean is_event
+        varchar event_name "Nullable, required if is_event = true"
+        enum status "scheduled | cancelled"
+        datetime created_at
+        datetime updated_at
+    }
+
+    MENU_ITEMS {
+        int id PK
+        varchar name
+        varchar slug UK
+        text description
+        int price_yen "Whole yen, positive"
+        varchar image_url
+        varchar image_alt_text
+        enum spice_level "mild | medium | hot | tangy"
+        enum category "2 values for v1"
+        enum badge_type "halal_standard | limited_batch | none"
+        varchar highlight_tag_1 "Nullable"
+        varchar highlight_tag_2 "Nullable"
+        boolean is_popular "Exactly one true at a time, enforced by MenuFeaturingService"
+        boolean is_sold_out
+        boolean is_active
+        int display_order
+        datetime created_at
+        datetime updated_at
+    }
+
+    USERS {
+        int id PK
+        varchar name
+        varchar email UK
+        timestamp email_verified_at "Nullable"
+        varchar password
+        varchar remember_token "Nullable"
+        datetime created_at
+        datetime updated_at
+    }
