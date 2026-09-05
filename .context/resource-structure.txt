@@ -1,0 +1,56 @@
+resources/
+├── css/
+│   └── app.css                      # Tailwind v4 @theme tokens (unchanged)
+├── views/
+│   └── app.blade.php                # Inertia root (unchanged)
+└── js/
+    ├── app.js                       # Inertia + Ziggy bootstrap (unchanged)
+    │
+    ├── Pages/                       # Route-mapped, one file per URL (Inertia convention)
+    │   ├── Public/
+    │   │   └── Home.vue             # The single public page — thin composition of sections
+    │   │                           #   (replaces today's monolithic Welcome.vue)
+    │   ├── Admin/
+    │   │   ├── Dashboard.vue        # /admin  — empty landing shell
+    │   │   ├── Accounts/
+    │   │   │   ├── Index.vue        # /admin/accounts  — list admins
+    │   │   │   └── Form.vue         # create/edit admin (reused)
+    │   │   ├── Locations/
+    │   │   │   ├── Index.vue        # /admin/locations — calendar-style list
+    │   │   │   └── Form.vue         # create/edit/cancel a Location Entry
+    │   │   └── Menu/
+    │   │       ├── Index.vue        # /admin/menu — table w/ reorder, feature, toggles
+    │   │       └── Form.vue         # create/edit a Menu Item
+    │   │
+    │   ├── Auth/                    # Breeze (existing — keep as-is)
+    │   └── Profile/                 # Breeze profile (existing — change password lives here)
+    │
+    ├── Layouts/
+    │   ├── PublicLayout.vue         # public nav + footer + <slot/> (exists)
+    │   ├── AdminLayout.vue          # NEW plain unbranded admin shell (PRD §6.3)
+    │   ├── GuestLayout.vue          # Breeze (existing)
+    │   └── AuthenticatedLayout.vue  # Breeze (can be replaced by / aliased to AdminLayout)
+    │
+    └── Components/
+        ├── Public/                  # PRD §6.2 section components (one per approved section)
+        │   ├── Navigation.vue       # extracted from PublicLayout  (§1)
+        │   ├── Hero.vue             # static copy + dynamic popular item & event pill (§2)
+        │   ├── LocationSchedule.vue # data-driven: scheduled vs rest-day (§3)
+        │   ├── MenuGallery.vue      # v-for over active items, display_order (§4)
+        │   ├── MenuCard.vue         # single item card — reused by MenuGallery + Hero
+        │   ├── AboutStory.vue       # static (§5)
+        │   ├── AllergenInfo.vue     # static (§6)
+        │   ├── Faq.vue              # accordion container (§7)
+        │   ├── FaqItem.vue          # accordion item — reused by Faq
+        │   └── Footer.vue           # extracted from PublicLayout  (§8)
+        │
+        ├── Admin/                   # small reusable admin bits (unbranded utility UI)
+        │   ├── StatusBadge.vue      # scheduled/cancelled, active/sold-out/limited badges
+        │   └── (any admin-only form/table helpers as they emerge)
+        │
+        └── ui/                      # shared low-level controls (existing Breeze primitives +
+                                     #   any new generic ones, e.g. MapEmbed)
+            ├── PrimaryButton.vue    # (Breeze — existing)
+            ├── TextInput.vue        # (Breeze — existing)
+            ├── ...                  # other Breeze primitives stay here
+            └── MapEmbed.vue         # reusable map iframe from lat/long (used by LocationSchedule)

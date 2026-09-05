@@ -3,30 +3,42 @@
 **Source docs:** `prd.md` (Sprint Plan §12), `ddd.md`, `erd.mermaid`, `readiness-assessment.md`
 **Approach:** Vertical slices per the PRD — each sprint delivers a complete, demoable feature (DB → backend → admin UI → public UI). Work proceeds in order below; each sprint ends with tests passing and a demoable outcome.
 
+> ## ⭐ MASTER TEMPLATE — `resources/js/Pages/Welcome.vue`
+>
+> `Welcome.vue` has been **modified and now contains every element/section of the public page** that will later be separated into individual components (Nav, Hero, Location, Menu, About, Allergen, FAQ, Footer).
+>
+> **It is the initial design / master template for the public page.** Any task in this plan that touches the public page MUST keep this `Welcome.vue` layout as the master reference:
+>
+> - Componentization (Sprint 1 §1.4, Sprint 2 §2.5, Sprint 3) extracts markup **from** `Welcome.vue` **into** components without redesigning the layout — components must faithfully reproduce this layout's structure, copy, classes, and states.
+> - Do not redesign, restructure, or discard this layout.
+> - **Only minor changes are allowed**, and only after the user has reviewed the result (per user direction: "i will allow minor changes after i see the result").
+
 ---
 
 ## Sprint 0 — Foundation (complete the scaffold)
 
-> Goal: Deployable, single-admin skeleton. Logged-out visitor sees the public shell; owner can log in and see an empty admin dashboard.
+> Goal: Deployable skeleton with no public sign-up. Logged-out visitor sees the public shell; the owner logs in with seeded default credentials, can change their password / update profile / add accounts from inside the admin dashboard, and sees an empty admin dashboard.
 
-### 0.1 Restrict to a single admin (no public sign-up)
+### 0.1 Bootstrap accounts from inside the admin area (no public sign-up)
 
-- Remove/guard the `register` GET/POST routes in `routes/auth.php`.
-- Remove the registration link from `GuestLayout.vue` (Breeze shows a "Register" link on Login).
-- Optionally delete `Register.vue`, `RegisteredUserController.php`, and the `RegistrationTest.php` (or repurpose).
-- Keep `User` as the admin identity — no roles table needed (DDD §4.4).
+- **Remove** the public `register` GET/POST routes from `routes/auth.php`. A merely-unlinked route is still reachable by URL and would let anyone self-register as an admin — this removal is the security-critical step.
+- Remove the registration link from `GuestLayout.vue` (Breeze shows a "Register" link on the Login page).
+- **Re-expose account creation behind `auth`:** add an admin "Accounts" area (e.g. `/admin/accounts`) where a logged-in owner can create additional admin accounts. Repurpose `Register.vue` / a new form here.
+- Keep `User` as the single identity — still no roles table; every created account is full admin (DDD §4.4).
+- > **Note (scope expansion):** this deliberately extends the PRD's "single admin / only the owner has a login" into _multi-admin, single role_. Acceptable for an owner-plus-spare setup, but it's a conscious deviation from the written spec — if strict single-user is ever needed, drop the in-dashboard create action and keep only the seeded account.
 
-### 0.2 Seed a single admin account
+### 0.2 Seed the first admin with default credentials
 
-- Update `database/seeders/DatabaseSeeder.php` to create a deterministic admin (e.g. `admin@kitachilidogs.jp`) instead of / in addition to `Test User`. Never seed in production guardlessly — read from `.env` or a config value.
+- Because new accounts can only be created by an _existing_ admin, the first-run admin must come from the seeder: create a deterministic bootstrap account (e.g. `admin@kitachilidogs.jp`) with a default password read from `.env` / a config value (never hardcoded in a committed file).
+- Recommended: force (or strongly prompt) a password change on first login so the default credential doesn't linger (e.g. a `must_change_password` flag, or a clear "Change password" prompt after first login).
 
 ### 0.3 Build the `/admin` protected shell
 
 - Route group `Route::prefix('admin')->middleware(['auth','verified'])` in `routes/web.php` → `name('admin.')`.
 - Replace/repurpose the stock Breeze `/dashboard` with an `Admin/Dashboard` page (or add `/admin` rendering `Admin/Dashboard.vue`).
 - Add an `AdminLayout.vue` (reuse Breeze `AuthenticatedLayout.vue` or build a plain unbranded admin shell per PRD §6.3 — standard forms/tables, no editorial branding).
-- Add an admin nav with links to the (soon) Location & Menu areas.
-- **Outcome check:** owner logs in, lands on empty dashboard; public `/` shows the shell page.
+- Add an admin nav with links to the (soon) Location & Menu areas, plus owner-account controls: **Change password / Update profile** (Breeze `/profile` forms) and **Add account**.
+- **Outcome check:** owner logs in with the default credentials, can change password and update profile from inside the dashboard, and lands on an empty dashboard; public `/` shows the shell page.
 
 ---
 
@@ -208,5 +220,5 @@ flowchart LR
 - **DDD invariants live in models / domain services, not controllers** (DDD §6). Each slice ships its invariants with its migration.
 - **Admin UI language mirrors the Ubiquitous Language** (DDD §2): labels/toggles = "Location Entry/Stop", "Rest Day", "Event", "Menu Item", "Popular", "Sold Out", "Active".
 - **Keep the two core domains decoupled** — `LocationEntry` and `MenuItem` never reference each other; only the public presentation layer reads both (DDD §5).
-- **Commit `Welcome.vue` as the design reference**, do not delete until Sprint 3 composition is pixel-complete.
+- **`Welcome.vue` is the master template for the public page** (see the ⭐ note at the top of this plan). Every public-facing slice (Sprints 1–3) must preserve its layout and copy as the reference — extract into components without redesigning, and make only minor, review-approved changes. Never delete it or treat it as disposable scaffolding.
 - Run `composer run dev` / `npm run build` and `artisan test` at the end of every sprint to confirm the vertical slice is green.
