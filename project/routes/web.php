@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\ProfileController;
+use App\Models\LocationEntry;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -12,6 +14,7 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
+        'todayLocation' => LocationEntry::todayScheduled(),
     ]);
 });
 
@@ -26,6 +29,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('accounts', [AccountController::class, 'index'])->name('accounts.index');
     Route::post('accounts', [AccountController::class, 'store'])->name('accounts.store');
     Route::delete('accounts/{user}', [AccountController::class, 'destroy'])->name('accounts.destroy');
+
+    Route::get('locations', [LocationController::class, 'index'])->name('locations.index');
+    Route::post('locations', [LocationController::class, 'store'])->name('locations.store');
+    Route::patch('locations/{locationEntry}', [LocationController::class, 'update'])->name('locations.update');
+    Route::post('locations/{locationEntry}/cancel', [LocationController::class, 'cancel'])->name('locations.cancel');
 });
 
 Route::middleware('auth')->group(function () {

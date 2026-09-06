@@ -33,11 +33,15 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                                     Dashboard
                                 </NavLink>
+                                <NavLink :href="route('admin.locations.index')"
+                                    :active="route().current('admin.locations.*')">
+                                    Locations
+                                </NavLink>
                                 <NavLink :href="route('admin.accounts.index')"
                                     :active="route().current('admin.accounts.*')">
                                     Accounts
                                 </NavLink>
-                                <!-- Locations & Menu nav links will be added when their slices ship (Sprint 1 & 2). -->
+                                <!-- Menu nav link will be added when its slice ships (Sprint 2). -->
                             </div>
                         </div>
 
@@ -99,6 +103,10 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('admin.dashboard')"
                             :active="route().current('admin.dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('admin.locations.index')"
+                            :active="route().current('admin.locations.*')">
+                            Locations
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('admin.accounts.index')"
                             :active="route().current('admin.accounts.*')">
