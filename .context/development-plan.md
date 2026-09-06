@@ -70,12 +70,27 @@ Create `create_locations_table`. Columns per ERD, with invariants expressed at t
   - Expose a scoped/public query: "today's scheduled entry" = `schedule_date = today && status = scheduled`. Cancelled ⇒ treated as Rest Day (invariant #4).
 - Keep a non-default `$table` if naming it `Location`; consider naming the model `LocationEntry` to match the DDD aggregate while `$table = 'locations'`.
 
-### 1.3 Admin — Location CRUD
+### 1.3 Admin — Location CRUD (agreed UX)
 
-- `LocationController` with index/create/store/edit/update (and a `cancel` action rather than delete, to preserve history per DDD §4.1 status lifecycle). Keep delete optional/soft via status.
+> **UI library decision:** **PrimeVue v4** in the admin area only, using the **`Calendar` inline month view** (no other PrimeVue views). The **public site stays pure Tailwind — no PrimeVue.**
+
+**Interaction — single `/admin/locations` page:**
+
+- **Layout:** an inline **month calendar** + a persistent **inline form** that is **disabled/greyed by default**. The form only becomes editable when a date is selected on the calendar.
+- **Calendar markers:** every date with an **active scheduled entry** is marked (event or routine). Distinguish routine stop vs. event visually (e.g. routine = solid marker; event = distinct accent/icon). **Blank = no active stop = holiday.** **Cancelled** entries shown dimmed/struck (history only).
+- **Clicking a date:**
+  - future/empty → form **enables**, `schedule_date` pre-filled, **add** mode;
+  - future/today marked → form **enables + pre-fills**, **edit** mode;
+  - **past date → read-only / not editable** (owner plans forward).
+- **Save** → returns to the same calendar view; the clicked date now shows its marker.
+- Marker cell rendering via PrimeVue `Calendar` `#date` slot; selected date drives `v-model` for the form.
+
+**Controller/routes:**
+
+- `LocationController` with index/create/store/edit/update, plus a **`cancel`** action (sets `status = cancelled`, preserves history — no hard delete, per DDD §4.1 lifecycle).
 - A `LocationRequest` Form Request enforcing the invariants (duplicate `schedule_date`, time ordering, event-name rule).
-- Pages under `resources/js/Pages/Admin/Locations/` — a calendar/date-picker index plus a create/edit form. Filterable by status (scheduled/cancelled) for the owner's history view.
-- Calendar edge cases (Sprint 4 handles polish): duplicate-date prevention, past-date handling.
+- Pages under `resources/js/Pages/Admin/Locations/` — `Index.vue` (inline PrimeVue month calendar + disabled inline form) and the form fields handled on the same page. Filterable by status (scheduled/cancelled) for the owner's history view.
+- Calendar edge cases (Sprint 4 handles polish): duplicate-date prevention, past-date read-only.
 
 ### 1.4 Public — data-driven `LocationSchedule.vue`
 
@@ -221,4 +236,5 @@ flowchart LR
 - **Admin UI language mirrors the Ubiquitous Language** (DDD §2): labels/toggles = "Location Entry/Stop", "Rest Day", "Event", "Menu Item", "Popular", "Sold Out", "Active".
 - **Keep the two core domains decoupled** — `LocationEntry` and `MenuItem` never reference each other; only the public presentation layer reads both (DDD §5).
 - **`Welcome.vue` is the master template for the public page** (see the ⭐ note at the top of this plan). Every public-facing slice (Sprints 1–3) must preserve its layout and copy as the reference — extract into components without redesigning, and make only minor, review-approved changes. Never delete it or treat it as disposable scaffolding.
+- **PrimeVue v4 is admin-only.** Use PrimeVue only inside the admin area, and only the `Calendar` **inline month view** for Locations (Sprint 1). The public site must remain **pure Tailwind with no PrimeVue**.
 - Run `composer run dev` / `npm run build` and `artisan test` at the end of every sprint to confirm the vertical slice is green.
