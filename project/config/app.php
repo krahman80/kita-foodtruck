@@ -63,9 +63,11 @@ return [
     | will be used by the PHP date and date-time functions. The timezone
     | is set to "UTC" by default as it is suitable for most use cases.
     |
+    | The truck operates in Sapporo, so "today" (e.g. the public rest-day
+    | query) must be resolved in Asia/Tokyo.
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Tokyo'),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,5 +1,17 @@
 <script setup>
 import PublicLayout from '@/Layouts/PublicLayout.vue';
+import LocationSchedule from '@/Components/Public/LocationSchedule.vue';
+
+defineProps({
+    todayLocation: {
+        type: Object,
+        default: null,
+    },
+    nextLocation: {
+        type: Object,
+        default: null,
+    },
+});
 </script>
 
 <template>
@@ -127,185 +139,9 @@ import PublicLayout from '@/Layouts/PublicLayout.vue';
         </section>
 
         <!-- ==========================================
-           SECTION 3: LOCATION
-           Current location, today's open/close time, embedded map.
-           Exact format: "Sat, Sep 6 — Today we'll be at [Location], from 11:00 to 15:00"
-           Includes calm holiday/closed toggle state.
+           SECTION 3: LOCATION (data-driven component)
            ========================================== -->
-        <section id="location-schedule" class="py-12 md:py-16 bg-warm-white">
-            <div class="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Heading -->
-                <div class="max-w-3xl mb-10">
-                    <span class="text-xs font-bold tracking-widest text-truck-orange uppercase">
-                        Schedule &amp; Tracking
-                    </span>
-                    <h2 class="font-heading text-3xl sm:text-4xl font-bold text-charcoal-brown mt-1.5">
-                        Today's Truck Location
-                    </h2>
-                    <p class="text-base text-charcoal-brown/75 mt-2">
-                        Our bright orange step van navigates central Sapporo parks and plazas Wednesday through Sunday.
-                    </p>
-
-                    <!-- State Toggle (Active Service vs Calm Holiday View) -->
-                    <div
-                        class="mt-4 inline-flex items-center p-1 rounded-xl bg-tan-subtle border border-toasted-tan/30 text-xs font-medium">
-                        <button id="toggle-schedule-open" type="button"
-                            class="px-3.5 py-1.5 rounded-lg bg-warm-white text-charcoal-brown font-semibold shadow-2xs border border-toasted-tan/20 transition-all">
-                            Today's Live Stop (Open)
-                        </button>
-                        <button id="toggle-schedule-holiday" type="button"
-                            class="px-3.5 py-1.5 rounded-lg text-charcoal-brown/70 hover:text-charcoal-brown transition-all">
-                            Simulate Holiday / Closed State
-                        </button>
-                    </div>
-                </div>
-
-                <!-- STATE A: NORMAL OPEN SERVICE STATE (Active by default) -->
-                <div id="location-state-open" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-
-                    <!-- Information Column (5 cols) -->
-                    <div class="lg:col-span-5 space-y-6">
-
-                        <!-- Required Format Headline Callout Box -->
-                        <div class="p-6 rounded-2xl bg-tan-subtle border border-toasted-tan/30 shadow-2xs">
-                            <div
-                                class="flex items-center gap-2 text-xs font-bold text-truck-orange uppercase tracking-wider mb-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-truck-orange animate-ping"></span>
-                                Live Service Status
-                            </div>
-
-                            <!-- Exact Format specified by user -->
-                            <p id="today-schedule-text"
-                                class="font-heading text-xl sm:text-2xl font-bold text-charcoal-brown leading-snug">
-                                Sat, Sep 6 — Today we'll be at Odori Park (West 6-Chome, by the Fountain), from 11:00 to
-                                15:00
-                            </p>
-
-                            <div
-                                class="mt-4 pt-4 border-t border-toasted-tan/25 flex items-center justify-between text-xs text-charcoal-brown/80">
-                                <span>Fresh batches prepared every 45 mins</span>
-                                <span class="font-semibold text-truck-orange">Open Now</span>
-                            </div>
-                        </div>
-
-                        <!-- Location Particulars List -->
-                        <div class="space-y-3.5 text-sm text-charcoal-brown/85">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-6 h-6 rounded-lg bg-warm-white border border-toasted-tan/30 flex items-center justify-center shrink-0 text-truck-orange mt-0.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        stroke-width="2">
-                                        <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <strong class="font-semibold text-charcoal-brown">Spot Details:</strong>
-                                    <p class="text-charcoal-brown/75">Odori Nishi 6-Chome, Chuo Ward, Sapporo 060-0042
-                                        (Right beside the
-                                        granite water fountain and flower beds).</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-6 h-6 rounded-lg bg-warm-white border border-toasted-tan/30 flex items-center justify-center shrink-0 text-truck-orange mt-0.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        stroke-width="2">
-                                        <rect x="2" y="5" width="20" height="14" rx="2" />
-                                        <line x1="2" y1="10" x2="22" y2="10" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <strong class="font-semibold text-charcoal-brown">Accepted Payments:</strong>
-                                    <p class="text-charcoal-brown/75">Cash (JPY ¥), PayPay, Suica/Kitaca Transit IC,
-                                        credit cards
-                                        (Visa/Mastercard contactless).</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-6 h-6 rounded-lg bg-warm-white border border-toasted-tan/30 flex items-center justify-center shrink-0 text-truck-orange mt-0.5">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polyline points="12 6 12 12 16 14" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <strong class="font-semibold text-charcoal-brown">Transit Access:</strong>
-                                    <p class="text-charcoal-brown/75">1 minute walk from Odori Subway Station (Exit 1 or
-                                        2,
-                                        Namboku/Tozai Line).</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-1">
-                            <a id="directions-external-btn" href="https://maps.google.com/?q=Odori+Park+Sapporo"
-                                target="_blank" rel="noopener noreferrer"
-                                class="inline-flex items-center gap-2 text-sm font-semibold text-truck-orange hover:text-cheddar-yellow transition-colors">
-                                <span>Open in Google Maps Application</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Map Column (7 cols) -->
-                    <div class="lg:col-span-7">
-                        <div id="location-map-wrapper"
-                            class="w-full rounded-2xl overflow-hidden border border-toasted-tan/35 shadow-xs bg-tan-subtle h-[340px] sm:h-[420px] relative">
-                            <!-- Embedded Google Map of Odori Park Sapporo -->
-                            <iframe id="odori-park-map" title="Odori Park Sapporo Food Truck Location Map"
-                                src="https://maps.google.com/maps?q=Odori+Park,+Sapporo,+Hokkaido,+Japan&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                                class="w-full h-full border-0" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            <div
-                                class="absolute bottom-3 left-3 bg-warm-white/90 backdrop-blur-xs text-xs font-semibold px-3 py-1.5 rounded-lg border border-toasted-tan/30 text-charcoal-brown shadow-xs">
-                                📍 Orange Van parked under tree canopy, Odori West 6
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- STATE B: CALM HOLIDAY / CLOSED MESSAGE (No map, no time) -->
-                <div id="location-state-holiday"
-                    class="hidden p-10 sm:p-14 rounded-2xl bg-tan-subtle border border-toasted-tan/35 text-center max-w-3xl mx-auto">
-                    <div
-                        class="w-12 h-12 mx-auto rounded-full bg-warm-white border border-toasted-tan/30 flex items-center justify-center text-truck-orange mb-4 shadow-2xs">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                    </div>
-                    <h3 class="font-heading text-2xl sm:text-3xl font-bold text-charcoal-brown">
-                        The Truck is Resting Today
-                    </h3>
-                    <p class="text-base text-charcoal-brown/80 mt-3 leading-relaxed max-w-xl mx-auto">
-                        Our kitchen crew is slow-simmering fresh batches of beef chili and sourcing local Hokkaido buns
-                        for our
-                        upcoming stops. No active street service is scheduled for today.
-                    </p>
-                    <div
-                        class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-warm-white border border-toasted-tan/30 text-sm font-medium text-charcoal-brown">
-                        <span>Next Service:</span>
-                        <strong class="font-semibold text-truck-orange">Tuesday, Sep 9 at Sapporo Station North
-                            Plaza</strong>
-                    </div>
-                </div>
-
-            </div>
-        </section>
+        <LocationSchedule :location="todayLocation" :next-location="nextLocation" />
 
         <!-- ==========================================
            SECTION 4: FULL MENU WITH PRICES

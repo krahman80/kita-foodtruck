@@ -15,6 +15,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
         'todayLocation' => LocationEntry::todayScheduled(),
+        'nextLocation' => LocationEntry::nextScheduled(),
     ]);
 });
 

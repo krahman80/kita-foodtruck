@@ -12,7 +12,7 @@
 
 A single-page public website for a halal chili dog food truck operating in Sapporo, Japan, paired with a lightweight admin panel for managing the two pieces of information that change regularly: **daily truck location/schedule** and **menu items**. Everything else on the site is static content maintained directly in code.
 
-The public site's purpose is to answer the two questions a hungry visitor has first: *"Where is the truck today?"* and *"What can I order, and how much does it cost?"* — while also building trust (halal sourcing, allergen info, story) and driving social follow.
+The public site's purpose is to answer the two questions a hungry visitor has first: _"Where is the truck today?"_ and _"What can I order, and how much does it cost?"_ — while also building trust (halal sourcing, allergen info, story) and driving social follow.
 
 ---
 
@@ -32,7 +32,6 @@ The public site's purpose is to answer the two questions a hungry visitor has fi
 - Multi-language support (English only; prices in JPY)
 - Analytics/tracking (explicitly excluded for v1)
 - Real-time "open now / closed" status logic tied to current time
-- "Next stop" lookahead — only today's status is ever shown, never future dates, on the public site
 - Halal certification detail section (kept out for now; halal status is communicated via simple badges/copy instead)
 - Multiple daily stops (only one location entry per calendar date)
 - Public user accounts / registration (only the owner has a login)
@@ -41,25 +40,25 @@ The public site's purpose is to answer the two questions a hungry visitor has fi
 
 ## 4. Target Users
 
-| User | Description | Needs |
-|---|---|---|
-| **Customer (public visitor)** | Local resident, tourist, or event-goer in Sapporo looking for halal food | Fast answer to "where" and "what/how much," reassurance on halal/allergens |
-| **Owner/Admin** | Single operator managing the truck | Simple, low-friction way to update today's location and occasionally edit the menu |
+| User                          | Description                                                              | Needs                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| **Customer (public visitor)** | Local resident, tourist, or event-goer in Sapporo looking for halal food | Fast answer to "where" and "what/how much," reassurance on halal/allergens         |
+| **Owner/Admin**               | Single operator managing the truck                                       | Simple, low-friction way to update today's location and occasionally edit the menu |
 
 ---
 
 ## 5. Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Backend framework | Laravel 12 (PHP ^8.2) |
-| Frontend bridge | Inertia.js v2 (`inertiajs/inertia-laravel`, `@inertiajs/vue3`) |
-| Frontend framework | Vue 3 |
-| Styling | Tailwind CSS v4 (`@tailwindcss/vite`), custom `@theme` oklch color tokens |
-| Build tool | Vite 7 |
-| Auth (admin only) | Laravel Breeze (session-based), Laravel Sanctum present but not actively used for token/API auth in v1 |
-| Testing | PHPUnit, Mockery |
-| Dev tooling | Laravel Pail (logs), Laravel Pint (formatting), Laravel Sail (optional local env) |
+| Layer              | Technology                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| Backend framework  | Laravel 12 (PHP ^8.2)                                                                                  |
+| Frontend bridge    | Inertia.js v2 (`inertiajs/inertia-laravel`, `@inertiajs/vue3`)                                         |
+| Frontend framework | Vue 3                                                                                                  |
+| Styling            | Tailwind CSS v4 (`@tailwindcss/vite`), custom `@theme` oklch color tokens                              |
+| Build tool         | Vite 7                                                                                                 |
+| Auth (admin only)  | Laravel Breeze (session-based), Laravel Sanctum present but not actively used for token/API auth in v1 |
+| Testing            | PHPUnit, Mockery                                                                                       |
+| Dev tooling        | Laravel Pail (logs), Laravel Pint (formatting), Laravel Sail (optional local env)                      |
 
 **Architecture decision:** Single Laravel/Inertia application. No separate API, no separate admin app, no CORS setup required. Route-based separation between public and admin areas within the same codebase.
 
@@ -103,25 +102,30 @@ Dynamic sections (Hero's popular item, Location, Menu) receive data as props pas
 ## 7. Functional Requirements by Section
 
 ### 7.1 Navigation (static)
+
 - Logo left, nav links right (desktop).
 - Collapses into a hamburger menu on small viewports; opens a mobile drawer.
 - Links scroll to in-page sections: Location, Menu, Story, Allergens, FAQ.
 - Primary CTA button ("Find Truck Today") links to the Location section.
 
 ### 7.2 Hero (partially dynamic)
+
 - Displays the current **most popular menu item** (pulled from Menu data — see 8.2).
 - Displays an **upcoming event pill**, if a scheduled calendar entry is flagged as an event.
 - Static headline, subheadline, and primary/secondary CTA buttons.
 
 ### 7.3 Location Schedule (dynamic)
+
 - **If today has a calendar entry:**
   Display exact format: **"[Day], [Month] [Date] — Today we'll be at [Location] ([landmark note, if any]), from [start time] to [end time]"**
   Includes: address detail, transit note, embedded map (via lat/long), map pin caption.
-- **If today has no calendar entry:**
+- **If today has no calendar entry (Rest Day):**
   Display a calm holiday/closed message. No map, no time shown.
-- No real-time open/closed calculation, no display of future/past dates — only today's state, binary (scheduled vs. not).
+  Include a **"Next Service:"** note naming the date and location of the nearest future scheduled stop, so returning visitors know when the truck is back. If there is no future stop, the note is omitted.
+- No real-time open/closed calculation. Today's state is binary (scheduled vs. rest). On a rest day, the only future-date shown is the single "Next Service" lookahead to the nearest scheduled stop; no other future/past dates are displayed.
 
 ### 7.4 Full Menu with Prices (dynamic)
+
 - Grid/gallery of menu item cards.
 - Each card displays: image, name, price (¥, whole yen, tax inclusive), spice level indicator, short description, two highlight tags, and a badge (standard halal badge or limited-batch badge).
 - Sold-out items marked but not removed from display (admin toggle).
@@ -129,17 +133,21 @@ Dynamic sections (Hero's popular item, Location, Menu) receive data as props pas
 - Manual display order controlled by admin.
 
 ### 7.5 About / Story (static)
+
 - Owner photo alongside narrative text about why the truck exists and its halal sourcing philosophy.
 
 ### 7.6 Allergen & Dietary Info (static for v1)
+
 - Plain-language paragraph(s) covering halal sourcing and common allergens (dairy, gluten, nuts).
 - Not tied to per-item data in v1 (see Open Decisions re: optional relational allergen model for later).
 
 ### 7.7 FAQ (static)
+
 - Minimum required questions: where to buy/find the truck, what ingredients are used.
 - Accordion interaction — one open at a time.
 
 ### 7.8 Footer (static)
+
 - Three columns: (1) Truck identity + short description, (2) Contact info (email, phone, mobile base area), (3) Social/Follow Us (Instagram, TikTok).
 - Bottom bar: copyright line.
 
@@ -150,16 +158,19 @@ Dynamic sections (Hero's popular item, Location, Menu) receive data as props pas
 Only two entities require persistence and admin management. Full column-level schema is documented separately (`database-structure.md`).
 
 ### 8.1 `locations`
+
 One row per calendar date. Fields include: date, location name, address, landmark note, start/end time, latitude/longitude, map pin note, transit note, event flag + event name, status (scheduled/cancelled).
 
 **Admin interaction:** Admin adds one entry per date via a calendar-style interface in `/admin/locations`.
 
 ### 8.2 `menu_items`
+
 One row per menu item. Fields include: name, slug, description, price (¥), image, alt text, spice level, category (two categories for v1), badge type, two highlight tags, popular flag (manual admin toggle), sold-out flag, active flag, display order.
 
 **Admin interaction:** Admin adds/edits items via `/admin/menu`. Expected to change infrequently (roughly annually, occasional additions).
 
 ### 8.3 `allergens` + `menu_item_allergens` — Not Adopted for v1
+
 A relational model for per-item allergen tagging was proposed but is **not** used for v1. Allergen info remains static paragraph text (Section 7.6). May be revisited post-launch if per-item tagging becomes necessary.
 
 ---
@@ -191,6 +202,7 @@ A relational model for per-item allergen tagging was proposed but is **not** use
 - **`MenuCard.vue` / `FaqItem.vue`:** Built as **separate, reusable components**, rendered via `v-for` from their parent section (`MenuGallery.vue`, `Faq.vue`). Chosen over inlining for isolated props/state per item, easier testing, and reuse potential (e.g., Hero's popular-item display can reuse `MenuCard.vue`).
 - **Admin panel styling:** Plain, **unbranded utility UI** (standard forms/tables, default Breeze-style scaffolding) — does not need to match the public site's editorial design system.
 - **Seasonal operation:** **No off-season.** Truck operates year-round; the calendar simply has no entry on days it doesn't run, which already triggers the standard holiday/closed state (Section 7.3). No separate seasonal-closure notice needed.
+- **Next-stop lookahead:** On a Rest Day, the public Location section shows a single "Next Service" note with the date and location of the nearest future scheduled stop (owner-added via the calendar). Previously listed as a v1 non-goal; now **included** (see Section 7.3).
 
 ---
 
@@ -199,6 +211,7 @@ A relational model for per-item allergen tagging was proposed but is **not** use
 Each sprint delivers a complete, end-to-end vertical slice — database → backend → admin UI → public UI — for one feature area, rather than building horizontally across the whole app layer by layer. This means functionality is demoable and testable at the end of every sprint, not just at final integration.
 
 ### Sprint 0 — Foundation
+
 - Confirm Laravel + Inertia + Vue 3 + Tailwind v4 scaffold runs end-to-end (`composer run dev`)
 - Breeze installed, single admin account seeded, public registration disabled/hidden
 - Base route structure: `/`, `/login`, `/admin` (protected shell, no features yet)
@@ -208,6 +221,7 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 **Outcome:** Deployable skeleton — logged-out visitor sees an empty shell page; admin can log in and see an empty dashboard.
 
 ### Sprint 1 — Location Vertical Slice
+
 - `locations` migration + Eloquent model
 - Admin: `/admin/locations` — calendar-style CRUD (add/edit/cancel a date entry: location name, address, landmark note, start/end time, lat/long, map pin note, transit note, event flag + name)
 - Public: `LocationSchedule.vue` — today's-entry vs. holiday state, exact copy format, embedded map
@@ -216,6 +230,7 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 **Outcome:** Owner can log in, add today's stop, and see it reflected live on the public site — fully working feature, independent of Menu.
 
 ### Sprint 2 — Menu Vertical Slice
+
 - `menu_items` migration + Eloquent model
 - Admin: `/admin/menu` — CRUD for menu items (name, description, price, image, spice level, category [2 categories], badge type, highlight tags, `is_popular` toggle, `is_sold_out` toggle, `is_active` toggle, display order)
 - Public: `MenuGallery.vue` rendering `MenuCard.vue` per item (separate reusable component, per earlier decision)
@@ -224,6 +239,7 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 **Outcome:** Owner can manage the full menu independently; public site reflects price/availability changes immediately.
 
 ### Sprint 3 — Static Content Sections
+
 - `AboutStory.vue` (owner photo + story copy)
 - `AllergenInfo.vue` (static paragraph copy)
 - `Faq.vue` rendering `FaqItem.vue` (accordion, separate reusable component)
@@ -233,6 +249,7 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 **Outcome:** All 8 public sections are now complete and content-accurate; site is functionally full.
 
 ### Sprint 4 — Polish, QA & Launch
+
 - Mobile-first responsiveness pass across all sections
 - Image optimization/lazy-loading for Menu gallery and Hero
 - SEO basics: page title, meta description, local-search keywords
@@ -246,4 +263,5 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 ---
 
 ### Suggested Sprint Order Rationale
+
 Location ships before Menu because it's the single most time-sensitive, highest-value feature ("where is the truck today") — getting that vertical slice live first gives the owner immediate practical value even before the rest of the site is finished. Static content is deliberately sequenced last since it carries no backend risk and can flex around the two data-driven sprints if timeline pressure hits.

@@ -70,4 +70,16 @@ class LocationEntry extends Model
     {
         return static::query()->scheduledOn(Carbon::today())->first();
     }
+
+    /**
+     * The nearest future scheduled entry (used for the "Next Service" note on a Rest Day).
+     */
+    public static function nextScheduled(): ?self
+    {
+        return static::query()
+            ->where('status', self::STATUS_SCHEDULED)
+            ->whereDate('schedule_date', '>', Carbon::today())
+            ->orderBy('schedule_date')
+            ->first();
+    }
 }

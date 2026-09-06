@@ -95,14 +95,14 @@ Create `create_locations_table`. Columns per ERD, with invariants expressed at t
 ### 1.4 Public — data-driven `LocationSchedule.vue`
 
 - Extract the §3 markup out of `Welcome.vue` into `LocationSchedule.vue` driven by a `location` prop.
-- **Remove** the "Simulate Holiday / Closed" toggle and **remove** the future-date "Next Service" copy (out-of-scope, PRD §3).
+- **Remove** the "Simulate Holiday / Closed" toggle (prototype-only). The future-date "Next Service" copy is kept but made **data-driven** — it now shows the nearest future scheduled entry (see PRD §7.3, now in scope).
 - Two states from data:
   - **Scheduled today:** render exact copy `"[Day], [Month] [Date] — Today we'll be at [Location] ([landmark note]), from [start] to [end]"` + address, transit note, embedded map from lat/long, map pin caption.
-  - **Rest day** (no scheduled entry): calm holiday message, no map/time.
+  - **Rest day** (no scheduled entry): calm holiday message, no map/time, plus a **Next Service** note naming the next scheduled stop (hidden if none).
 
 ### 1.5 Controller wiring — public `/`
 
-- In the `/` route (or a `PublicController`), query `LocationEntry` for today's scheduled entry and pass as an Inertia prop `todayLocation` (or `null`).
+- In the `/` route (or a `PublicController`), query `LocationEntry` for today's scheduled entry and pass as an Inertia prop `todayLocation` (or `null`); also query the nearest future scheduled entry and pass it as `nextLocation` for the Rest Day "Next Service" note.
 - **Outcome check:** owner adds a stop for today in admin → public Location section reflects it; remove it/cancel → holiday state.
 
 ---

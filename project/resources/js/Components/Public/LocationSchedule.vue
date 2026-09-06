@@ -6,6 +6,10 @@ const props = defineProps({
         type: Object,
         default: null,
     },
+    nextLocation: {
+        type: Object,
+        default: null,
+    },
 });
 
 const open = computed(() => Boolean(props.location));
@@ -23,6 +27,13 @@ const headline = computed(() => {
     const loc = props.location;
     if (!loc) return '';
     return `${fmtDayMonth(loc.schedule_date)} — Today we'll be at ${loc.location_name}${landmark.value}, from ${hm(loc.start_time)} to ${hm(loc.end_time)}`;
+});
+
+const nextLabel = computed(() => {
+    const n = props.nextLocation;
+    if (!n) return '';
+    const where = n.landmark_note ? `${n.location_name} (${n.landmark_note})` : n.location_name;
+    return `${fmtDayMonth(n.schedule_date)} at ${where}`;
 });
 
 const mapSrc = computed(() => {
@@ -141,6 +152,11 @@ const mapSrc = computed(() => {
                     Our kitchen crew is slow-simmering fresh batches of beef chili and sourcing local Hokkaido buns for
                     our upcoming stops. No active street service is scheduled for today.
                 </p>
+                <div v-if="nextLocation"
+                    class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-warm-white border border-toasted-tan/30 text-sm font-medium text-charcoal-brown">
+                    <span>Next Service:</span>
+                    <strong class="font-semibold text-truck-orange">{{ nextLabel }}</strong>
+                </div>
             </div>
 
         </div>
