@@ -28,6 +28,8 @@ function closeMobileMenu() {
 
   <Head :title="title">
     <meta name="description" :content="description" />
+    <meta name="keywords"
+      content="halal food truck Sapporo, halal chili dog, halal chili dogs, halal food Japan, chili dog food truck, halal street food Sapporo" />
     <meta property="og:title" :content="title" />
     <meta property="og:description" :content="description" />
     <meta property="og:type" content="website" />

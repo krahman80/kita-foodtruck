@@ -32,7 +32,8 @@ const badge = computed(() => {
     <article
         class="group relative flex min-h-[440px] flex-col justify-between overflow-hidden rounded-2xl border border-toasted-tan/30 p-6 shadow-sm transition-all duration-300 hover:border-truck-orange/50 hover:shadow-md sm:min-h-[480px] sm:p-7">
         <!-- Full-card background image -->
-        <img :src="item.image_url" :alt="item.image_alt_text" referrerpolicy="no-referrer"
+        <img :src="item.image_url" :alt="item.image_alt_text" loading="lazy" decoding="async"
+            referrerpolicy="no-referrer"
             class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" />
         <!-- Sold-out scrim overlay -->
         <div v-if="item.is_sold_out" class="absolute inset-0 bg-charcoal-brown/55"></div>

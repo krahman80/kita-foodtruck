@@ -39,7 +39,7 @@ class LocationRequest extends FormRequest
             'transit_note' => ['nullable', 'string', 'max:255'],
             'is_event' => ['sometimes', 'boolean'],
             // EventDetails invariant: event requires a name (DDD §4.1 invariant #3).
-            'event_name' => ['nullable', 'string', 'max:255', 'required_if:is_event,1'],
+            'event_name' => ['nullable', 'string', 'max:255', Rule::requiredIf($this->boolean('is_event'))],
         ];
     }
 }
