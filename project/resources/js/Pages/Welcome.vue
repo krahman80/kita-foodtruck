@@ -1,8 +1,9 @@
 <script setup>
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import LocationSchedule from '@/Components/Public/LocationSchedule.vue';
+import MenuGallery from '@/Components/Public/MenuGallery.vue';
 
-defineProps({
+const props = defineProps({
     todayLocation: {
         type: Object,
         default: null,
@@ -11,7 +12,29 @@ defineProps({
         type: Object,
         default: null,
     },
+    menuItems: {
+        type: Array,
+        default: () => [],
+    },
+    popularItem: {
+        type: Object,
+        default: null,
+    },
+    upcomingEvent: {
+        type: Object,
+        default: null,
+    },
 });
+
+const money = (n) => `¥${Number(n).toLocaleString('en-US')}`;
+
+const heroBadge = () => {
+    const p = props.popularItem;
+    if (!p) return '';
+    if (p.badge_type === 'limited_batch') return 'Limited Batch';
+    if (p.badge_type === 'none') return '';
+    return 'Halal Certified';
+};
 </script>
 
 <template>
@@ -45,11 +68,11 @@ defineProps({
                     <!-- Left Text Content Overlay (7 cols) -->
                     <div class="lg:col-span-7 flex flex-col items-start space-y-6">
 
-                        <!-- Upcoming Event Pill Overlay -->
-                        <div id="hero-event-pill"
+                        <!-- Upcoming Event Pill Overlay (data-driven) -->
+                        <div v-if="upcomingEvent" id="hero-event-pill"
                             class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-toasted-tan/30 bg-warm-white/10 backdrop-blur-md text-xs font-semibold text-warm-white shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-truck-orange animate-pulse"></span>
-                            <span>This weekend: Sapporo Autumn Food Festival — Odori Park Block 7</span>
+                            <span>{{ upcomingEvent.event_name }} — {{ upcomingEvent.location_name }}</span>
                         </div>
 
                         <!-- Headline Overlay -->
@@ -94,14 +117,12 @@ defineProps({
                     </div>
 
                     <!-- Right: Featured Popular Menu Item Showcase Card (5 cols) Overlaid on Hero -->
-                    <div class="lg:col-span-5">
+                    <div v-if="popularItem" class="lg:col-span-5">
                         <div id="hero-popular-card"
                             class="bg-warm-white/95 backdrop-blur-md rounded-2xl border border-toasted-tan/40 p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-truck-orange/50">
                             <div class="relative overflow-hidden rounded-xl aspect-[4/3] bg-tan-subtle">
-                                <img id="hero-popular-img"
-                                    src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=1000&q=80"
-                                    alt="The Signature Sapporo Halal Chili Dog served hot on toasted Hokkaido milk bread bun"
-                                    referrerpolicy="no-referrer"
+                                <img id="hero-popular-img" :src="popularItem.image_url"
+                                    :alt="popularItem.image_alt_text" referrerpolicy="no-referrer"
                                     class="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105" />
                                 <!-- Popular Tag -->
                                 <div
@@ -111,7 +132,7 @@ defineProps({
                                 <!-- Price Pill in Yen -->
                                 <div
                                     class="absolute bottom-3 right-3 bg-charcoal-brown/90 backdrop-blur-xs text-warm-white text-sm font-bold px-3 py-1 rounded-lg">
-                                    ¥950
+                                    {{ money(popularItem.price_yen) }}
                                 </div>
                             </div>
 
@@ -119,16 +140,15 @@ defineProps({
                             <div class="pt-4 pb-1">
                                 <div class="flex items-baseline justify-between">
                                     <h2 class="font-heading text-xl font-bold text-charcoal-brown">
-                                        The Sapporo Classic Chili Dog
+                                        {{ popularItem.name }}
                                     </h2>
-                                    <span class="text-xs font-semibold text-cheddar-yellow uppercase tracking-wider">
-                                        Halal Certified
+                                    <span v-if="heroBadge()"
+                                        class="text-xs font-semibold text-cheddar-yellow uppercase tracking-wider">
+                                        {{ heroBadge() }}
                                     </span>
                                 </div>
                                 <p class="mt-1.5 text-sm text-charcoal-brown/75 leading-relaxed">
-                                    Custom-spiced halal beef sausage, 12-hour simmered Texas-Hokkaido beef chili, sweet
-                                    diced onions,
-                                    and house mustard on toasted milk bread.
+                                    {{ popularItem.description }}
                                 </p>
                             </div>
                         </div>
@@ -144,330 +164,9 @@ defineProps({
         <LocationSchedule :location="todayLocation" :next-location="nextLocation" />
 
         <!-- ==========================================
-           SECTION 4: FULL MENU WITH PRICES
-           Image gallery, grid layout, consistent aspect ratios,
-           generous spacing, 6 explicit sample items with real names/prices in ¥
+           SECTION 4: FULL MENU WITH PRICES (data-driven component)
            ========================================== -->
-        <section id="full-menu" class="py-12 md:py-16 bg-warm-white">
-            <div class="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8">
-
-                <!-- Section Header -->
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                    <div>
-                        <span class="text-xs font-bold tracking-widest text-truck-orange uppercase">
-                            Handcrafted Daily
-                        </span>
-                        <h2 class="font-heading text-3xl sm:text-4xl font-bold text-charcoal-brown mt-1.5">
-                            Full Menu &amp; Prices
-                        </h2>
-                        <p class="text-base text-charcoal-brown/75 mt-2 max-w-2xl">
-                            Every sausage is certified 100% halal beef, topped with slow-reduced chili con carne and
-                            paired with
-                            toasted artisan milk buns. All prices in Japanese Yen (¥), tax inclusive.
-                        </p>
-                    </div>
-                    <div
-                        class="inline-flex items-center gap-2 self-start md:self-auto px-3.5 py-1.5 rounded-lg bg-tan-subtle border border-toasted-tan/30 text-xs font-medium text-charcoal-brown/80">
-                        <span class="w-2 h-2 rounded-full bg-cheddar-yellow"></span>
-                        <span>100% Halal Certified Kitchen</span>
-                    </div>
-                </div>
-
-                <!-- Menu Cards Grid (6 Explicit Items - Full Image Cards with Text Overlaid) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-9">
-
-                    <!-- Item 1: Sapporo Classic Chili Dog -->
-                    <article id="menu-item-1"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-truck-orange/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=1000&q=85"
-                            alt="The Sapporo Classic Chili Dog" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span
-                                class="bg-cheddar-yellow text-charcoal-brown text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                100% Halal
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥950
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay: Title, Spice, Description & Ingredients -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    The Sapporo Classic
-                                </h3>
-                                <span class="text-xs text-cheddar-yellow font-semibold shrink-0" title="Mild Spice">●
-                                    Mild</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                Signature halal beef frankfurter, 12-hour simmered Texas-Hokkaido beef chili, sweet
-                                diced onions, and
-                                stone-ground mustard on toasted Hokkaido milk bread.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Hokkaido Brioche Bun</span>
-                                <span>100% Halal Beef</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Item 2: Tokachi Cheddar Melt Chili Dog -->
-                    <article id="menu-item-2"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-truck-orange/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1627059174044-6725ea95d2c2?auto=format&fit=crop&w=1000&q=85"
-                            alt="Tokachi Cheddar Melt Chili Dog" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span
-                                class="bg-cheddar-yellow text-charcoal-brown text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                100% Halal
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥1,100
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    Tokachi Cheddar Melt
-                                </h3>
-                                <span class="text-xs text-cheddar-yellow font-semibold shrink-0" title="Medium Spice">●●
-                                    Medium</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                Halal beef sausage smothered in spicy beef chili, warm melted cheese sauce made with
-                                aged Tokachi
-                                dairy cheddar, pickled jalapeño coins, and crispy shallots.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Tokachi Dairy Cheddar</span>
-                                <span>Pickled Jalapeño</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Item 3: Yuzu-Pepper Slaw Chili Dog -->
-                    <article id="menu-item-3"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-truck-orange/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1541214113241-21578d2d9b62?auto=format&fit=crop&w=1000&q=85"
-                            alt="Yuzu-Pepper Slaw Chili Dog" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span
-                                class="bg-cheddar-yellow text-charcoal-brown text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                100% Halal
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥1,050
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    Yuzu-Kosho Slaw Dog
-                                </h3>
-                                <span class="text-xs text-cheddar-yellow font-semibold shrink-0" title="Tangy & Mild">●
-                                    Tangy</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                Crisp shredded Hokkaido green cabbage tossed in citrusy green yuzu kosho vinaigrette,
-                                layered over
-                                hearty halal chili and juicy beef frank. Refreshing contrast.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Fresh Cabbage Slaw</span>
-                                <span>Yuzu Citrus Zing</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Item 4: Habanero Fire Limited Special -->
-                    <article id="menu-item-4"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-chili-red/60 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1585238342024-78d387f4a707?auto=format&fit=crop&w=1000&q=85"
-                            alt="Habanero Fire Chili Dog" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span class="bg-chili-red text-warm-white text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                Limited Daily Batch
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥1,150
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    Habanero Fire Dog
-                                </h3>
-                                <span class="text-xs text-chili-red font-semibold shrink-0" title="Hot Spice Level">●●●
-                                    Spicy</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                For heat lovers: double-spiced halal chili infused with charred habanero peppers, smoked
-                                paprika
-                                cream, fresh cilantro, and toasted sesame seeds.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Charred Habanero</span>
-                                <span>Cool Cilantro Cream</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Item 5: Hokkaido Russet Fries -->
-                    <article id="menu-item-5"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-truck-orange/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=1000&q=85"
-                            alt="Crisp Hokkaido Russet Cut Fries" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span
-                                class="bg-cheddar-yellow text-charcoal-brown text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                Side
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥500
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    Kutchan Russet Fries
-                                </h3>
-                                <span class="text-xs text-warm-white/80 font-medium shrink-0">Vegetarian</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                Thick-cut Hokkaido Kutchan potato wedges double-fried to golden crispness, dusted with
-                                Okhotsk sea
-                                salt and smoked Spanish paprika. Served with garlic dip.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Hokkaido Kutchan Potatoes</span>
-                                <span>Okhotsk Sea Salt</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Item 6: House-Crafted Botanist Cola -->
-                    <article id="menu-item-6"
-                        class="group relative min-h-[440px] sm:min-h-[480px] rounded-2xl overflow-hidden border border-toasted-tan/30 shadow-sm hover:border-truck-orange/50 hover:shadow-md transition-all duration-300 flex flex-col justify-between p-6 sm:p-7">
-                        <!-- Full Card Background Image -->
-                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=1000&q=85"
-                            alt="House-Brewed Spiced Craft Botanist Cola" referrerpolicy="no-referrer"
-                            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" />
-                        <!-- Editorial Dark Scrim for Pristine Contrast -->
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-charcoal-brown/95 via-charcoal-brown/70 to-charcoal-brown/40 group-hover:from-charcoal-brown/98 group-hover:via-charcoal-brown/75 transition-colors duration-300">
-                        </div>
-
-                        <!-- Top Row Overlay: Badges & Price -->
-                        <div class="relative z-10 flex items-start justify-between gap-2">
-                            <span
-                                class="bg-cheddar-yellow text-charcoal-brown text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                                Drink
-                            </span>
-                            <span
-                                class="bg-warm-white/95 backdrop-blur-md text-charcoal-brown font-heading font-bold text-base px-3.5 py-1 rounded-lg border border-toasted-tan/30 shadow-sm">
-                                ¥450
-                            </span>
-                        </div>
-
-                        <!-- Bottom Content Overlay -->
-                        <div class="relative z-10 flex flex-col space-y-3 pt-12">
-                            <div class="flex items-baseline justify-between gap-2">
-                                <h3 class="font-heading text-2xl font-bold text-warm-white tracking-tight">
-                                    Spiced Botanist Cola
-                                </h3>
-                                <span class="text-xs text-warm-white/80 font-medium shrink-0">Non-Alcoholic</span>
-                            </div>
-                            <p class="text-sm text-warm-white/85 leading-relaxed">
-                                Brewed in small batches with cinnamon bark, clove, cardamom, fresh lemon peel, and pure
-                                Hokkaido beet
-                                sugar. Effervescent, herbal, and refreshing.
-                            </p>
-                            <div
-                                class="pt-3 border-t border-warm-white/20 flex items-center justify-between text-xs text-warm-white/70 font-medium">
-                                <span>Whole Spices &amp; Citrus</span>
-                                <span>Hokkaido Beet Sugar</span>
-                            </div>
-                        </div>
-                    </article>
-
-                </div>
-
-                <!-- Combo Notice Box -->
-                <div
-                    class="mt-12 p-5 sm:p-6 rounded-2xl bg-tan-subtle border border-toasted-tan/30 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-center sm:text-left">
-                        <span class="font-heading text-base font-bold text-charcoal-brown">Truck Combo Special:</span>
-                        <span class="text-sm text-charcoal-brown/80 ml-2">Add Kutchan Russet Fries &amp; Craft Cola to
-                            any dog for
-                            just <strong class="text-truck-orange font-bold">+¥700</strong></span>
-                    </div>
-                    <a id="menu-find-truck-btn" href="#location-schedule"
-                        class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-xs font-semibold text-warm-white bg-truck-orange hover:bg-cheddar-yellow hover:text-charcoal-brown transition-all shadow-2xs shrink-0">
-                        Order at the Window
-                    </a>
-                </div>
-
-            </div>
-        </section>
+        <MenuGallery :items="menuItems" />
 
         <!-- ==========================================
            SECTION 5: ABOUT / STORY

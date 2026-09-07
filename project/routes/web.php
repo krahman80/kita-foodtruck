@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\ProfileController;
 use App\Models\LocationEntry;
+use App\Models\MenuItem;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,6 +18,13 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
         'todayLocation' => LocationEntry::todayScheduled(),
         'nextLocation' => LocationEntry::nextScheduled(),
+        'menuItems' => MenuItem::publicMenu(),
+        'popularItem' => MenuItem::popularItem(),
+        'upcomingEvent' => LocationEntry::query()
+            ->where('is_event', true)
+            ->whereDate('schedule_date', '>=', now()->toDateString())
+            ->orderBy('schedule_date')
+            ->first(),
     ]);
 });
 
@@ -35,6 +44,13 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('locations', [LocationController::class, 'store'])->name('locations.store');
     Route::patch('locations/{locationEntry}', [LocationController::class, 'update'])->name('locations.update');
     Route::post('locations/{locationEntry}/cancel', [LocationController::class, 'cancel'])->name('locations.cancel');
+
+    Route::get('menu', [MenuItemController::class, 'index'])->name('menu.index');
+    Route::post('menu', [MenuItemController::class, 'store'])->name('menu.store');
+    Route::patch('menu/{menuItem}', [MenuItemController::class, 'update'])->name('menu.update');
+    Route::post('menu/{menuItem}/feature', [MenuItemController::class, 'feature'])->name('menu.feature');
+    Route::post('menu/{menuItem}/toggle-sold-out', [MenuItemController::class, 'toggleSoldOut'])->name('menu.toggle-sold-out');
+    Route::post('menu/{menuItem}/toggle-active', [MenuItemController::class, 'toggleActive'])->name('menu.toggle-active');
 });
 
 Route::middleware('auth')->group(function () {
