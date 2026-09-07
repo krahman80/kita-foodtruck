@@ -50,8 +50,7 @@ const heroBadge = () => {
             class="relative min-h-[580px] sm:min-h-[640px] lg:min-h-[680px] flex items-center overflow-hidden">
             <!-- Full Background Image with Calm Editorial Warmth Scrim -->
             <div class="absolute inset-0 z-0">
-                <img id="hero-bg-image"
-                    src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=2000&q=85"
+                <img id="hero-bg-image" :src="'/images/hero/hero-bg.jpg'"
                     alt="Artisan halal chili dogs slow-simmered and served on toasted Hokkaido milk bread buns"
                     referrerpolicy="no-referrer" class="w-full h-full object-cover object-center" />
                 <!-- Multi-stop warm editorial scrim overlay for high legibility and boutique warmth -->
@@ -181,8 +180,7 @@ const heroBadge = () => {
                     <div class="lg:col-span-5 order-2 lg:order-1">
                         <div id="owner-photo-container"
                             class="relative rounded-2xl overflow-hidden border border-toasted-tan/35 bg-tan-subtle shadow-sm group">
-                            <img id="owner-portrait-img"
-                                src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=900&q=80"
+                            <img id="owner-potrait-img" :src="'/images/about/owner-img.jpg'"
                                 alt="Kenji and Tariq, co-founders and chefs of Kita Halal Chili Dogs inside their Sapporo food truck kitchen"
                                 referrerpolicy="no-referrer"
                                 class="w-full aspect-[4/5] object-cover object-center group-hover:scale-102 transition-transform duration-500" />

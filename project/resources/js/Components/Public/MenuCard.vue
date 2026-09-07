@@ -34,7 +34,6 @@ const badge = computed(() => {
         <!-- Full-card background image -->
         <img :src="item.image_url" :alt="item.image_alt_text" referrerpolicy="no-referrer"
             class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105" />
-
         <!-- Sold-out scrim overlay -->
         <div v-if="item.is_sold_out" class="absolute inset-0 bg-charcoal-brown/55"></div>
 
