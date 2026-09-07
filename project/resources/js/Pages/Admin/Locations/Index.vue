@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import DatePicker from 'primevue/datepicker';
+import LocationPicker from '@/Components/LocationPicker.vue';
 import { computed, ref, watch } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 
@@ -116,6 +117,11 @@ const cancelStop = () => {
     if (!editingId.value) return;
     router.post(route('admin.locations.cancel', editingId.value), {}, { preserveScroll: true });
 };
+
+const onPickLocation = ({ lat, lng }) => {
+    form.latitude = lat;
+    form.longitude = lng;
+};
 </script>
 
 <template>
@@ -224,15 +230,36 @@ const cancelStop = () => {
                                             <p v-if="form.errors.end_time" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.end_time }}</p>
                                         </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700">Latitude</label>
-                                            <input type="number" step="any" v-model="form.latitude"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700">Longitude</label>
-                                            <input type="number" step="any" v-model="form.longitude"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                        <div class="sm:col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700">Location on
+                                                map</label>
+                                            <p class="mt-0.5 text-xs text-gray-500">
+                                                Click the map to set latitude &amp; longitude, or type them below.
+                                            </p>
+                                            <div class="mt-2 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
+                                                <LocationPicker :latitude="form.latitude" :longitude="form.longitude"
+                                                    :disabled="!editable" @update="onPickLocation" />
+                                                <div class="space-y-3">
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700">Latitude</label>
+                                                        <input type="number" step="any" v-model="form.latitude"
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                        <p v-if="form.errors.latitude"
+                                                            class="mt-1 text-sm text-red-600">{{
+                                                                form.errors.latitude }}</p>
+                                                    </div>
+                                                    <div>
+                                                        <label
+                                                            class="block text-sm font-medium text-gray-700">Longitude</label>
+                                                        <input type="number" step="any" v-model="form.longitude"
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                        <p v-if="form.errors.longitude"
+                                                            class="mt-1 text-sm text-red-600">{{
+                                                                form.errors.longitude }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium text-gray-700">Map pin note</label>
