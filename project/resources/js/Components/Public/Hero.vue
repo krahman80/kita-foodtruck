@@ -6,11 +6,19 @@ const props = defineProps({
         type: Object,
         default: null,
     },
+    heroItem: {
+        type: Object,
+        default: null,
+    },
     upcomingEvent: {
         type: Object,
         default: null,
     },
 });
+
+// Fallbacks if no matching record is found in DB
+const headlineText = computed(() => props.heroItem?.name ?? 'Slow-Simmered Halal Chili & Hokkaido Brioche');
+const descriptionText = computed(() => props.heroItem?.description ?? 'Steamed-to-order halal beef franks topped with 12-hour spiced chili con carne, freshly grated Hokkaido cheddar, and locally baked toasted milk buns. Crafted with calm precision on the streets of Sapporo.');
 
 const money = (n) => `¥${Number(n).toLocaleString('en-US')}`;
 
@@ -19,7 +27,7 @@ const heroBadge = computed(() => {
     if (!p) return '';
     if (p.badge_type === 'limited_batch') return 'Limited Batch';
     if (p.badge_type === 'none') return '';
-    return 'Halal Certified';
+    return 'Muslim Friendly Certified';
 });
 </script>
 
@@ -57,18 +65,16 @@ const heroBadge = computed(() => {
                         <span>{{ upcomingEvent.event_name }} — {{ upcomingEvent.location_name }}</span>
                     </div>
 
-                    <!-- Headline Overlay -->
+                    <!-- Dynamic Headline Overlay -->
                     <h1 id="hero-headline"
                         class="font-heading text-4xl font-bold leading-[1.12] tracking-tight text-warm-white sm:text-5xl lg:text-6xl">
-                        Slow-Simmered Halal Chili &amp; Hokkaido Brioche
+                        {{ headlineText }}
                     </h1>
 
-                    <!-- Subheadline Overlay -->
+                    <!-- Dynamic Subheadline Overlay -->
                     <p id="hero-subheadline"
                         class="max-w-2xl text-lg font-normal leading-relaxed text-warm-white/85 sm:text-xl">
-                        Steamed-to-order halal beef franks topped with 12-hour spiced chili con carne,
-                        freshly grated Hokkaido cheddar, and locally baked toasted milk buns.
-                        Crafted with calm precision on the streets of Sapporo.
+                        {{ descriptionText }}
                     </p>
 
                     <!-- Actions & CTAs Overlay -->

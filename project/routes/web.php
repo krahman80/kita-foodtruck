@@ -20,6 +20,12 @@ Route::get('/', function () {
         'nextLocation' => LocationEntry::nextScheduled(),
         'menuItems' => MenuItem::publicMenu(),
         'popularItem' => MenuItem::popularItem(),
+        // Query an active, non-popular menu item for the hero overlay text
+        'heroItem' => MenuItem::query()
+            ->where('is_active', true)
+            ->where('is_popular', false)
+            ->inRandomOrder()
+            ->first(),
         'upcomingEvent' => LocationEntry::query()
             ->where('is_event', true)
             ->whereDate('schedule_date', '>=', now()->toDateString())

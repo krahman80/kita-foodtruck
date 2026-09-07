@@ -24,6 +24,10 @@ defineProps({
         type: Object,
         default: null,
     },
+    heroItem: {
+        type: Object,
+        default: null,
+    },
     upcomingEvent: {
         type: Object,
         default: null,
@@ -34,7 +38,7 @@ defineProps({
 <template>
     <!-- Public page composed from section components (Sprint 3 decomposition). -->
     <PublicLayout title="Welcome | Halal Chili Dog Sapporo">
-        <Hero :popular-item="popularItem" :upcoming-event="upcomingEvent" />
+        <Hero :popular-item="popularItem" :hero-item="heroItem" :upcoming-event="upcomingEvent" />
 
         <LocationSchedule :location="todayLocation" :next-location="nextLocation" />
 
