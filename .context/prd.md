@@ -95,7 +95,7 @@ Dynamic sections (Hero's popular item, Location, Menu) receive data as props pas
 
 - Protected by Breeze session auth (`auth` middleware), single admin account, no public sign-up.
 - Two management areas: **Location Calendar** and **Menu Items**.
-- Visual treatment: plain, unbranded utility UI (standard forms/tables, default Breeze-style scaffolding) — does not need to match the public site's editorial branding.
+- Visual treatment: **shares the site's brand palette and design tokens** (`app.css` `@theme` — warm cream surfaces, amber-orange accents, forest-green status) applied to straightforward **utility forms/tables**. The layout stays functional and uncluttered; it does not replicate the public page's editorial presentation.
 
 ---
 
@@ -200,7 +200,7 @@ A relational model for per-item allergen tagging was proposed but is **not** use
 - **Allergen info:** Stays static paragraph text (Section 7.6). The optional `allergens` / `menu_item_allergens` relational tables are **not** adopted for v1.
 - **`is_popular`:** Confirmed as a manual toggle in the admin Menu UI — no derivation from order/analytics data.
 - **`MenuCard.vue` / `FaqItem.vue`:** Built as **separate, reusable components**, rendered via `v-for` from their parent section (`MenuGallery.vue`, `Faq.vue`). Chosen over inlining for isolated props/state per item, easier testing, and reuse potential (e.g., Hero's popular-item display can reuse `MenuCard.vue`).
-- **Admin panel styling:** Plain, **unbranded utility UI** (standard forms/tables, default Breeze-style scaffolding) — does not need to match the public site's editorial design system.
+- **Admin panel styling:** Uses the **shared brand design tokens** (`@theme` in `app.css`: warm cream surfaces, amber-orange primary/accent, charcoal text, forest-green success/status) on **utility forms/tables** and the default layout — intentionally simpler than the public page's editorial presentation, but on-brand rather than Breeze-default/unbranded.
 - **Seasonal operation:** **No off-season.** Truck operates year-round; the calendar simply has no entry on days it doesn't run, which already triggers the standard holiday/closed state (Section 7.3). No separate seasonal-closure notice needed.
 - **Next-stop lookahead:** On a Rest Day, the public Location section shows a single "Next Service" note with the date and location of the nearest future scheduled stop (owner-added via the calendar). Previously listed as a v1 non-goal; now **included** (see Section 7.3).
 
@@ -255,7 +255,7 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 - SEO basics: page title, meta description, local-search keywords
 - Accessibility check: alt text, keyboard nav, accordion ARIA states
 - Edge case QA: empty menu state, holiday state, sold-out items, long text overflow
-- Admin UI QA: unbranded utility UI, form validation, calendar edge cases (e.g., past dates, duplicate-date prevention)
+- Admin UI QA: brand-token styling + form validation, calendar edge cases (e.g., past dates, duplicate-date prevention)
 - Production deployment, domain/hosting, map provider key setup
 
 **Outcome:** Launch-ready site.

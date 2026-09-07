@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -12,7 +11,7 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-cream">
             <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -20,12 +19,30 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('admin.dashboard')">
-                                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800" />
+                                <Link :href="route('admin.dashboard')" class="flex items-center gap-2.5">
+                                    <span
+                                        class="flex h-9 w-9 items-center justify-center rounded-lg bg-truck-orange text-warm-white shadow-sm">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            aria-hidden="true">
+                                            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
+                                            <path d="M15 18H9" />
+                                            <path
+                                                d="M19 18h2a1 1 0 0 0 1-1v-5.2a2 2 0 0 0-.586-1.414l-2.8-2.8A2 2 0 0 0 17.2 7H14v11h1" />
+                                            <circle cx="7" cy="18" r="2" />
+                                            <circle cx="17" cy="18" r="2" />
+                                        </svg>
+                                    </span>
+                                    <span class="flex flex-col leading-tight">
+                                        <span class="font-heading text-sm font-bold tracking-tight text-charcoal-brown">
+                                            KITA CHILI DOGS
+                                        </span>
+                                        <span
+                                            class="text-[10px] font-semibold uppercase tracking-wider text-truck-orange">
+                                            Admin • Sapporo
+                                        </span>
+                                    </span>
                                 </Link>
-                                <span class="ms-3 text-sm font-semibold text-gray-800">
-                                    Admin
-                                </span>
                             </div>
 
                             <!-- Navigation Links -->

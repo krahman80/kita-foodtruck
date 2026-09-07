@@ -110,13 +110,13 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Name *</label>
                                 <input v-model="form.name" type="text"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">{{ form.errors.name }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Price (¥) *</label>
                                 <input v-model="form.price_yen" type="number" min="1" step="1"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 <p v-if="form.errors.price_yen" class="mt-1 text-sm text-red-600">{{
                                     form.errors.price_yen }}
                                 </p>
@@ -125,7 +125,7 @@ const label = (key) =>
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700">Description *</label>
                                 <textarea v-model="form.description" rows="2"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange"></textarea>
                                 <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{
                                     form.errors.description
                                     }}</p>
@@ -134,7 +134,7 @@ const label = (key) =>
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700">Image *</label>
                                 <input type="file" accept="image/*" @change="onPickFile"
-                                    class="mt-1 block w-full text-sm text-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-indigo-700 hover:file:bg-indigo-100" />
+                                    class="mt-1 block w-full text-sm text-gray-700 file:mr-3 file:rounded-md file:border-0 file:bg-truck-orange/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-orange-deep hover:file:bg-truck-orange/20" />
                                 <p v-if="form.errors.image" class="mt-1 text-sm text-red-600">{{ form.errors.image }}
                                 </p>
 
@@ -150,7 +150,7 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Image alt text *</label>
                                 <input v-model="form.image_alt_text" type="text"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 <p v-if="form.errors.image_alt_text" class="mt-1 text-sm text-red-600">{{
                                     form.errors.image_alt_text }}</p>
                             </div>
@@ -158,7 +158,7 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Spice level</label>
                                 <select v-model="form.spice_level"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
                                     <option value="mild">Mild</option>
                                     <option value="medium">Medium</option>
                                     <option value="hot">Hot</option>
@@ -168,7 +168,7 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Category</label>
                                 <select v-model="form.category"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
                                     <option value="chili_dog">Chili Dog</option>
                                     <option value="drink">Drink</option>
                                 </select>
@@ -176,7 +176,7 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Badge</label>
                                 <select v-model="form.badge_type"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
                                     <option value="halal_standard">Halal Standard</option>
                                     <option value="limited_batch">Limited Batch</option>
                                     <option value="none">None</option>
@@ -185,29 +185,29 @@ const label = (key) =>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Display order</label>
                                 <input v-model="form.display_order" type="number" min="0" step="1"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Highlight tag 1</label>
                                 <input v-model="form.highlight_tag_1" type="text"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Highlight tag 2</label>
                                 <input v-model="form.highlight_tag_2" type="text"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                             </div>
 
                             <div class="sm:col-span-2 flex flex-wrap gap-6">
                                 <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                                     <input type="checkbox" v-model="form.is_active"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                        class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
                                     Active (shown publicly)
                                 </label>
                                 <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                                     <input type="checkbox" v-model="form.is_sold_out"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                        class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
                                     Sold out
                                 </label>
                             </div>
@@ -215,7 +215,7 @@ const label = (key) =>
 
                         <div class="mt-6">
                             <button type="submit" :disabled="form.processing"
-                                class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50">
+                                class="inline-flex items-center rounded-md bg-truck-orange px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-soft disabled:opacity-50">
                                 {{ form.processing ? 'Saving…' : editingId ? 'Save changes' : 'Add item' }}
                             </button>
                         </div>
@@ -254,7 +254,7 @@ const label = (key) =>
                                     <div class="font-medium text-gray-900">
                                         {{ item.name }}
                                         <span v-if="item.is_popular"
-                                            class="ms-1 rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-semibold text-indigo-700">Featured</span>
+                                            class="ms-1 rounded-full bg-truck-orange/20 px-2 py-0.5 text-xs font-semibold text-orange-deep">Featured</span>
                                     </div>
                                     <div class="text-xs text-gray-500">{{ item.slug }}</div>
                                 </td>
@@ -274,7 +274,7 @@ const label = (key) =>
                                 </td>
                                 <td class="px-4 py-3 text-right text-sm">
                                     <div class="inline-flex flex-wrap items-center justify-end gap-2">
-                                        <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                                        <button type="button" class="font-medium text-truck-orange hover:text-orange-soft"
                                             @click="edit(item)">Edit</button>
                                         <button v-if="item.is_active && !item.is_popular" type="button"
                                             class="font-medium text-purple-600 hover:text-purple-500"

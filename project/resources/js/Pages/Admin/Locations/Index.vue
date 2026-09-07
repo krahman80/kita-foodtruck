@@ -202,31 +202,31 @@ const onPickLocation = ({ lat, lng }) => {
                                             <label class="block text-sm font-medium text-gray-700">Location name
                                                 *</label>
                                             <input type="text" v-model="form.location_name" required
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.location_name" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.location_name }}</p>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Address</label>
                                             <input type="text" v-model="form.address"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Landmark note</label>
                                             <input type="text" v-model="form.landmark_note"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">Start time *</label>
                                             <input type="time" v-model="form.start_time" required
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.start_time" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.start_time }}</p>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700">End time *</label>
                                             <input type="time" v-model="form.end_time" required
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.end_time" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.end_time }}</p>
                                         </div>
@@ -244,7 +244,7 @@ const onPickLocation = ({ lat, lng }) => {
                                                         <label
                                                             class="block text-sm font-medium text-gray-700">Latitude</label>
                                                         <input type="number" step="any" v-model="form.latitude"
-                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                                         <p v-if="form.errors.latitude"
                                                             class="mt-1 text-sm text-red-600">{{
                                                                 form.errors.latitude }}</p>
@@ -253,7 +253,7 @@ const onPickLocation = ({ lat, lng }) => {
                                                         <label
                                                             class="block text-sm font-medium text-gray-700">Longitude</label>
                                                         <input type="number" step="any" v-model="form.longitude"
-                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                                         <p v-if="form.errors.longitude"
                                                             class="mt-1 text-sm text-red-600">{{
                                                                 form.errors.longitude }}</p>
@@ -264,17 +264,17 @@ const onPickLocation = ({ lat, lng }) => {
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium text-gray-700">Map pin note</label>
                                             <input type="text" v-model="form.map_pin_note"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div class="sm:col-span-2">
                                             <label class="block text-sm font-medium text-gray-700">Transit note</label>
                                             <input type="text" v-model="form.transit_note"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
 
                                         <div class="sm:col-span-2 flex items-center gap-2">
                                             <input id="is_event" type="checkbox" v-model="form.is_event"
-                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                                class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
                                             <label for="is_event" class="text-sm font-medium text-gray-700">
                                                 This stop is an event
                                             </label>
@@ -283,7 +283,7 @@ const onPickLocation = ({ lat, lng }) => {
                                         <div v-if="form.is_event" class="sm:col-span-2">
                                             <label class="block text-sm font-medium text-gray-700">Event name *</label>
                                             <input type="text" v-model="form.event_name"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.event_name" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.event_name }}</p>
                                         </div>
@@ -292,7 +292,7 @@ const onPickLocation = ({ lat, lng }) => {
 
                                 <div v-if="editable" class="mt-6 flex items-center gap-3">
                                     <button type="submit" :disabled="form.processing"
-                                        class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50">
+                                        class="inline-flex items-center rounded-md bg-truck-orange px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-soft disabled:opacity-50">
                                         {{ form.processing ? 'Saving…' : editingId ? 'Save changes' : 'Save stop' }}
                                     </button>
 
