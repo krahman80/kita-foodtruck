@@ -33,11 +33,83 @@ const currentImage = ref('');
 const newImagePreview = ref('');
 const fileInput = ref(null);
 
-const onPickFile = (e) => {
+/* ---------- client-side image downscale / compress (Sprint 4 §4.1) ---------- */
+const IMAGE_MAX_DIM = 1000; // longest side in px
+const IMAGE_MAX_BYTES = 700 * 1024; // 700 KB
+// Detect WebP support once (for re-encoding uploads to the smallest size).
+const webpSupported =
+    typeof document !== 'undefined' &&
+    document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
+
+/**
+ * Optionally downscale an uploaded image so its longest side is <= IMAGE_MAX_DIM
+ * and re-encode it (WebP when supported, else JPEG) so it stays <= IMAGE_MAX_BYTES.
+ * Images already within both limits pass through unchanged.
+ * @param {File} file
+ * @returns {Promise<File>}
+ */
+const processImage = (file) =>
+    new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            const needsResize = img.naturalWidth > IMAGE_MAX_DIM || img.naturalHeight > IMAGE_MAX_DIM;
+            const needsCompress = file.size > IMAGE_MAX_BYTES;
+            if (!needsResize && !needsCompress) {
+                resolve(file);
+                return;
+            }
+            const scale = Math.min(1, IMAGE_MAX_DIM / Math.max(img.naturalWidth, img.naturalHeight));
+            const w = Math.max(1, Math.round(img.naturalWidth * scale));
+            const h = Math.max(1, Math.round(img.naturalHeight * scale));
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                reject(new Error('Canvas not supported'));
+                return;
+            }
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, w, h);
+
+            const type = webpSupported ? 'image/webp' : 'image/jpeg';
+            const base = (file.name || 'image').replace(/\.[^.]+$/, '');
+            const ext = webpSupported ? '.webp' : '.jpg';
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    reject(new Error('Image re-encode failed'));
+                    return;
+                }
+                resolve(new File([blob], `${base}${ext}`, { type: blob.type }));
+            }, type, 0.8);
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Could not load image'));
+        };
+        img.src = url;
+    });
+
+const onPickFile = async (e) => {
     const file = e.target.files[0] || null;
-    form.image = file;
-    newImagePreview.value = file ? URL.createObjectURL(file) : '';
     form.clearErrors('image');
+    if (!file) {
+        form.image = null;
+        newImagePreview.value = '';
+        return;
+    }
+    try {
+        const processed = await processImage(file);
+        form.image = processed;
+        newImagePreview.value = processed ? URL.createObjectURL(processed) : '';
+    } catch {
+        form.image = null;
+        newImagePreview.value = '';
+        form.setError('image', 'Could not read that image. Please choose a JPG, PNG, or WebP file.');
+    }
 };
 
 const openCreate = () => {
@@ -160,7 +232,7 @@ const label = (key) =>
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange"></textarea>
                                     <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{
                                         form.errors.description
-                                    }}</p>
+                                        }}</p>
                                 </div>
 
                                 <div class="sm:col-span-2">
@@ -170,7 +242,7 @@ const label = (key) =>
                                     <input ref="fileInput" type="file" accept="image/*" @change="onPickFile"
                                         class="mt-1 block w-full rounded-md border border-gray-300 bg-white text-sm text-gray-700 shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-truck-orange/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-orange-deep hover:file:bg-truck-orange/20 focus:border-truck-orange focus:ring-truck-orange focus:outline-none" />
                                     <p v-if="form.errors.image" class="mt-1 text-sm text-red-600">{{ form.errors.image
-                                    }}</p>
+                                        }}</p>
 
                                     <img v-if="newImagePreview" :src="newImagePreview" alt="Selected image preview"
                                         class="mt-3 h-32 w-48 rounded-md border border-gray-200 object-cover" />
@@ -280,7 +352,7 @@ const label = (key) =>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-center gap-1.5">
                                         <span class="truncate text-sm font-semibold text-gray-900">{{ item.name
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="item.is_popular"
                                             class="rounded-full bg-truck-orange/20 px-2 py-0.5 text-[11px] font-semibold text-orange-deep">Featured</span>
                                     </div>
@@ -288,7 +360,7 @@ const label = (key) =>
                                         class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
                                         <span>{{ label(item.category) }}</span>
                                         <span class="font-semibold text-gray-900">¥{{ item.price_yen.toLocaleString()
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="item.is_sold_out"
                                             class="rounded bg-orange-100 px-1.5 py-0.5 text-orange-700">Sold out</span>
                                         <span class="rounded px-1.5 py-0.5"
