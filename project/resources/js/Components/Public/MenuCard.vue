@@ -23,7 +23,7 @@ const badge = computed(() => {
         case 'none':
             return null;
         default:
-            return { text: '100% Halal', cls: 'bg-cheddar-yellow text-charcoal-brown' };
+            return { text: 'Muslin Friendly', cls: 'bg-cheddar-yellow text-charcoal-brown' };
     }
 });
 </script>
