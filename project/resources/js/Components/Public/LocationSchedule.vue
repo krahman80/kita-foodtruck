@@ -61,7 +61,7 @@ const mapSrc = computed(() => {
                     {{ t('loc.title') }}
                 </h2>
                 <p class="mt-2 text-base text-charcoal-brown/75">
-                    Our bright orange step van navigates central Sapporo parks and plazas Wednesday through Sunday.
+                    {{ t('loc.sub') }}
                 </p>
             </div>
 
@@ -73,7 +73,7 @@ const mapSrc = computed(() => {
                         <div
                             class="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-truck-orange">
                             <span class="h-2.5 w-2.5 animate-ping rounded-full bg-truck-orange"></span>
-                            Live Service Status
+                            {{ t('loc.liveStatus') }}
                         </div>
                         <p id="today-schedule-text"
                             class="font-heading text-xl font-bold leading-snug text-charcoal-brown sm:text-2xl">
@@ -81,8 +81,8 @@ const mapSrc = computed(() => {
                         </p>
                         <div
                             class="mt-4 flex items-center justify-between border-t border-toasted-tan/25 pt-4 text-xs text-charcoal-brown/80">
-                            <span>Fresh batches prepared every 45 mins</span>
-                            <span class="font-semibold text-truck-orange">Open Now</span>
+                            <span>{{ t('loc.freshBatches') }}</span>
+                            <span class="font-semibold text-truck-orange">{{ t('loc.openNow') }}</span>
                         </div>
                     </div>
 
@@ -97,7 +97,7 @@ const mapSrc = computed(() => {
                                 </svg>
                             </div>
                             <div>
-                                <strong class="font-semibold text-charcoal-brown">Spot Details:</strong>
+                                <strong class="font-semibold text-charcoal-brown">{{ t('loc.spotDetails') }}</strong>
                                 <p class="text-charcoal-brown/75">{{ location.address }}</p>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ const mapSrc = computed(() => {
                                 </svg>
                             </div>
                             <div>
-                                <strong class="font-semibold text-charcoal-brown">Transit Access:</strong>
+                                <strong class="font-semibold text-charcoal-brown">{{ t('loc.transitAccess') }}</strong>
                                 <p class="text-charcoal-brown/75">{{ location.transit_note }}</p>
                             </div>
                         </div>
@@ -123,11 +123,11 @@ const mapSrc = computed(() => {
                 <div class="lg:col-span-7">
                     <div
                         class="relative h-[340px] w-full overflow-hidden rounded-2xl border border-toasted-tan/35 bg-tan-subtle shadow-xs sm:h-[420px]">
-                        <iframe :title="`${location.location_name} Food Truck Location Map`" :src="mapSrc"
+                        <iframe :title="`${location.location_name} — ${t('loc.mapTitle')}`" :src="mapSrc"
                             class="h-full w-full border-0" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                         <div v-if="location.map_pin_note"
-                            class="absolute bottom-3 left-3 rounded-lg border border-toasted-tan/30 bg-warm-white/90 px-3 py-1.5 text-xs font-semibold text-charcoal-brown shadow-xs backdrop-blur-xs">
+                            class="absolute right-3 top-3 rounded-lg border border-toasted-tan/30 bg-warm-white/90 px-3 py-1.5 text-xs font-semibold text-charcoal-brown shadow-xs backdrop-blur-xs">
                             📍 {{ location.map_pin_note }}
                         </div>
                     </div>
@@ -147,15 +147,14 @@ const mapSrc = computed(() => {
                     </svg>
                 </div>
                 <h3 class="font-heading text-2xl font-bold text-charcoal-brown sm:text-3xl">
-                    The Truck is Resting Today
+                    {{ t('loc.restingTitle') }}
                 </h3>
                 <p class="mx-auto mt-3 max-w-xl text-base leading-relaxed text-charcoal-brown/80">
-                    Our kitchen crew is slow-simmering fresh batches of beef chili and sourcing local Hokkaido buns for
-                    our upcoming stops. No active street service is scheduled for today.
+                    {{ t('loc.restingDesc') }}
                 </p>
                 <div v-if="nextLocation"
                     class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-warm-white border border-toasted-tan/30 text-sm font-medium text-charcoal-brown">
-                    <span>Next Service:</span>
+                    <span>{{ t('loc.nextService') }}</span>
                     <strong class="font-semibold text-truck-orange">{{ nextLabel }}</strong>
                 </div>
             </div>

@@ -36,6 +36,17 @@ const messages = {
         // Section headings (eyebrow + title)
         'loc.eyebrow': 'Schedule & Tracking',
         'loc.title': "Today's Truck Location",
+        'loc.sub': 'Our bright orange step van navigates central Sapporo parks and plazas Wednesday through Sunday.',
+        'loc.liveStatus': 'Live Service Status',
+        'loc.freshBatches': 'Fresh batches prepared every 45 mins',
+        'loc.openNow': 'Open Now',
+        'loc.spotDetails': 'Spot Details:',
+        'loc.transitAccess': 'Transit Access:',
+        'loc.mapTitle': 'Food Truck Location Map',
+        'loc.restingTitle': 'The Truck is Resting Today',
+        'loc.restingDesc':
+            'Our kitchen crew is slow-simmering fresh batches of beef chili and sourcing local Hokkaido buns for our upcoming stops. No active street service is scheduled for today.',
+        'loc.nextService': 'Next Service:',
         'menu.eyebrow': 'Handcrafted Daily',
         'menu.title': 'Full Menu & Prices',
         'about.eyebrow': 'Our Origins & Mission',
@@ -100,6 +111,34 @@ const messages = {
         'admin.th.email': 'Email',
         'admin.th.actions': 'Actions',
         'admin.menuEmpty': 'No menu items yet. Add your first item in the form.',
+
+        // ---- Auth (guest/login) ----
+        'auth.logInTitle': 'Log in',
+        'auth.welcomeBack': 'Welcome back',
+        'auth.signInHint': 'Sign in to manage Kita Chili Dogs.',
+        'auth.email': 'Email',
+        'auth.password': 'Password',
+        'auth.remember': 'Remember me',
+        'auth.forgot': 'Forgot your password?',
+        'auth.logIn': 'Log in',
+        'auth.signingIn': 'Signing in…',
+        'auth.tagline': 'Sapporo • Halal Street Food',
+
+        // Forgot / reset password
+        'auth.forgotTitle': 'Forgot Password',
+        'auth.forgotIntro':
+            'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+        'auth.forgotSubmit': 'Email Password Reset Link',
+
+        // Register
+        'auth.registerTitle': 'Register',
+        'auth.createAccount': 'Create an account',
+        'auth.registerHint': 'Register to get started.',
+        'auth.name': 'Name',
+        'auth.confirmPassword': 'Confirm Password',
+        'auth.alreadyRegistered': 'Already registered?',
+        'auth.register': 'Register',
+        'auth.registering': 'Registering…',
     },
 
     ja: {
@@ -132,6 +171,17 @@ const messages = {
         // Section headings (eyebrow + title)
         'loc.eyebrow': '営業スケジュール',
         'loc.title': '本日のトラックの場所',
+        'loc.sub': '鮮やかなオレンジのトラックが、水曜から日曜まで札幌中心部の公園や広場を巡ります。',
+        'loc.liveStatus': '営業ステータス',
+        'loc.freshBatches': '45分ごとに作りたてを提供',
+        'loc.openNow': '営業中',
+        'loc.spotDetails': '開催場所:',
+        'loc.transitAccess': 'アクセス:',
+        'loc.mapTitle': 'フードトラックの場所マップ',
+        'loc.restingTitle': '本日はお休みです',
+        'loc.restingDesc':
+            'キッチンでは次の営業に向けてビーフチリをじっくり煮込み、北海道産のバンズを仕入れています。本日の路上での営業予定はありません。',
+        'loc.nextService': '次の営業:',
         'menu.eyebrow': '毎日手作り',
         'menu.title': 'メニュー・価格',
         'about.eyebrow': '創業の物語・ミッション',
@@ -196,6 +246,34 @@ const messages = {
         'admin.th.email': 'メール',
         'admin.th.actions': '操作',
         'admin.menuEmpty': 'まだメニューがありません。フォームから最初のアイテムを追加してください。',
+
+        // ---- Auth (guest/login) ----
+        'auth.logInTitle': 'ログイン',
+        'auth.welcomeBack': 'おかえりなさい',
+        'auth.signInHint': 'キタチリドッグスの管理画面にログインします。',
+        'auth.email': 'メールアドレス',
+        'auth.password': 'パスワード',
+        'auth.remember': 'ログイン状態を保持する',
+        'auth.forgot': 'パスワードをお忘れですか？',
+        'auth.logIn': 'ログイン',
+        'auth.signingIn': 'ログイン中…',
+        'auth.tagline': '札幌 • ハラルストリートフード',
+
+        // Forgot / reset password
+        'auth.forgotTitle': 'パスワードをお忘れですか',
+        'auth.forgotIntro':
+            'パスワードをお忘れですか？問題ありません。ご登録のメールアドレスを入力してください。パスワード再設定用のリンクをお送りします。',
+        'auth.forgotSubmit': 'パスワード再設定リンクを送信',
+
+        // Register
+        'auth.registerTitle': '新規登録',
+        'auth.createAccount': 'アカウントを作成',
+        'auth.registerHint': '登録して始めましょう。',
+        'auth.name': '名前',
+        'auth.confirmPassword': 'パスワード（確認）',
+        'auth.alreadyRegistered': 'すでに登録済みですか？',
+        'auth.register': '登録',
+        'auth.registering': '登録中…',
     },
 };
 
