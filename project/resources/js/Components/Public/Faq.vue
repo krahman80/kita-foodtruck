@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import FaqItem from '@/Components/Public/FaqItem.vue';
+import { t } from '@/i18n';
 
 const faqs = [
     {
@@ -53,10 +54,10 @@ const toggle = (index) => {
             <!-- Section Heading -->
             <div class="mx-auto mb-12 max-w-2xl text-center">
                 <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">
-                    Questions &amp; Answers
+                    {{ t('faq.eyebrow') }}
                 </span>
                 <h2 class="mt-1.5 font-heading text-3xl font-bold text-charcoal-brown sm:text-4xl">
-                    Frequently Asked Questions
+                    {{ t('faq.title') }}
                 </h2>
                 <p class="mt-2 text-base text-charcoal-brown/75">
                     Everything you need to know about finding our truck and enjoying our halal menu in Sapporo.

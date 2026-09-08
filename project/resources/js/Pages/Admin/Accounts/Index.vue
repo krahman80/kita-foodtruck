@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm, router } from '@inertiajs/vue3';
+import { t } from '@/i18n';
 
 defineProps({
     accounts: {
@@ -39,7 +40,7 @@ const remove = (account) => {
 
     <AdminLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Admin Accounts</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">{{ t('admin.page.accounts') }}</h2>
         </template>
 
         <div class="py-12">
@@ -47,7 +48,7 @@ const remove = (account) => {
                 <!-- Create account -->
                 <div class="overflow-hidden rounded-lg bg-white shadow">
                     <div class="border-b border-gray-200 px-6 py-4">
-                        <h3 class="text-base font-semibold text-gray-800">Add Admin Account</h3>
+                        <h3 class="text-base font-semibold text-gray-800">{{ t('admin.addAdminAccount') }}</h3>
                     </div>
                     <form class="p-6" @submit.prevent="submit">
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -77,7 +78,7 @@ const remove = (account) => {
                         </div>
                         <div class="mt-6">
                             <PrimaryButton :disabled="form.processing">
-                                {{ form.processing ? 'Adding…' : 'Add Account' }}
+                                {{ form.processing ? t('admin.adding') : t('admin.addAccount') }}
                             </PrimaryButton>
                         </div>
                     </form>
@@ -86,22 +87,22 @@ const remove = (account) => {
                 <!-- Account list -->
                 <div class="mt-8 overflow-hidden rounded-lg bg-white shadow">
                     <div class="border-b border-gray-200 px-6 py-4">
-                        <h3 class="text-base font-semibold text-gray-800">Existing Accounts</h3>
+                        <h3 class="text-base font-semibold text-gray-800">{{ t('admin.existingAccounts') }}</h3>
                     </div>
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Name
+                                    {{ t('admin.th.name') }}
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Email
+                                    {{ t('admin.th.email') }}
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
-                                    Actions</th>
+                                    {{ t('admin.th.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
@@ -109,14 +110,15 @@ const remove = (account) => {
                                 <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
                                     {{ account.name }}
                                     <span v-if="account.id === $page.props.auth.user.id"
-                                        class="ms-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">You</span>
+                                        class="ms-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">{{
+                                        t('admin.you') }}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">{{ account.email }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm">
                                     <button v-if="account.id !== $page.props.auth.user.id" type="button"
                                         class="text-sm font-medium text-red-600 hover:text-red-500"
                                         @click="remove(account)">
-                                        Delete
+                                        {{ t('admin.delete') }}
                                     </button>
                                 </td>
                             </tr>

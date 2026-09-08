@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
     location: {
@@ -54,10 +55,10 @@ const mapSrc = computed(() => {
             <!-- Section Heading -->
             <div class="mb-10 max-w-3xl">
                 <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">
-                    Schedule &amp; Tracking
+                    {{ t('loc.eyebrow') }}
                 </span>
                 <h2 class="mt-1.5 font-heading text-3xl font-bold text-charcoal-brown sm:text-4xl">
-                    Today's Truck Location
+                    {{ t('loc.title') }}
                 </h2>
                 <p class="mt-2 text-base text-charcoal-brown/75">
                     Our bright orange step van navigates central Sapporo parks and plazas Wednesday through Sunday.

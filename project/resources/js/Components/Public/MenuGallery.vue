@@ -1,5 +1,6 @@
 <script setup>
 import MenuCard from '@/Components/Public/MenuCard.vue';
+import { t } from '@/i18n';
 
 defineProps({
     items: { type: Array, required: true },
@@ -12,9 +13,10 @@ defineProps({
         <div class="mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
             <div class="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">Handcrafted Daily</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">{{ t('menu.eyebrow')
+                    }}</span>
                     <h2 class="mt-1.5 font-heading text-3xl font-bold text-charcoal-brown sm:text-4xl">
-                        Full Menu &amp; Prices
+                        {{ t('menu.title') }}
                     </h2>
                     <p class="mt-2 max-w-2xl text-base text-charcoal-brown/75">
                         Every sausage is certified 100% halal beef, topped with slow-reduced chili con carne and paired
@@ -24,7 +26,7 @@ defineProps({
                 <div
                     class="inline-flex items-center gap-2 self-start rounded-lg border border-toasted-tan/30 bg-tan-subtle px-3.5 py-1.5 text-xs font-medium text-charcoal-brown/80 md:self-auto">
                     <span class="h-2 w-2 rounded-full bg-cheddar-yellow"></span>
-                    <span>100% Halal Certified Kitchen</span>
+                    <span>Muslim Friendly Kitchen</span>
                 </div>
             </div>
 
@@ -45,9 +47,8 @@ defineProps({
                 class="mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl border border-toasted-tan/30 bg-tan-subtle p-5 sm:flex-row sm:p-6">
                 <div class="text-center sm:text-left">
                     <span class="font-heading text-base font-bold text-charcoal-brown">Truck Combo Special:</span>
-                    <span class="ml-2 text-sm text-charcoal-brown/80">Add Kutchan Russet Fries &amp; Craft Cola to any
-                        dog
-                        for just <strong class="font-bold text-truck-orange">+¥700</strong></span>
+                    <span class="ml-2 text-sm text-charcoal-brown/80">Add extra creamy cheese to any dog for just
+                        <strong class="font-bold text-truck-orange">+¥200</strong></span>
                 </div>
                 <a id="menu-find-truck-btn" href="#location-schedule"
                     class="inline-flex shrink-0 items-center justify-center rounded-xl bg-truck-orange px-5 py-2.5 text-xs font-semibold text-warm-white shadow-2xs transition-all hover:bg-cheddar-yellow hover:text-charcoal-brown">

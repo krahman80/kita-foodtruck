@@ -22,21 +22,22 @@ class MenuItemRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Determine if this request is an store/create or update action
+        $isCreating = $this->isMethod('post') && ! $this->has('_method');
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            // Whole yen, positive (DDD §4.2 invariant #1).
             'price_yen' => ['required', 'integer', 'min:1'],
-            // Media: uploaded image + alt required together (DDD §4.2 invariant #3).
             'image' => [
-                Rule::requiredIf($this->isMethod('post')),
+                Rule::requiredIf($isCreating),
+                'nullable', // Allows null when updating without a file
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
             ],
             'image_alt_text' => ['required', 'string', 'max:255'],
             'spice_level' => ['required', Rule::in(['mild', 'medium', 'hot', 'tangy'])],
-            // Two v1 categories (PRD §11).
             'category' => ['required', Rule::in(['chili_dog', 'drink'])],
             'badge_type' => ['required', Rule::in(['halal_standard', 'limited_batch', 'none'])],
             'highlight_tag_1' => ['nullable', 'string', 'max:255'],

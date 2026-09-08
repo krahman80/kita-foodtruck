@@ -1,3 +1,7 @@
+<script setup>
+import { t } from '@/i18n';
+</script>
+
 <template>
     <!-- ==========================================
          SECTION 6: ALLERGEN & DIETARY INFO
@@ -8,10 +12,10 @@
             <!-- Section Heading -->
             <div class="mb-12 max-w-3xl">
                 <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">
-                    Transparency &amp; Care
+                    {{ t('allergen.eyebrow') }}
                 </span>
                 <h2 class="mt-1.5 font-heading text-3xl font-bold text-charcoal-brown sm:text-4xl">
-                    Allergen &amp; Dietary Information
+                    {{ t('allergen.title') }}
                 </h2>
                 <p class="mt-2 text-base text-charcoal-brown/75">
                     We take kitchen integrity and guest safety seriously. Below is an honest breakdown of our

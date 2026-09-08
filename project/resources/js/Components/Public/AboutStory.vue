@@ -1,3 +1,7 @@
+<script setup>
+import { t } from '@/i18n';
+</script>
+
 <template>
     <!-- ==========================================
          SECTION 5: ABOUT / STORY
@@ -31,11 +35,11 @@
                 <div class="order-1 space-y-6 lg:order-2 lg:col-span-7">
                     <div>
                         <span class="text-xs font-bold uppercase tracking-widest text-truck-orange">
-                            Our Origins &amp; Mission
+                            {{ t('about.eyebrow') }}
                         </span>
                         <h2
                             class="mt-1.5 font-heading text-3xl font-bold leading-tight text-charcoal-brown sm:text-4xl">
-                            Why We Built Sapporo's First Halal Chili Dog Van
+                            {{ t('about.title') }}
                         </h2>
                     </div>
 

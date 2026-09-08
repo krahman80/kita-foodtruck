@@ -4,6 +4,7 @@ import DatePicker from 'primevue/datepicker';
 import LocationPicker from '@/Components/LocationPicker.vue';
 import { computed, ref, watch } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { t } from '@/i18n';
 
 const props = defineProps({
     locations: {
@@ -130,7 +131,7 @@ const onPickLocation = ({ lat, lng }) => {
 
     <AdminLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">Location Calendar</h2>
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">{{ t('admin.page.locations') }}</h2>
         </template>
 
         <div class="py-12">
@@ -163,13 +164,18 @@ const onPickLocation = ({ lat, lng }) => {
                             <div
                                 class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-gray-100 px-1 pt-4 text-xs text-gray-500">
                                 <span class="flex items-center gap-1.5">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span> Stop
+                                    <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span> {{
+                                    t('admin.loc.legend.stop')
+                                    }}
                                 </span>
                                 <span class="flex items-center gap-1.5">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span> Event
+                                    <span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span> {{
+                                    t('admin.loc.legend.event')
+                                    }}
                                 </span>
                                 <span class="flex items-center gap-1.5">
-                                    <span class="h-1 w-3 rounded-sm bg-gray-300"></span> Cancelled
+                                    <span class="h-1 w-3 rounded-sm bg-gray-300"></span> {{
+                                        t('admin.loc.legend.cancelled') }}
                                 </span>
                             </div>
                         </div>
@@ -180,7 +186,7 @@ const onPickLocation = ({ lat, lng }) => {
                         <div class="overflow-hidden rounded-xl bg-white shadow">
                             <div class="border-b border-gray-200 px-6 py-4">
                                 <h3 class="text-base font-semibold text-gray-800">
-                                    {{ editingId ? 'Edit Stop' : 'Add a Stop' }}
+                                    {{ editingId ? t('admin.loc.editTitle') : t('admin.loc.addTitle') }}
                                 </h3>
                                 <p v-if="!hasSelection" class="mt-1 text-sm text-gray-500">
                                     Pick a date on the calendar to enable this form.
@@ -293,12 +299,13 @@ const onPickLocation = ({ lat, lng }) => {
                                 <div v-if="editable" class="mt-6 flex items-center gap-3">
                                     <button type="submit" :disabled="form.processing"
                                         class="inline-flex items-center rounded-md bg-truck-orange px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-soft disabled:opacity-50">
-                                        {{ form.processing ? 'Saving…' : editingId ? 'Save changes' : 'Save stop' }}
+                                        {{ form.processing ? t('admin.saving') : editingId ? t('admin.saveChanges') :
+                                        t('admin.saveStop') }}
                                     </button>
 
                                     <button v-if="editingId && !isCancelled" type="button" @click="cancelStop"
                                         class="inline-flex items-center rounded-md border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 shadow-sm hover:bg-red-50">
-                                        Cancel this stop
+                                        {{ t('admin.cancelStop') }}
                                     </button>
                                 </div>
                             </form>

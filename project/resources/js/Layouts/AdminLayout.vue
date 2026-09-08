@@ -5,6 +5,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { i18n, t, toggleLocale } from '@/i18n';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -48,23 +49,30 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
-                                    Dashboard
+                                    {{ t('admin.nav.dashboard') }}
                                 </NavLink>
                                 <NavLink :href="route('admin.locations.index')"
                                     :active="route().current('admin.locations.*')">
-                                    Locations
+                                    {{ t('admin.nav.locations') }}
                                 </NavLink>
                                 <NavLink :href="route('admin.menu.index')" :active="route().current('admin.menu.*')">
-                                    Menu
+                                    {{ t('admin.nav.menu') }}
                                 </NavLink>
                                 <NavLink :href="route('admin.accounts.index')"
                                     :active="route().current('admin.accounts.*')">
-                                    Accounts
+                                    {{ t('admin.nav.accounts') }}
                                 </NavLink>
                             </div>
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <!-- Language toggle -->
+                            <button id="admin-lang-toggle" type="button" @click="toggleLocale"
+                                class="me-3 inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-truck-orange hover:text-truck-orange"
+                                :aria-label="'Switch language to ' + (i18n.locale === 'ja' ? 'English' : 'Japanese')">
+                                {{ t('toggle.lang') }}
+                            </button>
+
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -86,10 +94,10 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')">
-                                            Profile
+                                            {{ t('admin.profile') }}
                                         </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            {{ t('admin.logout') }}
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -121,19 +129,27 @@ const showingNavigationDropdown = ref(false);
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink :href="route('admin.dashboard')"
                             :active="route().current('admin.dashboard')">
-                            Dashboard
+                            {{ t('admin.nav.dashboard') }}
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('admin.locations.index')"
                             :active="route().current('admin.locations.*')">
-                            Locations
+                            {{ t('admin.nav.locations') }}
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('admin.menu.index')" :active="route().current('admin.menu.*')">
-                            Menu
+                            {{ t('admin.nav.menu') }}
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('admin.accounts.index')"
                             :active="route().current('admin.accounts.*')">
-                            Accounts
+                            {{ t('admin.nav.accounts') }}
                         </ResponsiveNavLink>
+                    </div>
+
+                    <!-- Responsive Language Toggle -->
+                    <div class="border-t border-gray-200 px-4 py-3">
+                        <button id="admin-lang-toggle-mobile" type="button" @click="toggleLocale"
+                            class="inline-flex w-full items-center justify-center rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:border-truck-orange hover:text-truck-orange">
+                            {{ t('toggle.lang') }}
+                        </button>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -144,9 +160,10 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')"> {{ t('admin.profile') }}
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                {{ t('admin.logout') }}
                             </ResponsiveNavLink>
                         </div>
                     </div>

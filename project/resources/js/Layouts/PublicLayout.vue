@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { i18n, t, toggleLocale } from '@/i18n';
 
 defineProps({
   title: {
@@ -70,7 +71,7 @@ function closeMobileMenu() {
               KITA CHILI DOGS
             </span>
             <span class="text-[11px] font-medium tracking-widest text-charcoal-brown/70 uppercase">
-              Sapporo • 100% Halal
+              {{ t('brand.tagline') }}
             </span>
           </div>
         </a>
@@ -79,26 +80,32 @@ function closeMobileMenu() {
         <nav id="desktop-nav" class="hidden md:flex items-center gap-8 text-sm font-medium text-charcoal-brown/85">
           <a id="nav-link-location" href="#location-schedule"
             class="hover:text-truck-orange transition-colors duration-150 py-1">
-            Today's Spot
+            {{ t('nav.spot') }}
           </a>
           <a id="nav-link-menu" href="#full-menu" class="hover:text-truck-orange transition-colors duration-150 py-1">
-            Menu &amp; Prices
+            {{ t('nav.menu') }}
           </a>
           <a id="nav-link-story" href="#our-story" class="hover:text-truck-orange transition-colors duration-150 py-1">
-            Our Story
+            {{ t('nav.story') }}
           </a>
           <a id="nav-link-dietary" href="#allergen-dietary"
             class="hover:text-truck-orange transition-colors duration-150 py-1">
-            Halal &amp; Allergens
+            {{ t('nav.dietary') }}
           </a>
           <a id="nav-link-faq" href="#faq-section" class="hover:text-truck-orange transition-colors duration-150 py-1">
-            FAQ
+            {{ t('nav.faq') }}
           </a>
           <!-- Nav Primary CTA -->
           <a id="nav-cta-btn" href="#location-schedule"
             class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs font-semibold tracking-wide text-warm-white bg-truck-orange hover:bg-cheddar-yellow hover:text-charcoal-brown transition-all duration-200 shadow-sm">
-            Find Truck Today
+            {{ t('nav.cta') }}
           </a>
+          <!-- Language toggle (desktop) -->
+          <button id="lang-toggle-desktop" type="button" @click="toggleLocale"
+            class="inline-flex items-center justify-center rounded-xl border border-toasted-tan/30 px-3 py-1.5 text-xs font-semibold text-charcoal-brown/80 hover:border-truck-orange hover:text-truck-orange transition-colors"
+            :aria-label="'Switch language to ' + (i18n.locale === 'ja' ? 'English' : 'Japanese')">
+            {{ t('toggle.lang') }}
+          </button>
         </nav>
 
         <!-- Mobile Hamburger Toggle Button -->
@@ -126,29 +133,36 @@ function closeMobileMenu() {
           <div class="border-b border-toasted-tan/25 bg-warm-white px-5 pt-3 pb-6 space-y-3">
             <a id="mobile-link-location" href="#location-schedule" @click="closeMobileMenu"
               class="block py-2.5 px-3 rounded-lg text-base font-medium text-charcoal-brown hover:bg-tan-subtle hover:text-truck-orange transition-colors">
-              Today's Location &amp; Schedule
+              {{ t('mnav.location') }}
             </a>
             <a id="mobile-link-menu" href="#full-menu" @click="closeMobileMenu"
               class="block py-2.5 px-3 rounded-lg text-base font-medium text-charcoal-brown hover:bg-tan-subtle hover:text-truck-orange transition-colors">
-              Full Menu &amp; Prices
+              {{ t('mnav.menu') }}
             </a>
             <a id="mobile-link-story" href="#our-story" @click="closeMobileMenu"
               class="block py-2.5 px-3 rounded-lg text-base font-medium text-charcoal-brown hover:bg-tan-subtle hover:text-truck-orange transition-colors">
-              Our Story
+              {{ t('mnav.story') }}
             </a>
             <a id="mobile-link-dietary" href="#allergen-dietary" @click="closeMobileMenu"
               class="block py-2.5 px-3 rounded-lg text-base font-medium text-charcoal-brown hover:bg-tan-subtle hover:text-truck-orange transition-colors">
-              Halal Sourcing &amp; Allergens
+              {{ t('mnav.dietary') }}
             </a>
             <a id="mobile-link-faq" href="#faq-section" @click="closeMobileMenu"
               class="block py-2.5 px-3 rounded-lg text-base font-medium text-charcoal-brown hover:bg-tan-subtle hover:text-truck-orange transition-colors">
-              FAQ
+              {{ t('mnav.faq') }}
             </a>
             <div class="pt-2">
               <a id="mobile-link-cta" href="#location-schedule" @click="closeMobileMenu"
                 class="flex items-center justify-center w-full py-3 px-4 rounded-xl text-sm font-semibold text-warm-white bg-truck-orange hover:bg-cheddar-yellow hover:text-charcoal-brown transition-colors shadow-sm">
-                See Today's Location
+                {{ t('mnav.cta') }}
               </a>
+            </div>
+            <!-- Language toggle (mobile) -->
+            <div class="pt-2">
+              <button id="lang-toggle-mobile" type="button" @click="toggleLocale"
+                class="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-sm font-semibold text-charcoal-brown border border-toasted-tan/30 hover:border-truck-orange hover:text-truck-orange transition-colors">
+                {{ t('toggle.lang') }}
+              </button>
             </div>
           </div>
         </div>
@@ -192,19 +206,18 @@ function closeMobileMenu() {
               </span>
             </div>
             <p class="text-sm text-charcoal-brown/75 leading-relaxed">
-              Sapporo's original 100% halal chili dog food truck. Crafted with slow-simmered beef, fresh Hokkaido milk
-              buns, and genuine northern warmth.
+              {{ t('foot.brandDesc') }}
             </p>
             <div class="inline-flex items-center gap-2 text-xs font-semibold text-cheddar-yellow">
               <span>★</span>
-              <span>Halal Certified Kitchen on Wheels</span>
+              <span>{{ t('foot.halal') }}</span>
             </div>
           </div>
 
           <!-- Column 2: Contact information (email, phone) -->
           <div id="footer-col-contact" class="space-y-4">
             <h3 class="font-heading text-base font-bold uppercase tracking-wider text-charcoal-brown">
-              Contact &amp; Bookings
+              {{ t('foot.contact') }}
             </h3>
             <ul class="space-y-2.5 text-sm text-charcoal-brown/80">
               <li class="flex items-center gap-2.5">
@@ -229,10 +242,10 @@ function closeMobileMenu() {
           <!-- Column 3: Social / Follow Us links (Instagram, TikTok) -->
           <div id="footer-col-social" class="space-y-4">
             <h3 class="font-heading text-base font-bold uppercase tracking-wider text-charcoal-brown">
-              Follow Our Truck
+              {{ t('foot.follow') }}
             </h3>
             <p class="text-sm text-charcoal-brown/75">
-              Live daily morning location updates, batch announcements, and seasonal special previews.
+              {{ t('foot.followDesc') }}
             </p>
             <div class="flex flex-col space-y-2 text-sm font-medium">
               <a id="footer-social-instagram" href="https://instagram.com" target="_blank" rel="noopener noreferrer"
@@ -258,9 +271,9 @@ function closeMobileMenu() {
 
         <!-- Bottom Copyright Line -->
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-charcoal-brown/60 gap-3">
-          <p>© 2026 Kita Halal Chili Dogs Sapporo. All rights reserved.</p>
+          <p>{{ t('foot.rights') }}</p>
           <p class="text-center sm:text-right">
-            Handcrafted with 100% Halal Certified Beef • Hokkaido, Japan
+            {{ t('foot.handcrafted') }}
           </p>
         </div>
 
