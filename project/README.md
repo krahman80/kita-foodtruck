@@ -1,59 +1,48 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kita Chili Dogs
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A halal chili dog food truck site for Sapporo, Japan — a single public page plus a protected admin panel.
 
-## About Laravel
+**Stack:** Laravel 12 · Vue 3 + Inertia v2 · Tailwind CSS v4 (Vite) · MySQL
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Public site
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Welcome/hero, live location schedule (including rest-day and next-service states), menu, about story, allergen info, and FAQ. The page chrome text supports **EN ↔ 日本語** via a shared locale.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Admin (`/admin`)
 
-## Learning Laravel
+Owner-only management area:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Dashboard** — overview cards linking to each section.
+- **Location calendar** — PrimeVue inline month view with markers, plus a Leaflet map picker for coordinates.
+- **Menu manager** — two-column add/edit + card list, local image upload (client-side resize/compress), featured/hide/sold-out/active controls.
+- **Accounts** — create/remove admin accounts (single role, no public registration).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Auth
 
-## Laravel Sponsors
+Login by email/password. A seeded admin account is created on first run (values from `config/admin.php` / environment). No public registration.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Deployment
 
-### Premium Partners
+- **[`DEPLOYMENT.md`](./DEPLOYMENT.md)** — general shared-hosting (cPanel-style) guide.
+- **[`HOSTINGER-DEPLOYMENT.md`](./HOSTINGER-DEPLOYMENT.md)** — Hostinger-specific (hPanel) guide.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Both cover: PHP 8.2+, pointing the document root at `public/`, production `.env`, Composer + Vite build, storage link, migrate/seed, and production caching (including `route:cache`, which is supported).
 
-## Contributing
+## Local development
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+The app runs in Docker (`docker-compose.yml` at the repo root; container named `app`, exposed on port `8020`). Front-end assets are built with Vite:
 
-## Code of Conduct
+- `docker exec app php artisan migrate --seed`
+- `npm install` then `npm run dev` (or `npm run build`)
+- Tests: `docker exec app php artisan test`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Key conventions
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `Welcome.vue` is the master template for the public page.
+- PrimeVue is admin-only; the public site is pure Tailwind.
+- Colors are tokenized in `resources/css/app.css` (`@theme`).
+- Chrome text is translated via `resources/js/i18n.js` (shared locale, EN/日本語).
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).

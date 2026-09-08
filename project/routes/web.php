@@ -5,37 +5,13 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\ProfileController;
-use App\Models\LocationEntry;
-use App\Models\MenuItem;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'todayLocation' => LocationEntry::todayScheduled(),
-        'nextLocation' => LocationEntry::nextScheduled(),
-        'menuItems' => MenuItem::publicMenu(),
-        'popularItem' => MenuItem::popularItem(),
-        // Query an active, non-popular menu item for the hero overlay text
-        'heroItem' => MenuItem::query()
-            ->where('is_active', true)
-            ->where('is_popular', false)
-            ->inRandomOrder()
-            ->first(),
-        'upcomingEvent' => LocationEntry::query()
-            ->where('is_event', true)
-            ->whereDate('schedule_date', '>=', now()->toDateString())
-            ->orderBy('schedule_date')
-            ->first(),
-    ]);
-});
+Route::get('/', [PublicController::class, 'home']);
 
 // Backwards-compatible redirect for anything still pointing at the old /dashboard.
-Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'))
+Route::get('/dashboard', [PublicController::class, 'dashboardRedirect'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 // Protected admin area (owner-only).
