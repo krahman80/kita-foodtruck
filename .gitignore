@@ -9,3 +9,11 @@
 Thumbs.db
 desktop.ini
 *.log
+
+# === Secrets & Environment ===
+.env
+.env.backup
+.env.production
+.env.local
+*.pem
+*.key
