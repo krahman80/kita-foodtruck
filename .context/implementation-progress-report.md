@@ -151,3 +151,16 @@ These are non-blocking, but each has a real user-visible or product-quality impa
 - **`Welcome.vue` remains the master public template** — extract, don't redesign.
 - **Colors** come from `@theme` tokens in `app.css` (`warm-white`, `truck-orange`, `cheddar-yellow`, `charcoal-brown`, `toasted-tan`, `chili-red`, `orange-soft/deep`, `cream`, `forest`).
 - **i18n:** translate chrome text via `t('...')` from `resources/js/i18n.js`; shared locale (persisted). Translate UI labels, not DB content.
+
+---
+
+## 8. Planned — Feature Expansion Phase (Post-Launch)
+
+Two additive enhancements were scoped after v1. Both are **production-safe additions with no schema changes**, and are independent of Sprints 0–4:
+
+- **FX.1 — Public menu image lightbox:** clicking a menu image opens a **larger view** so customers can see it clearly. Reusable `ImageLightbox.vue`; accessible (Esc/backdrop close, focus returns to the trigger, `aria-modal`, preserves alt text). Uses the existing `image_url` — **no backend change**.
+- **FX.2 — Admin monthly activity dashboard:** on the dashboard, show **per month** how many times the truck went out as an **Event** vs a **simple Stop** (scheduled `LocationEntry`, split by `is_event`; cancelled excluded). Read-only reporting query (last 12 months or a month/year selector) rendered on `Admin/Dashboard`.
+
+**Cross-references:** `prd.md` §12 (Feature Expansion Phase), `development-plan.md` (Feature Expansion Phase), `ddd.md` §8.
+
+**Status:** Not started (planned).

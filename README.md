@@ -4,6 +4,12 @@ A halal chili dog food truck site for Sapporo, Japan — a single public page pl
 
 **Stack:** Laravel 12 · Vue 3 + Inertia v2 · Tailwind CSS v4 (Vite) · MySQL
 
+## Screenshots
+
+| Public site — Hero & today's location                              | Public site — Menu & story                                 | Admin dashboard                        |
+| ------------------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------- |
+| ![Public site hero and today's truck location](./screenshot-1.jpg) | ![Public menu gallery and about story](./screenshot-2.jpg) | ![Admin dashboard](./screenshot-3.jpg) |
+
 ## Public site
 
 Welcome/hero, live location schedule (including rest-day and next-service states), menu, about story, allergen info, and FAQ. The page chrome text supports **EN ↔ 日本語** via a shared locale.

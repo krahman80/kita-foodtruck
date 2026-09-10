@@ -213,6 +213,29 @@ Columns per ERD:
 
 ---
 
+## Feature Expansion Phase (Post-Launch)
+
+> Goal: additive enhancements after v1 ships. **Neither feature changes existing domain invariants** — both are presentation/reporting additions on top of the current data model (no migrations). Independent of each other and of Sprints 0–4.
+
+### FX.1 — Menu Image Lightbox (public)
+
+- **Goal:** clicking a menu image opens a **larger version** so customers can see/read the item clearly.
+- **Scope:** a reusable `ImageLightbox.vue` (overlay via `<Teleport>` or the native `<dialog>` element), opened from `MenuCard.vue` (inside `MenuGallery.vue`), and optionally reused by the Hero popular-item card.
+- **UX & a11y:** the image (or a small zoom affordance) is the trigger; close via **Esc**, backdrop click, and a visible close button; trap focus while open and **return focus to the trigger** on close; lock body scroll; `role="dialog"` + `aria-modal="true"`; preserve `image_alt_text`; honor `prefers-reduced-motion`.
+- **Data:** none — uses the existing `image_url` / `image_alt_text`. **No migration.**
+- **Outcome check:** clicking any public menu image opens the enlarged view; fully keyboard/screen-reader operable; Esc and backdrop close it.
+
+### FX.2 — Monthly Activity Dashboard (admin)
+
+- **Goal:** on the admin dashboard, show **per month** how many times the truck went out as an **Event** vs a **simple Stop**.
+- **Definition:** count `LocationEntry` where `status = scheduled` in the month, split by `is_event = true` (Event) vs `is_event = false` (routine Stop). **Cancelled entries are excluded** (a cancelled stop is a Rest Day per DDD §4.1 invariant #4). Because of the "one entry per date" invariant, each scheduled entry is exactly one outing.
+- **Scope:** a read-only **reporting** query (Eloquent aggregate) — e.g. `DashboardController` plus an optional `ActivityReportService`; default to the **last 12 months** (or a month/year selector). Render as a small table + simple Tailwind bar chart (no chart library needed for v1).
+- **Data:** none — derived from `location_entries`; **no schema change.**
+- **Note:** this is **operational reporting about the truck's own schedule**, not visitor analytics/tracking (which remains a v1 non-goal).
+- **Outcome check:** the dashboard shows a month-by-month breakdown of Events vs Stops that reconciles with `/admin/locations`.
+
+---
+
 ## Suggested Execution Order & Dependencies
 
 ```mermaid

@@ -213,3 +213,24 @@ Even though this maps closely onto two Eloquent models (`Location`, `MenuItem`),
 - **`is_popular` uniqueness:** Constrained to exactly one `MenuItem` at a time, enforced via the `MenuFeaturingService` domain service (Section 4.2). Resolves the earlier ambiguity in the schema/PRD, which allowed multiple flagged items.
 - **`LocationEntry` cancelled status:** Elaborated in Section 4.1's Status Lifecycle table. Cancelled entries remain visible to the Owner in `/admin/locations` (filterable), are never shown publicly, and are treated identically to a Rest Day by the public query.
 - **Category cardinality:** Confirmed as one-to-many — a single `Category` can contain any number of `MenuItem`s; each `MenuItem` still belongs to exactly one `Category`. No change to the existing model was needed; this simply confirms the intended relationship direction.
+
+---
+
+## 8. Feature Expansion (Post-Launch)
+
+Two planned additions, both **outside** the existing aggregates — no new invariants, no schema changes.
+
+### 8.1 Menu Image Lightbox (presentation only)
+
+A larger-image view triggered by clicking a menu image. This is a **presentation / read-side** concern — the Menu context's read model is already "active items with `image_url`". No change to the `MenuItem` aggregate or its invariants; the lightbox only re-renders an existing `Media.image_url` at a larger size. Lives entirely in the Vue/Inertia presentation layer (a reusable `ImageLightbox` component).
+
+### 8.2 Monthly Activity Report (read-only projection)
+
+An admin dashboard view answering "how many times did the truck go out this month, as an Event vs a simple Stop?" This is a **read-only projection over the `LocationEntry` set** (reporting), not new aggregate behavior:
+
+- Counts `LocationEntry` per month where `status = scheduled`.
+- Split by `EventDetails.is_event` — `true` = Event, `false` = routine Stop.
+- **Excludes `cancelled`** entries, consistent with §4.1 invariant #4 (a cancelled stop is a Rest Day, never a real outing).
+- The "one entry per date" invariant means each scheduled entry counts as exactly one outing, so no de-duplication is needed.
+
+No aggregate, invariant, or domain-event changes. Implement as a read query in the admin presentation path (controller + optional thin reporting service), **not** by expanding `LocationEntry`'s responsibilities. It is also **not** visitor analytics/tracking (a v1 non-goal).

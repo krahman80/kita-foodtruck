@@ -262,6 +262,18 @@ Each sprint delivers a complete, end-to-end vertical slice — database → back
 
 ---
 
+### Feature Expansion Phase (Post-Launch)
+
+Two additive enhancements queued **after v1 launch**. Neither changes existing data models or invariants.
+
+**FX.1 — Menu image lightbox (public).** Clicking a menu image opens a **larger version** so customers can view the item clearly. Implemented as a reusable `ImageLightbox.vue` (accessible: Esc/backdrop close, focus returns to the trigger, `aria-modal`, preserves alt text). No backend change — uses the existing `image_url`.
+
+**FX.2 — Monthly activity dashboard (admin).** The dashboard shows, **per month**, how many times the truck went out as an **Event** vs a **simple Stop** (counts of scheduled `LocationEntry`, split by `is_event`; cancelled excluded). Read-only reporting over `location_entries`; last 12 months or a month/year selector; simple table + bar chart. This is **operational reporting**, not visitor analytics.
+
+**Outcome:** richer public menu viewing and at-a-glance operational insight for the owner, with no schema changes.
+
+---
+
 ### Suggested Sprint Order Rationale
 
 Location ships before Menu because it's the single most time-sensitive, highest-value feature ("where is the truck today") — getting that vertical slice live first gives the owner immediate practical value even before the rest of the site is finished. Static content is deliberately sequenced last since it carries no backend risk and can flex around the two data-driven sprints if timeline pressure hits.
