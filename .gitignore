@@ -17,3 +17,10 @@ desktop.ini
 .env.local
 *.pem
 *.key
+
+# Graphify generated output
+graphify-out/
+
+# Python virtual environments
+.venv/
+venv/
