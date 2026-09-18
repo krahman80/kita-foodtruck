@@ -53,7 +53,7 @@ function closeMobileMenu() {
         <!-- Logo & Identity -->
         <a id="nav-logo-link" href="#main-hero"
           class="flex items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-truck-orange rounded-lg"
-          aria-label="Kita Halal Chili Dogs Home">
+          aria-label="キタハラルチリドッグス札幌 ホーム">
           <div id="nav-logo-badge"
             class="w-10 h-10 rounded-xl bg-truck-orange flex items-center justify-center text-warm-white shadow-sm transition-transform duration-200 group-hover:scale-105">
             <!-- Stylized Food Truck Emblem -->
@@ -67,8 +67,9 @@ function closeMobileMenu() {
             </svg>
           </div>
           <div class="flex flex-col">
-            <span class="font-heading text-lg sm:text-xl font-bold tracking-tight text-charcoal-brown leading-tight">
-              KITA CHILI DOGS
+            <span
+              class="font-heading text-base whitespace-nowrap sm:text-xl font-bold tracking-tight text-charcoal-brown leading-tight">
+              キタハラルチリドッグス札幌
             </span>
             <span class="text-[11px] font-medium tracking-widest text-charcoal-brown/70 uppercase">
               {{ t('brand.tagline') }}
