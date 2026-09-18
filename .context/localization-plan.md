@@ -409,3 +409,63 @@ This is worth noting because Sprint 1's verification passed for the wrong reason
 ### Not in this sprint
 
 The landing page is still a Japanese shell around English section bodies — the Hero CTAs (`See Today's Location`), the location headline template, menu card badges, About prose, the allergen table and the FAQ are Sprints 3–4. The `uppercase tracking-widest` eyebrow treatment on section headings belongs to Sprint 6 (§4E); the header tagline was tightened here because it is header chrome.
+
+---
+
+## 14. Sprint 3 — implementation record
+
+**Outcome delivered:** the "find us and eat" journey reads as Japanese — the Hero, today's location headline, the full menu gallery, and every menu card.
+
+### Files changed (5)
+
+| File                                     | Change                                                                                                                           |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `resources/js/i18n.js`                   | 27 new keys per locale (`hero.*`, `loc.*`, `menu.*`, `spice.*`, `badge.*`) plus a shared `yen()` formatter                       |
+| `Components/Public/Hero.vue`             | Fallback headline and description, CTA labels, the three trust facts, the `Most Popular` tag, the truck `alt`, badge text, price |
+| `Components/Public/LocationSchedule.vue` | **Structural refactor** — see below                                                                                              |
+| `Components/Public/MenuGallery.vue`      | Subtitle, kitchen badge, empty state, combo line, order CTA                                                                      |
+| `Components/Public/MenuCard.vue`         | Spice labels, badge labels, sold-out tag, price, spice tooltip                                                                   |
+
+### The `LocationSchedule.vue` refactor
+
+The headline was an English sentence assembled from concatenated fragments:
+
+```js
+`${fmtDayMonth(...)} — Today we'll be at ${loc.location_name}${landmark}, from ${hm(start)} to ${hm(end)}`
+```
+
+Word-swapping cannot translate that, because Japanese puts the verb last. It is now one translated template with parameters — `t('loc.headline', { date, name, landmark, from, to })` — and the locale owns the word order:
+
+| Locale | Rendered                                                            |
+| ------ | ------------------------------------------------------------------- |
+| ja     | `9月18日(金) — 本日は大通公園（…）にて10:00〜17:00で営業します`     |
+| en     | `Fri, Sep 18 — Today we'll be at 大通公園 (…), from 10:00 to 17:00` |
+
+Two supporting details: `fmtDayMonth` now selects `ja-JP` or `en-US`, and the landmark parenthesis switches between full-width `（…）` and ASCII ` (…)`. `nextLabel` took the same treatment. The `hm()` helper's parameter was renamed from `t` to `time`, since it shadowed the imported `t`.
+
+### Verified
+
+| Check                  | Result                                                                      |
+| ---------------------- | --------------------------------------------------------------------------- |
+| Key coverage           | every `t()` key in the four components resolves — no raw keys render        |
+| Headline, both locales | Correct date format, word order and parenthesis width                       |
+| Menu card              | `ムスリムフレンドリー ¥950 … ● まろやか` / `Muslim Friendly ¥950 … ● Mild`  |
+| Gallery                | `トラック限定コンボ：追加チーズ +¥200 窓口でご注文ください` / EN equivalent |
+| Hero                   | `本日の営業場所を見る` / `メニューを見る（¥）`, plus three JA trust facts   |
+| Toggle                 | Switches the whole journey both directions, no reload                       |
+| Test suite             | 38 passed                                                                   |
+
+### A typo fixed in passing
+
+The default menu badge read **`Muslin Friendly`** — muslin being a fabric. Corrected to `Muslim Friendly` in both locales, now driven by `badge.muslimFriendly`.
+
+### Two notes
+
+1. **`menu.comboAddOn` is a fragment, deliberately.** The price is a separate `<strong>` value token, so the line is `menu.comboAddOn` followed by the `yen(200)` token. Japanese reads it as a price-list pair (「追加チーズ +¥200」); English reads it as a clause ending. This is the only split sentence in the codebase, and it breaks at a **value boundary** rather than mid-grammar — which is what separates it from the `admin.dash.tip` anti-pattern noted in §6.
+2. **`売り切れ` (Sold Out) is not visually verified.** The only sold-out menu item is also inactive, so it never renders on the public page. The key resolves and the identical pattern is verified on the badge next to it; activating that item would prove it end to end.
+
+### Still English on the page
+
+About prose, the allergen table and the FAQ — Sprint 4, which remains externally blocked on roughly 1,000 words of Japanese copy and the allergen wording sign-off. If that review has not started, it is now the critical path (§11).
+
+Also still pending for Sprint 6: the `uppercase tracking-widest` eyebrow treatment on **section** headings. It was deliberately left alone here to keep this sprint a clean text-extraction slice; the header tagline was the only exception, and only because it is header chrome.

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { t, yen } from '@/i18n';
 
 const props = defineProps({
     popularItem: {
@@ -16,18 +17,17 @@ const props = defineProps({
     },
 });
 
-// Fallbacks if no matching record is found in DB
-const headlineText = computed(() => props.heroItem?.name ?? 'Slow-Simmered Halal Chili & Hokkaido Brioche');
-const descriptionText = computed(() => props.heroItem?.description ?? 'Steamed-to-order halal beef franks topped with 12-hour spiced chili con carne, freshly grated Hokkaido cheddar, and locally baked toasted milk buns. Crafted with calm precision on the streets of Sapporo.');
-
-const money = (n) => `¥${Number(n).toLocaleString('en-US')}`;
+// Fallbacks when no matching record is found in the database.
+const headlineText = computed(() => props.heroItem?.name ?? t('hero.fallbackTitle'));
+const descriptionText = computed(() => props.heroItem?.description ?? t('hero.fallbackDesc'));
 
 const heroBadge = computed(() => {
     const p = props.popularItem;
     if (!p) return '';
-    if (p.badge_type === 'limited_batch') return 'Limited Batch';
+    if (p.badge_type === 'limited_batch') return t('badge.limitedBatch');
     if (p.badge_type === 'none') return '';
-    return 'Muslim Friendly Certified';
+
+    return t('badge.muslimFriendlyCertified');
 });
 </script>
 
@@ -41,8 +41,7 @@ const heroBadge = computed(() => {
         class="relative flex min-h-[580px] items-center overflow-hidden sm:min-h-[640px] lg:min-h-[680px]">
         <!-- Food Truck Backdrop -->
         <div class="absolute inset-0 z-0">
-            <img id="hero-bg-image" :src="'/images/hero/hero-bg.jpg'"
-                alt="The Kita Halal Chili Dogs food truck serving customers in a Sapporo park"
+            <img id="hero-bg-image" :src="'/images/hero/hero-bg.jpg'" :alt="t('hero.truckAlt')"
                 referrerpolicy="no-referrer" class="h-full w-full object-cover object-center scale-105 sm:scale-110" />
             <!--
                 Warm scrim, weighted to the left where the copy sits, so the truck on the
@@ -95,24 +94,24 @@ const heroBadge = computed(() => {
                     <div class="flex w-full flex-col items-stretch gap-4 pt-2 sm:w-auto sm:flex-row sm:items-center">
                         <a id="hero-primary-cta" href="#location-schedule"
                             class="inline-flex items-center justify-center rounded-xl bg-truck-orange px-7 py-3.5 text-center text-base font-semibold text-warm-white shadow-md transition-all duration-200 hover:bg-cheddar-yellow hover:text-charcoal-brown active:scale-98">
-                            See Today's Location
+                            {{ t('hero.ctaPrimary') }}
                         </a>
                         <a id="hero-secondary-cta" href="#full-menu"
                             class="inline-flex items-center justify-center rounded-xl border border-warm-white/20 bg-warm-white/10 px-6 py-3.5 text-center text-base font-semibold text-warm-white backdrop-blur-sm transition-all duration-200 hover:bg-warm-white/20">
-                            Explore Menu (¥)
+                            {{ t('hero.ctaSecondary') }}
                         </a>
                     </div>
 
                     <!-- Reassuring Brand Footnotes Overlay -->
                     <div class="flex flex-wrap items-center gap-6 pt-4 text-xs font-medium text-warm-white/80">
                         <span class="flex items-center gap-1.5">
-                            <span class="text-sm text-cheddar-yellow">★</span> 100% Halal Certified Beef
+                            <span class="text-sm text-cheddar-yellow">★</span> {{ t('hero.fact1') }}
                         </span>
                         <span class="flex items-center gap-1.5">
-                            <span class="text-sm text-cheddar-yellow">★</span> Zero Pork &amp; Zero Alcohol
+                            <span class="text-sm text-cheddar-yellow">★</span> {{ t('hero.fact2') }}
                         </span>
                         <span class="flex items-center gap-1.5">
-                            <span class="text-sm text-cheddar-yellow">★</span> Fresh Buns Baked Daily
+                            <span class="text-sm text-cheddar-yellow">★</span> {{ t('hero.fact3') }}
                         </span>
                     </div>
                 </div>
@@ -128,12 +127,12 @@ const heroBadge = computed(() => {
                             <!-- Popular Tag -->
                             <div
                                 class="absolute left-3 top-3 rounded-full bg-truck-orange px-3 py-1 text-xs font-bold tracking-wide text-warm-white shadow-xs">
-                                Most Popular
+                                {{ t('hero.mostPopular') }}
                             </div>
                             <!-- Price Pill in Yen -->
                             <div
                                 class="absolute bottom-3 right-3 rounded-lg bg-charcoal-brown/90 px-3 py-1 text-sm font-bold text-warm-white shadow-xs backdrop-blur-xs">
-                                {{ money(popularItem.price_yen) }}
+                                {{ yen(popularItem.price_yen) }}
                             </div>
                         </div>
 

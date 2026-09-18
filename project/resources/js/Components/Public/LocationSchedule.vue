@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { t } from '@/i18n';
+import { i18n, t } from '@/i18n';
 
 const props = defineProps({
     location: {
@@ -15,26 +15,45 @@ const props = defineProps({
 
 const open = computed(() => Boolean(props.location));
 
-const fmtDayMonth = (d) => {
-    const dt = new Date(`${d}T00:00:00`);
-    return dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+const fmtDayMonth = (date) => {
+    const dt = new Date(`${date}T00:00:00`);
+
+    return i18n.locale === 'ja'
+        ? dt.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' })
+        : dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 };
 
-const hm = (t) => (t ? String(t).slice(0, 5) : '');
+const hm = (time) => (time ? String(time).slice(0, 5) : '');
 
-const landmark = computed(() => (props.location?.landmark_note ? ` (${props.location.landmark_note})` : ''));
+/** Japanese wraps the landmark in full-width parentheses; English uses ASCII. */
+const wrap = (note) => (i18n.locale === 'ja' ? `（${note}）` : ` (${note})`);
+
+const landmark = computed(() =>
+    props.location?.landmark_note ? wrap(props.location.landmark_note) : '',
+);
 
 const headline = computed(() => {
     const loc = props.location;
     if (!loc) return '';
-    return `${fmtDayMonth(loc.schedule_date)} — Today we'll be at ${loc.location_name}${landmark.value}, from ${hm(loc.start_time)} to ${hm(loc.end_time)}`;
+
+    // Built from one translated template, because the word order of this sentence
+    // differs per language and cannot be assembled from concatenated fragments.
+    return t('loc.headline', {
+        date: fmtDayMonth(loc.schedule_date),
+        name: loc.location_name,
+        landmark: landmark.value,
+        from: hm(loc.start_time),
+        to: hm(loc.end_time),
+    });
 });
 
 const nextLabel = computed(() => {
     const n = props.nextLocation;
     if (!n) return '';
-    const where = n.landmark_note ? `${n.location_name} (${n.landmark_note})` : n.location_name;
-    return `${fmtDayMonth(n.schedule_date)} at ${where}`;
+
+    const where = n.landmark_note ? `${n.location_name}${wrap(n.landmark_note)}` : n.location_name;
+
+    return t('loc.nextLabel', { date: fmtDayMonth(n.schedule_date), where });
 });
 
 const mapSrc = computed(() => {

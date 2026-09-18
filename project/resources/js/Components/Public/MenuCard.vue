@@ -1,29 +1,31 @@
 <script setup>
 import { computed } from 'vue';
+import { t, yen } from '@/i18n';
 
 const props = defineProps({
     item: { type: Object, required: true },
 });
 
-const price = computed(() => `¥${Number(props.item.price_yen).toLocaleString('en-US')}`);
+const price = computed(() => yen(props.item.price_yen));
 
-const SPICE = {
-    mild: { dots: '●', label: 'Mild' },
-    medium: { dots: '●●', label: 'Medium' },
-    hot: { dots: '●●●', label: 'Hot' },
-    tangy: { dots: '●', label: 'Tangy' },
-};
+/** Dots are language-independent; only the label is translated. */
+const SPICE_DOTS = { mild: '●', medium: '●●', hot: '●●●', tangy: '●' };
 
-const spice = computed(() => SPICE[props.item.spice_level] ?? { dots: '', label: '' });
+const spice = computed(() => {
+    const dots = SPICE_DOTS[props.item.spice_level] ?? '';
+
+    return dots ? { dots, label: t(`spice.${props.item.spice_level}`) } : { dots: '', label: '' };
+});
 
 const badge = computed(() => {
     switch (props.item.badge_type) {
         case 'limited_batch':
-            return { text: 'Limited Daily Batch', cls: 'bg-chili-red text-warm-white' };
+            return { text: t('badge.limitedBatch'), cls: 'bg-chili-red text-warm-white' };
         case 'none':
             return null;
         default:
-            return { text: 'Muslin Friendly', cls: 'bg-cheddar-yellow text-charcoal-brown' };
+            // Previously 'Muslin Friendly' — a typo for Muslim.
+            return { text: t('badge.muslimFriendly'), cls: 'bg-cheddar-yellow text-charcoal-brown' };
     }
 });
 </script>
@@ -57,7 +59,7 @@ const badge = computed(() => {
         <!-- Sold-out tag -->
         <div v-if="item.is_sold_out"
             class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rotate-[-6deg] rounded-lg bg-chili-red px-4 py-1.5 font-heading text-sm font-bold uppercase tracking-wider text-warm-white shadow-lg">
-            Sold Out
+            {{ t('menu.soldOut') }}
         </div>
 
         <!-- Bottom content -->
@@ -65,7 +67,7 @@ const badge = computed(() => {
             <div class="flex items-baseline justify-between gap-2">
                 <h3 class="font-heading text-2xl font-bold tracking-tight text-warm-white">{{ item.name }}</h3>
                 <span v-if="spice.label" class="shrink-0 text-xs font-semibold text-cheddar-yellow"
-                    :title="`${spice.label} Spice`">
+                    :title="t('spice.title', { label: spice.label })">
                     {{ spice.dots }} {{ spice.label }}
                 </span>
             </div>

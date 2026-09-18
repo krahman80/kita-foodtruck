@@ -72,6 +72,44 @@ const messages = {
         'faq.eyebrow': 'Questions & Answers',
         'faq.title': 'Frequently Asked Questions',
 
+        // ---- Public sections: hero, location, menu ----
+        'hero.fallbackTitle': 'Slow-Simmered Halal Chili & Hokkaido Brioche',
+        'hero.fallbackDesc':
+            'Steamed-to-order halal beef franks topped with 12-hour spiced chili con carne, freshly grated Hokkaido cheddar, and locally baked toasted milk buns.',
+        'hero.ctaPrimary': "See Today's Location",
+        'hero.ctaSecondary': 'Explore Menu (¥)',
+        'hero.fact1': '100% Halal Certified Beef',
+        'hero.fact2': 'Zero Pork & Zero Alcohol',
+        'hero.fact3': 'Fresh Buns Baked Daily',
+        'hero.mostPopular': 'Most Popular',
+        'hero.truckAlt': 'The Kita Halal Chili Dogs food truck serving customers in a Sapporo park',
+
+        // Sentences with placeholders: word order differs per language, so these
+        // must never be assembled from concatenated fragments.
+        'loc.headline': "{date} — Today we'll be at {name}{landmark}, from {from} to {to}",
+        'loc.nextLabel': '{date} at {where}',
+
+        'menu.subtitle':
+            'Every sausage is certified 100% halal beef, topped with slow-reduced chili con carne and paired with toasted artisan milk buns. All prices in Japanese Yen (¥), tax inclusive.',
+        'menu.kitchenBadge': 'Muslim Friendly Kitchen',
+        'menu.emptyTitle': 'Menu coming soon',
+        'menu.emptyDesc':
+            "We're still finalizing our menu. Check back shortly for full listings and prices.",
+        'menu.comboSpecial': 'Truck Combo Special:',
+        'menu.comboAddOn': 'Add extra creamy cheese to any dog for just',
+        'menu.orderCta': 'Order at the Window',
+        'menu.soldOut': 'Sold Out',
+
+        'spice.mild': 'Mild',
+        'spice.medium': 'Medium',
+        'spice.hot': 'Hot',
+        'spice.tangy': 'Tangy',
+        'spice.title': '{label} Spice',
+
+        'badge.limitedBatch': 'Limited Daily Batch',
+        'badge.muslimFriendly': 'Muslim Friendly',
+        'badge.muslimFriendlyCertified': 'Muslim Friendly Certified',
+
         // ---- Admin (shared locale) ----
         'admin.nav.dashboard': 'Dashboard',
         'admin.nav.locations': 'Locations',
@@ -218,6 +256,42 @@ const messages = {
         'allergen.title': 'アレルギー・食事情報',
         'faq.eyebrow': '質問と回答',
         'faq.title': 'よくある質問',
+
+        // ---- 公開セクション（ヒーロー・営業場所・メニュー） ----
+        'hero.fallbackTitle': 'じっくり煮込んだハラルビーフチリと北海道産ブリオッシュ',
+        'hero.fallbackDesc':
+            '注文ごとに蒸し上げたハラルビーフソーセージに、12時間煮込んだチリコンカン、北海道産チェダーチーズ、焼きたてのミルクバンズを合わせた一品。',
+        'hero.ctaPrimary': '本日の営業場所を見る',
+        'hero.ctaSecondary': 'メニューを見る（¥）',
+        'hero.fact1': '100%ハラル認証ビーフ使用',
+        'hero.fact2': 'ポーク・アルコール不使用',
+        'hero.fact3': 'バンズは毎日焼きたて',
+        'hero.mostPopular': '一番人気',
+        'hero.truckAlt': '札幌の公園で営業するキタハラルチリドッグスのフードトラック',
+
+        // 語順が言語ごとに異なるため、断片を連結せずプレースホルダーで組み立てる。
+        'loc.headline': '{date} — 本日は{name}{landmark}にて{from}〜{to}で営業します',
+        'loc.nextLabel': '{date} {where}',
+
+        'menu.subtitle':
+            'ソーセージはすべて100%ハラル認証ビーフ。じっくり煮詰めたチリコンカンと、こんがり焼いたミルクバンズを合わせています。価格はすべて日本円（¥）・税込です。',
+        'menu.kitchenBadge': 'ムスリムフレンドリーキッチン',
+        'menu.emptyTitle': 'メニュー公開準備中',
+        'menu.emptyDesc': '現在メニューを準備しています。公開まで今しばらくお待ちください。',
+        'menu.comboSpecial': 'トラック限定コンボ：',
+        'menu.comboAddOn': '追加チーズ',
+        'menu.orderCta': '窓口でご注文ください',
+        'menu.soldOut': '売り切れ',
+
+        'spice.mild': 'まろやか',
+        'spice.medium': '中辛',
+        'spice.hot': '辛口',
+        'spice.tangy': '酸味',
+        'spice.title': '辛さ: {label}',
+
+        'badge.limitedBatch': '1日限定',
+        'badge.muslimFriendly': 'ムスリムフレンドリー',
+        'badge.muslimFriendlyCertified': 'ムスリムフレンドリー認証',
 
         // ---- Admin (shared locale) ----
         'admin.nav.dashboard': 'ダッシュボード',
@@ -378,4 +452,15 @@ export function toggleLocale() {
     document.documentElement.lang = i18n.locale;
 
     axios.post(PERSIST_ROUTE, { locale: i18n.locale }).catch(() => {});
+}
+
+/**
+ * Format an amount in yen for the active locale.
+ *
+ * Yen has no minor unit and both ja and en group with commas, so the output is
+ * identical today — but keeping it in one place means a currency or locale
+ * change does not need editing every price call site.
+ */
+export function yen(amount) {
+    return `¥${Number(amount).toLocaleString(i18n.locale === 'ja' ? 'ja-JP' : 'en-US')}`;
 }
