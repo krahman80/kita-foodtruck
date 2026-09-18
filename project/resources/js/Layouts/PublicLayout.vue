@@ -1,18 +1,25 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { i18n, t, toggleLocale } from '@/i18n';
 
-defineProps({
+const props = defineProps({
+  /** Optional override. Falls back to the localised metadata below. */
   title: {
     type: String,
-    default: 'Halal Chili Dog Food Truck',
+    default: null,
   },
   description: {
     type: String,
-    default: 'A calm, editorial single-page landing page for a halal chili dog food truck operating in Sapporo, Japan.',
+    default: null,
   },
 });
+
+// Japanese is the primary language, so every metadata string comes from the
+// active locale rather than being hardcoded in English.
+const metaTitle = computed(() => props.title ?? t('meta.title'));
+const metaDescription = computed(() => props.description ?? t('meta.description'));
+const ogLocale = computed(() => (i18n.locale === 'ja' ? 'ja_JP' : 'en_US'));
 
 const isMobileMenuOpen = ref(false);
 
@@ -27,20 +34,25 @@ function closeMobileMenu() {
 
 <template>
 
-  <Head :title="title">
-    <meta name="description" :content="description" />
-    <meta name="keywords"
-      content="halal food truck Sapporo, halal chili dog, halal chili dogs, halal food Japan, chili dog food truck, halal street food Sapporo" />
-    <meta property="og:title" :content="title" />
-    <meta property="og:description" :content="description" />
+  <Head :title="metaTitle">
+    <meta name="description" :content="metaDescription" />
+    <meta name="keywords" :content="t('meta.keywords')" />
+    <meta property="og:title" :content="metaTitle" />
+    <meta property="og:description" :content="metaDescription" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" :content="ogLocale" />
+    <meta property="og:locale:alternate" :content="ogLocale === 'ja_JP' ? 'en_US' : 'ja_JP'" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+    <!--
+      Google Fonts: brand Latin faces plus Noto Sans JP for kana and kanji.
+      The brand faces carry no Japanese glyphs, so without Noto Sans JP the
+      Japanese text renders in whichever font the OS happens to supply.
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet" />
   </Head>
 
@@ -71,7 +83,7 @@ function closeMobileMenu() {
               class="font-heading text-base whitespace-nowrap sm:text-xl font-bold tracking-tight text-charcoal-brown leading-tight">
               キタハラルチリドッグス
             </span>
-            <span class="text-[11px] font-medium tracking-widest text-charcoal-brown/70 uppercase">
+            <span class="text-[11px] font-medium tracking-wide text-charcoal-brown/70 uppercase">
               {{ t('brand.tagline') }}
             </span>
           </div>
@@ -105,7 +117,7 @@ function closeMobileMenu() {
           <!-- Language toggle (desktop) -->
           <button id="lang-toggle-desktop" type="button" @click="toggleLocale"
             class="inline-flex items-center justify-center rounded-xl border border-toasted-tan/30 px-3 py-1.5 text-xs font-semibold text-charcoal-brown/80 hover:border-truck-orange hover:text-truck-orange transition-colors"
-            :aria-label="'Switch language to ' + (i18n.locale === 'ja' ? 'English' : 'Japanese')">
+            :aria-label="i18n.locale === 'ja' ? t('a11y.langToEn') : t('a11y.langToJa')">
             {{ t('toggle.lang') }}
           </button>
         </nav>
@@ -113,7 +125,7 @@ function closeMobileMenu() {
         <!-- Mobile Hamburger Toggle Button -->
         <button id="mobile-menu-btn" type="button" @click="toggleMobileMenu"
           class="lg:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-charcoal-brown border border-toasted-tan/30 hover:bg-tan-subtle focus:outline-none focus:ring-2 focus:ring-truck-orange transition-colors"
-          :aria-expanded="isMobileMenuOpen" aria-label="Toggle navigation menu" aria-controls="mobile-menu-drawer">
+          :aria-expanded="isMobileMenuOpen" :aria-label="t('a11y.toggleMenu')" aria-controls="mobile-menu-drawer">
           <svg id="hamburger-icon" class="w-6 h-6" :class="isMobileMenuOpen ? 'hidden' : 'block'" fill="none"
             stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="4" y1="6" x2="20" y2="6" />
@@ -203,8 +215,8 @@ function closeMobileMenu() {
                   <circle cx="17" cy="18" r="2" />
                 </svg>
               </div>
-              <span class="font-heading text-xl font-bold tracking-tight text-charcoal-brown">
-                KITA CHILI DOGS
+              <span class="font-heading text-xl font-bold tracking-tight whitespace-nowrap text-charcoal-brown">
+                キタハラルチリドッグス
               </span>
             </div>
             <p class="text-sm text-charcoal-brown/75 leading-relaxed">
@@ -236,7 +248,7 @@ function closeMobileMenu() {
               </li>
               <li class="flex items-start gap-2.5 pt-1 text-xs text-charcoal-brown/65">
                 <span class="text-truck-orange mt-0.5">📍</span>
-                <span>Mobile Base: Chuo Ward, Sapporo, Hokkaido 060-0042, Japan</span>
+                <span>{{ t('foot.base') }}</span>
               </li>
             </ul>
           </div>

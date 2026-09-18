@@ -10,6 +10,17 @@ import axios from 'axios';
 
 const messages = {
     en: {
+        // Document metadata + accessibility
+        // The brand is appended to every page title by app.js, so it is not repeated here.
+        'meta.title': 'Halal Chili Dog Food Truck in Sapporo',
+        'meta.description':
+            "Sapporo's 100% halal-certified chili dog food truck. Slow-simmered beef chili, Hokkaido milk buns, and today's location updated daily.",
+        'meta.keywords':
+            'halal food truck Sapporo, halal chili dog, halal food Japan, chili dog food truck, halal street food Sapporo',
+        'a11y.toggleMenu': 'Toggle navigation menu',
+        'a11y.langToEn': 'Switch to English',
+        'a11y.langToJa': 'Switch to Japanese',
+
         // Header / nav
         'brand.tagline': 'Sapporo • 100% Halal',
         'nav.spot': "Today's Spot",
@@ -35,6 +46,7 @@ const messages = {
             "Sapporo's original 100% halal chili dog food truck. Crafted with slow-simmered beef, fresh Hokkaido milk buns, and genuine northern warmth.",
         'foot.halal': 'Halal Certified Kitchen on Wheels',
         'foot.rights': '© 2026 Kita Halal Chili Dogs Sapporo. All rights reserved.',
+        'foot.base': 'Mobile Base: Chuo Ward, Sapporo, Hokkaido 060-0042, Japan',
         'foot.handcrafted': 'Handcrafted with 100% Halal Certified Beef • Hokkaido, Japan',
 
         // Section headings (eyebrow + title)
@@ -146,6 +158,17 @@ const messages = {
     },
 
     ja: {
+        // 文書メタデータ・アクセシビリティ
+        // ブランド名は app.js が全ページのタイトルに付与するため、ここでは繰り返さない。
+        'meta.title': '札幌のハラルチリドッグス フードトラック',
+        'meta.description':
+            '札幌を中心に営業する100%ハラル認証のチリドッグフードトラック。じっくり煮込んだビーフチリと北海道産バンズをお届けします。本日の営業場所とメニューは毎日更新。',
+        'meta.keywords':
+            'ハラル フードトラック 札幌, ハラル チリドッグ, 札幌 ハラル, ハラル 日本, ムスリム フレンドリー 札幌',
+        'a11y.toggleMenu': 'ナビゲーションを開閉する',
+        'a11y.langToEn': '英語に切り替える',
+        'a11y.langToJa': '日本語に切り替える',
+
         // Header / nav
         'brand.tagline': '札幌 • 100%ハラル',
         'nav.spot': '本日の営業',
@@ -170,6 +193,7 @@ const messages = {
             '札幌発の100%ハラル・チリドッグフードトラック。じっくり煮込んだビーフと北海道産ミルクパンで、心のこもった一杯を。',
         'foot.halal': 'ハラル認証キッチンオンホイール',
         'foot.rights': '© 2026 キタハラルチリドッグス',
+        'foot.base': '本拠地：北海道札幌市中央区 060-0042',
         'foot.handcrafted': '100%ハラル認証ビーフ使用 • 北海道・日本',
 
         // Section headings (eyebrow + title)

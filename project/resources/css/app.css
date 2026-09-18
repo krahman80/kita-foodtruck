@@ -24,12 +24,20 @@
     --color-cream: oklch(0.966 0.012 84);
     --color-forest: oklch(0.45 0.09 142);
 
+    /*
+     Brand Latin faces first, then Japanese faces. Font matching is per-glyph, so
+     Latin keeps Outfit / Plus Jakarta Sans while kana and kanji fall through to
+     Noto Sans JP. Without the Japanese faces the wordmark, nav and headings
+     render in whatever the OS happens to supply, which differs per platform.
+    */
     --font-display:
-        "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        sans-serif;
-    --font-body:
-        "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Outfit", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+        "Yu Gothic", Meiryo, -apple-system, BlinkMacSystemFont, "Segoe UI",
         Roboto, sans-serif;
+    --font-body:
+        "Plus Jakarta Sans", "Noto Sans JP", "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans", "Yu Gothic", Meiryo, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, sans-serif;
 }
 
 /* 3. Base Typography and Default Body Styles */
@@ -39,6 +47,15 @@ body {
     color: var(--color-charcoal-brown);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+}
+
+/*
+ Japanese needs looser leading than Latin at the same size. This only sets the
+ default for unstyled text; prose blocks that carry an explicit `leading-*`
+ utility are tuned alongside their translated copy in the later sprints.
+*/
+body:lang(ja) {
+    line-height: 1.75;
 }
 
 h1,

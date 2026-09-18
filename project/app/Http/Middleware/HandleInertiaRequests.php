@@ -34,7 +34,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'locale' => app()->getLocale(),
+            // Lazy on purpose. share() runs in the web middleware group, which is
+            // BEFORE route middleware, so reading app()->getLocale() eagerly here
+            // would report the pre-SetLocale value and the client would seed itself
+            // in a different language than the server renders (validation messages,
+            // mail, <html lang>). The closure defers the read to response time.
+            'locale' => fn() => app()->getLocale(),
             'flash' => session('flash'),
         ];
     }

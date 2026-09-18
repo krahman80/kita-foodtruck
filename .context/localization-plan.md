@@ -350,4 +350,62 @@ Japanese made the public header nav wider than its `md` breakpoint could hold, a
 | **`GuestLayout.vue` wordmark**        | Still had the Latin `KITA CHILI DOGS` — the third and last layout straggler                                                                                                                                                                                                                 |
 | **`auth.signInHint` / `foot.rights`** | §6 items: renamed to the standard brand, and the English `All rights reserved.` tail removed                                                                                                                                                                                                |
 
-Note: `APP_NAME` was the template leftover `Haus//02`, which rendered in every page title (e.g. `ログイン - Haus//02`). It is now `キタハラルチリドッグス` in `.env`; `.env.example` still carries the generic `Laravel` placeholder and should be aligned before the next deploy. The public page title prefix (`Muslim Friendly Chili Dog Sapporo`, from the `title` prop in `Welcome.vue`) is still English and is covered by §4C.
+Note: `APP_NAME` was the template leftover `Haus//02`, which rendered in every page title (e.g. `ログイン - Haus//02`). It is now `キタハラルチリドッグス` in `.env`; `.env.example` still carries the generic `Laravel` placeholder and should be aligned before the next deploy. The public page title prefix (`Muslim Friendly Chili Dog Sapporo`, from the `title` prop in `Welcome.vue`) is still English and is covered by §4C — **resolved in Sprint 2, see §13**.
+
+---
+
+## 13. Sprint 2 — implementation record
+
+**Outcome delivered:** a visitor landing on `/` gets Japanese chrome, Japanese metadata and `<html lang="ja">`, and the EN toggle survives a reload because the _server_, not the browser, remembers the choice.
+
+### Files changed (5)
+
+| File                                            | Change                                                                                                                                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `resources/css/app.css`                         | Japanese faces appended to `--font-display` / `--font-body`; `body:lang(ja)` line-height 1.75                                                                                  |
+| `resources/js/i18n.js`                          | New `meta.*`, `a11y.*` and `foot.base` keys in both locales                                                                                                                    |
+| `resources/js/Layouts/PublicLayout.vue`         | Locale-aware title / description / keywords, `og:locale` + `og:locale:alternate`, Noto Sans JP added to the font link, aria-labels from keys, footer wordmark and base address |
+| `resources/js/Pages/Welcome.vue`                | Removed the hardcoded English `title` prop                                                                                                                                     |
+| `app/Http/Middleware/HandleInertiaRequests.php` | **Bug fix** — lazy `locale` closure, see below                                                                                                                                 |
+
+### The bug this sprint exposed
+
+`Inertia\Middleware` resolves shared props inside the `web` middleware group, which runs **before** route middleware. `'locale' => app()->getLocale()` therefore captured the pre-`SetLocale` value:
+
+| Check, after `POST /locale {"locale":"en"}`      | Before   | After |
+| ------------------------------------------------ | -------- | ----- |
+| `<html lang>` — rendered at response time        | `en`     | `en`  |
+| Inertia shared prop `locale` — the client's seed | **`ja`** | `en`  |
+
+So the visible language and the server's language disagreed — precisely the failure this architecture exists to prevent. It would have produced Japanese validation errors inside an English UI. Fixed by deferring the read to response time: `'locale' => fn () => app()->getLocale()`. Recorded in `.ai/rules/middleware.md`.
+
+This is worth noting because Sprint 1's verification passed for the wrong reason: the default is `ja`, so a stale `ja` prop looked correct.
+
+### Japanese typography
+
+`Outfit` and `Plus Jakarta Sans` carry no kana or kanji, so Japanese was rendering in whatever font the OS supplied — different on macOS, Windows and Android. Noto Sans JP is now loaded and appended **after** the brand Latin faces. No `:lang(ja)` selectors are needed: font matching is per-glyph, so Latin keeps Outfit / Plus Jakarta Sans and kana + kanji fall through to Noto Sans JP. Verified with `document.fonts.check('16px "Noto Sans JP"', 'あ')` → `true`.
+
+### Verified
+
+| Check                               | Result                                                                |
+| ----------------------------------- | --------------------------------------------------------------------- |
+| `GET /`, fresh session              | `lang="ja"`, shared prop `locale: "ja"` — consistent                  |
+| `POST /locale {"locale":"en"}`      | `204`                                                                 |
+| `GET /` after that POST             | `lang="en"`, shared prop `locale: "en"` — consistent                  |
+| `POST /locale {"locale":"fr"}`      | `422` — allowlist enforced                                            |
+| Toggle then reload, both directions | Persists (`en` → `ja` → `en`), each surviving a reload                |
+| JA title                            | `札幌のハラルチリドッグス フードトラック - キタハラルチリドッグス`    |
+| EN title                            | `Halal Chili Dog Food Truck in Sapporo - キタハラルチリドッグス`      |
+| `og:locale` / `og:locale:alternate` | `ja_JP`/`en_US`, flipping to `en_US`/`ja_JP`                          |
+| aria-labels                         | `ナビゲーションを開閉する` / `英語に切り替える`, flipping with locale |
+| Footer                              | wordmark `キタハラルチリドッグス`; base address localised             |
+| Test suite                          | 38 passed                                                             |
+
+### Two things worth knowing
+
+1. **`meta.title` must not repeat the brand.** `app.js` appends `APP_NAME` to every page title, so the first draft produced `…｜キタハラルチリドッグス - キタハラルチリドッグス`. The key now holds only the descriptive part.
+2. **The brand suffix in the title is not locale-aware.** `APP_NAME` is a single value, so the EN view is titled `… - キタハラルチリドッグス`. Acceptable for a brand mark; making it locale-aware would mean moving the suffix out of `app.js`.
+
+### Not in this sprint
+
+The landing page is still a Japanese shell around English section bodies — the Hero CTAs (`See Today's Location`), the location headline template, menu card badges, About prose, the allergen table and the FAQ are Sprints 3–4. The `uppercase tracking-widest` eyebrow treatment on section headings belongs to Sprint 6 (§4E); the header tagline was tightened here because it is header chrome.

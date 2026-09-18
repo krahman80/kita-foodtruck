@@ -7,4 +7,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | bootstrap/** | .ai/rules/bootstrap.md |
 | resources/js/** | .ai/rules/js.md |
 | lang/** | .ai/rules/lang.md |
-| app/Http/Middleware/** | .ai/rules/middleware.md |
+| app/Http/Middleware/**, app/Http/Middleware/HandleInertiaRequests.php | .ai/rules/middleware.md |
