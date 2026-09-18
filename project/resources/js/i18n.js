@@ -1,8 +1,12 @@
 import { reactive } from 'vue';
+import axios from 'axios';
 
-// Lightweight partial i18n (Option A).
-// Only "chrome" text is translated: public nav, footer, and section headings.
-// DB-driven content (locations/menu/FAQ bodies) is intentionally left as-is.
+// Lightweight i18n. Japanese is the primary language and English is
+// supplementary, so 'ja' is the default and 'en' is the fallback for any key
+// missing from the JA table.
+//
+// DB-driven content (locations/menu) is intentionally left as-is: it is
+// authored in Japanese by the client and is never a translation target.
 
 const messages = {
     en: {
@@ -165,7 +169,7 @@ const messages = {
         'foot.brandDesc':
             '札幌発の100%ハラル・チリドッグフードトラック。じっくり煮込んだビーフと北海道産ミルクパンで、心のこもった一杯を。',
         'foot.halal': 'ハラル認証キッチンオンホイール',
-        'foot.rights': '© 2026 キタハラルチリドッグス札幌 All rights reserved.',
+        'foot.rights': '© 2026 キタハラルチリドッグス',
         'foot.handcrafted': '100%ハラル認証ビーフ使用 • 北海道・日本',
 
         // Section headings (eyebrow + title)
@@ -221,6 +225,25 @@ const messages = {
         'admin.loc.legend.event': 'イベント',
         'admin.loc.legend.cancelled': '中止',
 
+        // Admin: location form fields (staff screens are JA-only)
+        'admin.brandSub': '管理画面・札幌',
+        'admin.loc.date': '日付',
+        'admin.loc.locationName': '場所名',
+        'admin.loc.address': '住所',
+        'admin.loc.landmarkNote': '目印',
+        'admin.loc.startTime': '開始時刻',
+        'admin.loc.endTime': '終了時刻',
+        'admin.loc.onMap': '地図上の位置',
+        'admin.loc.onMapHint': '地図をクリックして緯度・経度を設定するか、以下に直接入力してください。',
+        'admin.loc.latitude': '緯度',
+        'admin.loc.longitude': '経度',
+        'admin.loc.mapPinNote': 'ピンのメモ',
+        'admin.loc.transitNote': 'アクセス',
+        'admin.loc.isEvent': 'この営業はイベント',
+        'admin.loc.eventName': 'イベント名',
+        'admin.loc.pickDate': 'カレンダーで日付を選ぶと入力できるようになります。',
+        'admin.loc.pastReadOnly': '過去の日付は閲覧のみです。今後の営業予定を登録してください。',
+
         'admin.saveStop': '営業を保存',
         'admin.saveChanges': '変更を保存',
         'admin.saving': '保存中…',
@@ -250,7 +273,7 @@ const messages = {
         // ---- Auth (guest/login) ----
         'auth.logInTitle': 'ログイン',
         'auth.welcomeBack': 'おかえりなさい',
-        'auth.signInHint': 'キタチリドッグスの管理画面にログインします。',
+        'auth.signInHint': 'キタハラルチリドッグスの管理画面にログインします。',
         'auth.email': 'メールアドレス',
         'auth.password': 'パスワード',
         'auth.remember': 'ログイン状態を保持する',
@@ -277,25 +300,58 @@ const messages = {
     },
 };
 
-const stored =
-    typeof localStorage !== 'undefined' ? localStorage.getItem('kita-locale') : null;
-const startLocale = stored && messages[stored] ? stored : 'en';
+const DEFAULT_LOCALE = 'ja';
+const LOCALES = ['ja', 'en'];
+
+/** Must match the route declared in routes/web.php. */
+const PERSIST_ROUTE = '/locale';
 
 export const i18n = reactive({
-    locale: startLocale,
+    locale: DEFAULT_LOCALE,
     messages,
 });
 
-export function t(key) {
-    const table = i18n.messages[i18n.locale] || {};
-    const value = table[key];
-    if (value !== undefined) return value;
-    return messages.en[key] ?? key;
+const normalize = (locale) => (LOCALES.includes(locale) ? locale : DEFAULT_LOCALE);
+
+/**
+ * Seed the client from the locale the server rendered with, so `<html lang>`,
+ * validation messages and the visible labels cannot disagree.
+ */
+export function initLocale(locale) {
+    i18n.locale = normalize(locale);
+    document.documentElement.lang = i18n.locale;
 }
 
+/** Replace {placeholder} tokens. Needed for sentences, not just labels. */
+function interpolate(message, params) {
+    if (!params) return message;
+
+    return message.replace(/\{(\w+)\}/g, (match, key) =>
+        Object.prototype.hasOwnProperty.call(params, key) ? String(params[key]) : match,
+    );
+}
+
+export function t(key, params) {
+    const value = i18n.messages[i18n.locale]?.[key] ?? messages.en[key];
+
+    return value === undefined ? key : interpolate(value, params);
+}
+
+/**
+ * Switch language and record the choice server-side.
+ *
+ * The switch itself is reactive and instant; the request exists only so that
+ * server-generated text (validation errors, auth errors, mail) and the
+ * `<html lang>` attribute follow the same locale. It is deliberately not
+ * awaited, and the promise is swallowed: a failed preference write must never
+ * surface as a broken toggle.
+ *
+ * The cookie cannot be written directly from JavaScript — Laravel's
+ * EncryptCookies discards values it cannot decrypt — hence the round trip.
+ */
 export function toggleLocale() {
-    const next = i18n.locale === 'ja' ? 'en' : 'ja';
-    i18n.locale = next;
-    if (typeof localStorage !== 'undefined') localStorage.setItem('kita-locale', next);
-    if (typeof document !== 'undefined') document.documentElement.lang = next;
+    i18n.locale = i18n.locale === 'ja' ? 'en' : 'ja';
+    document.documentElement.lang = i18n.locale;
+
+    axios.post(PERSIST_ROUTE, { locale: i18n.locale }).catch(() => {});
 }

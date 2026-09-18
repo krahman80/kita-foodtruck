@@ -4,18 +4,23 @@ use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PublicController::class, 'home']);
+Route::get('/', [PublicController::class, 'home'])->middleware('locale');
+
+// Persists the public language toggle. Reachable without 'locale' on purpose:
+// it only writes the choice, it does not render anything.
+Route::post('locale', LocaleController::class)->name('locale.update');
 
 // Backwards-compatible redirect for anything still pointing at the old /dashboard.
 Route::get('/dashboard', [PublicController::class, 'dashboardRedirect'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
 // Protected admin area (owner-only).
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'force-locale'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('accounts', [AccountController::class, 'index'])->name('accounts.index');
@@ -35,7 +40,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('menu/{menuItem}/toggle-active', [MenuItemController::class, 'toggleActive'])->name('menu.toggle-active');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'force-locale'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

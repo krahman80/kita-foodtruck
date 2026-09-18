@@ -20,7 +20,7 @@
 | 6   | **Admin, authentication, and profile screens are Japanese only.**             | Staff-facing. Removes roughly 70 English keys and half the label work.                                                                              |
 | 7   | **No browser-language auto-detection.** First visit is always Japanese.       | Many Japanese residents run an English-language OS; detection would serve English to the core audience.                                             |
 | 8   | **An English visitor sees English labels around Japanese content.**           | Agreed explicitly with the client as an accepted outcome, not a defect.                                                                             |
-| 9   | **The brand is `キタハラルチリドッグス札幌` in all Japanese text.**           | Two competing Japanese names existed; see §6.                                                                                                       |
+| 9   | **The brand is `キタハラルチリドッグス` in all Japanese text.**               | Two competing Japanese names existed; see §6. Shortened from `キタハラルチリドッグス札幌`, which was too wide for the header nav.                   |
 
 ---
 
@@ -167,16 +167,16 @@ These cover `LocationRequest`, `MenuItemRequest`, `ProfileUpdateRequest`, and ev
 
 ## 6. Brand name standardization
 
-**Standard: `キタハラルチリドッグス札幌`** — used everywhere the brand appears, in both languages. The header wordmark is no longer locale-dependent and always renders the Japanese name.
+**Standard: `キタハラルチリドッグス`** (shortened from `キタハラルチリドッグス札幌`, which did not fit the header nav) — used everywhere the brand appears, in both languages. The header wordmark is no longer locale-dependent and always renders the Japanese name.
 
 Current inconsistencies to correct:
 
-| Location                             | Current                                                  | Action                                                                                                                                     |
-| ------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `i18n.js` → `auth.signInHint`        | `キタチリドッグスの管理画面にログインします。`           | Replace with the standard name                                                                                                             |
-| `i18n.js` → `foot.rights`            | `© 2026 キタハラルチリドッグス札幌 All rights reserved.` | Keep the name; remove the English legal suffix (JA is primary)                                                                             |
-| `PublicLayout.vue`                   | Latin wordmark `KITA CHILI DOGS`                         | **Done** — replaced with `キタハラルチリドッグス札幌`; mobile size reduced to `text-base` so 12 full-width characters still fit the header |
-| `PublicLayout.vue`, `AboutStory.vue` | `aria-label`s and `alt` text using the Latin brand name  | Logo `aria-label` **done**; `AboutStory.vue` `alt` text pending Phase 2                                                                    |
+| Location                             | Current                                                  | Action                                                                                                    |
+| ------------------------------------ | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `i18n.js` → `auth.signInHint`        | `キタチリドッグスの管理画面にログインします。`           | **Done** — replaced with the standard name                                                                |
+| `i18n.js` → `foot.rights`            | `© 2026 キタハラルチリドッグス札幌 All rights reserved.` | **Done** — name kept, English legal suffix removed (JA is primary)                                        |
+| `PublicLayout.vue`                   | Latin wordmark `KITA CHILI DOGS`                         | **Done** — replaced with the Japanese brand name; size reduced so 10 full-width characters fit the header |
+| `PublicLayout.vue`, `AboutStory.vue` | `aria-label`s and `alt` text using the Latin brand name  | Logo `aria-label` **done**; `AboutStory.vue` `alt` text pending Phase 2                                   |
 
 Related terminology drift to resolve at the same time:
 
@@ -236,7 +236,7 @@ Related terminology drift to resolve at the same time:
 
 §7 lists the work **horizontally** (all plumbing, then all public text, then all staff text). The sprints below are the same work arranged as **vertical slices**: each sprint ends with a journey the client can actually click through, spanning server (validation, mail, `html lang`), client (labels), and typography together.
 
-Because the database is out of scope (§8), a "slice" here is a **user journey**, not a data feature. The slices are ordered so the riskiest architectural assumption is proven **first**, not last.
+Because the database is out of scope (§8), a "slice" here is a **user journey**, not a data feature. The slices are ordered so the riskiest architectural assumption is proven **first**, not last. Sprint 1 is complete — see §12.
 
 | #     | Vertical outcome (demonstrable)                                                                                                          | Covers                     | New | Changed | Deleted | JA keys | Effort       |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | --- | ------- | ------- | ------- | ------------ |
@@ -285,3 +285,69 @@ Two Vue files are unreferenced and should be **deleted rather than translated**:
 ### Sizing basis
 
 Measured, not estimated: `i18n.js` = 301 lines / 226 key lines = **113 keys per locale** (admin 51, auth 21, public 41). 25 Vue files totalling 3,181 lines. The +35 / +40 / +45 JA-key figures are derived from the actual hardcoded strings counted in §4C and §4D (28 `<label>`s in the admin forms, plus the enumerated section bodies).
+
+---
+
+## 12. Sprint 1 — implementation record
+
+**Outcome delivered:** an admin logs in and manages a location entirely in Japanese — labels, dates, and validation messages. This is the architecture proof described in §11: the server now produces Japanese text, not just the client.
+
+### Verified in the running container
+
+| Check                              | Result                                                                   |
+| ---------------------------------- | ------------------------------------------------------------------------ |
+| `GET /`                            | `200`, `lang="ja"`, shared Inertia prop `locale: "ja"`                   |
+| `GET /login`                       | `200`, `lang="ja"` — proves `ForceLocale` pins the staff segment         |
+| `GET /admin/locations` (guest)     | `302` → login, as expected                                               |
+| `POST /locale`                     | registered as `locale.update › LocaleController`                         |
+| `admin.locations.index` middleware | `web → Authenticate → EnsureEmailIsVerified → ForceLocale`               |
+| Validation output                  | `場所名は必須です。` / `価格は必須です。` / `メールアドレスは必須です。` |
+| Password reset mail subject        | `パスワード再設定のご案内`                                               |
+| `php -l` on all new PHP files      | clean                                                                    |
+| `npm run build`                    | passes                                                                   |
+
+### Files created (7 — one more than planned)
+
+| File                                        | Purpose                                                                                                                                                          |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lang/ja/validation.php`                    | Messages plus the `attributes` name map                                                                                                                          |
+| `lang/ja/auth.php`                          | Login failure and throttle messages                                                                                                                              |
+| `lang/ja/passwords.php`                     | Password reset status messages                                                                                                                                   |
+| `lang/ja.json`                              | Localises the `ResetPassword` and `VerifyEmail` notifications — they call `Lang::get()` with the English sentence as the key, so **no class override is needed** |
+| `app/Http/Middleware/SetLocale.php`         | session → cookie → default, allowlist-validated                                                                                                                  |
+| `app/Http/Middleware/ForceLocale.php`       | Pins staff route groups to `ja`                                                                                                                                  |
+| `app/Http/Controllers/LocaleController.php` | `POST /locale`, returns `204` (not a redirect — the toggle already re-renders reactively)                                                                        |
+
+**Changed (10):** `.env`, `.env.example`, `bootstrap/app.php`, `routes/web.php`, `routes/auth.php`, `HandleInertiaRequests.php`, `i18n.js`, `app.js`, `AdminLayout.vue`, `Admin/Locations/Index.vue`
+
+**Deleted (1):** `resources/js/Pages/Dashboard.vue`
+
+### Deviations from the plan
+
+| Planned         | Actual | Why                                                       |
+| --------------- | ------ | --------------------------------------------------------- |
+| 6 new files     | 7      | `lang/ja.json` was the cleanest way to localise the mails |
+| +35 JA keys     | +17    | The location form needed fewer keys than the estimate     |
+| 9 changed files | 10     | `routes/auth.php` also needed the staff pin               |
+
+### Two findings worth carrying forward
+
+1. **Japanese particle spacing.** The first pass produced `場所名 は必須です。` — a space before the particle, which reads as a typo to a Japanese reader. Corrected across every message file. Recorded in `.ai/rules/lang.md` so it is not reintroduced.
+2. **Config caching.** `.env` changes do **not** take effect until `php artisan config:clear`, because `bootstrap/cache/config.php` is present. Recorded in `.ai/rules/bootstrap.md`, together with the usable invocation (`docker compose exec app php artisan ...`) since there is no local PHP.
+
+### Carry-over into Sprint 5
+
+`MenuItemRequest` also posts `name`, which the global `attributes` map resolves to お名前 — correct for the auth and account screens, wrong for a menu item. It must override this with its own `attributes()` method returning `['name' => 'メニュー名']`. Flagged in a comment in `lang/ja/validation.php` so it cannot be missed.
+
+### Follow-ups fixed during Sprint 1 verification
+
+Japanese made the public header nav wider than its `md` breakpoint could hold, and the longer wordmark pushed it further. Because these are public-chrome issues (Sprint 2 territory), they were fixed immediately rather than deferred:
+
+| Item                                  | Detail                                                                                                                                                                                                                                                                                      |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Brand shortened**                   | `キタハラルチリドッグス札幌` → `キタハラルチリドッグス`, applied to all three layouts, `auth.signInHint`, `foot.rights`                                                                                                                                                                     |
+| **Desktop nav wrapping**              | The nav needed ~841px but had ~442px at `md`. Moved to `lg:` (hamburger covers 768–1023), `gap-4 xl:gap-6`, `text-xs xl:text-sm`, plus `whitespace-nowrap` on the links and `shrink-0` on the logo so a label can never break mid-word. Verified single-row at 1024–1680px with no overflow |
+| **`GuestLayout.vue` wordmark**        | Still had the Latin `KITA CHILI DOGS` — the third and last layout straggler                                                                                                                                                                                                                 |
+| **`auth.signInHint` / `foot.rights`** | §6 items: renamed to the standard brand, and the English `All rights reserved.` tail removed                                                                                                                                                                                                |
+
+Note: `APP_NAME` was the template leftover `Haus//02`, which rendered in every page title (e.g. `ログイン - Haus//02`). It is now `キタハラルチリドッグス` in `.env`; `.env.example` still carries the generic `Laravel` placeholder and should be aligned before the next deploy. The public page title prefix (`Muslim Friendly Chili Dog Sapporo`, from the `title` prop in `Welcome.vue`) is still English and is covered by §4C.

@@ -52,8 +52,8 @@ function closeMobileMenu() {
       <div class="max-w-[1140px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         <!-- Logo & Identity -->
         <a id="nav-logo-link" href="#main-hero"
-          class="flex items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-truck-orange rounded-lg"
-          aria-label="キタハラルチリドッグス札幌 ホーム">
+          class="flex shrink-0 items-center gap-3.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-truck-orange rounded-lg"
+          aria-label="キタハラルチリドッグス ホーム">
           <div id="nav-logo-badge"
             class="w-10 h-10 rounded-xl bg-truck-orange flex items-center justify-center text-warm-white shadow-sm transition-transform duration-200 group-hover:scale-105">
             <!-- Stylized Food Truck Emblem -->
@@ -69,7 +69,7 @@ function closeMobileMenu() {
           <div class="flex flex-col">
             <span
               class="font-heading text-base whitespace-nowrap sm:text-xl font-bold tracking-tight text-charcoal-brown leading-tight">
-              キタハラルチリドッグス札幌
+              キタハラルチリドッグス
             </span>
             <span class="text-[11px] font-medium tracking-widest text-charcoal-brown/70 uppercase">
               {{ t('brand.tagline') }}
@@ -78,7 +78,8 @@ function closeMobileMenu() {
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav id="desktop-nav" class="hidden md:flex items-center gap-8 text-sm font-medium text-charcoal-brown/85">
+        <nav id="desktop-nav"
+          class="hidden items-center gap-4 text-xs font-medium whitespace-nowrap text-charcoal-brown/85 lg:flex xl:gap-6 xl:text-sm">
           <a id="nav-link-location" href="#location-schedule"
             class="hover:text-truck-orange transition-colors duration-150 py-1">
             {{ t('nav.spot') }}
@@ -111,7 +112,7 @@ function closeMobileMenu() {
 
         <!-- Mobile Hamburger Toggle Button -->
         <button id="mobile-menu-btn" type="button" @click="toggleMobileMenu"
-          class="md:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-charcoal-brown border border-toasted-tan/30 hover:bg-tan-subtle focus:outline-none focus:ring-2 focus:ring-truck-orange transition-colors"
+          class="lg:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-charcoal-brown border border-toasted-tan/30 hover:bg-tan-subtle focus:outline-none focus:ring-2 focus:ring-truck-orange transition-colors"
           :aria-expanded="isMobileMenuOpen" aria-label="Toggle navigation menu" aria-controls="mobile-menu-drawer">
           <svg id="hamburger-icon" class="w-6 h-6" :class="isMobileMenuOpen ? 'hidden' : 'block'" fill="none"
             stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -128,7 +129,7 @@ function closeMobileMenu() {
       </div>
 
       <!-- Mobile Dropdown Menu -->
-      <div id="mobile-menu-drawer" class="md:hidden grid transition-[grid-template-rows] duration-300 ease-in-out"
+      <div id="mobile-menu-drawer" class="lg:hidden grid transition-[grid-template-rows] duration-300 ease-in-out"
         :class="isMobileMenuOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
         <div class="overflow-hidden">
           <div class="border-b border-toasted-tan/25 bg-warm-white px-5 pt-3 pb-6 space-y-3">

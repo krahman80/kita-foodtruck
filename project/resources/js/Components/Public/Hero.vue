@@ -39,16 +39,30 @@ const heroBadge = computed(() => {
          ========================================== -->
     <section id="main-hero"
         class="relative flex min-h-[580px] items-center overflow-hidden sm:min-h-[640px] lg:min-h-[680px]">
-        <!-- Full Background Image with Calm Editorial Warmth Scrim -->
+        <!-- Food Truck Backdrop -->
         <div class="absolute inset-0 z-0">
             <img id="hero-bg-image" :src="'/images/hero/hero-bg.jpg'"
-                alt="Artisan halal chili dogs slow-simmered and served on toasted Hokkaido milk bread buns"
-                referrerpolicy="no-referrer" class="h-full w-full object-cover object-center" />
-            <!-- Multi-stop warm editorial scrim overlay for high legibility and boutique warmth -->
+                alt="The Kita Halal Chili Dogs food truck serving customers in a Sapporo park"
+                referrerpolicy="no-referrer" class="h-full w-full object-cover object-center scale-105 sm:scale-110" />
+            <!--
+                Warm scrim, weighted to the left where the copy sits, so the truck on the
+                right stays clearly visible. Source image is only 1097×794, so keep the
+                extra scale modest: cover already stretches it ~1.3x on a 1440px viewport,
+                and going past ~1.15x total starts to soften the truck visibly.
+            -->
+            <!--
+                Small screens: the copy spans the full width (4%–92%), so the wash has to
+                be even. A left-weighted gradient leaves the right-hand text sitting on
+                near-untinted photo.
+            -->
+            <div class="absolute inset-0 bg-charcoal-brown/72 lg:hidden"></div>
+            <!-- lg+: weighted left, so the truck on the right stays clearly visible -->
             <div
-                class="absolute inset-0 bg-gradient-to-r from-charcoal-brown/95 via-charcoal-brown/85 to-charcoal-brown/55">
+                class="absolute inset-0 hidden bg-gradient-to-r from-charcoal-brown/92 from-20% via-charcoal-brown/45 via-45% to-charcoal-brown/5 lg:block">
             </div>
-            <div class="absolute inset-0 bg-charcoal-brown/25"></div>
+            <!-- Thin grounding wash so the copy keeps contrast over the sky and trees -->
+            <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-charcoal-brown/55 to-transparent">
+            </div>
         </div>
 
         <!-- Content Overlay on Top of the Images -->

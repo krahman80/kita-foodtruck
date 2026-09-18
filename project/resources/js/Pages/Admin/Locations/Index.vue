@@ -127,7 +127,7 @@ const onPickLocation = ({ lat, lng }) => {
 
 <template>
 
-    <Head title="Locations" />
+    <Head :title="t('admin.page.locations')" />
 
     <AdminLayout>
         <template #header>
@@ -165,12 +165,12 @@ const onPickLocation = ({ lat, lng }) => {
                                 class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-gray-100 px-1 pt-4 text-xs text-gray-500">
                                 <span class="flex items-center gap-1.5">
                                     <span class="h-1.5 w-1.5 rounded-full bg-orange-500"></span> {{
-                                    t('admin.loc.legend.stop')
+                                        t('admin.loc.legend.stop')
                                     }}
                                 </span>
                                 <span class="flex items-center gap-1.5">
                                     <span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span> {{
-                                    t('admin.loc.legend.event')
+                                        t('admin.loc.legend.event')
                                     }}
                                 </span>
                                 <span class="flex items-center gap-1.5">
@@ -189,10 +189,10 @@ const onPickLocation = ({ lat, lng }) => {
                                     {{ editingId ? t('admin.loc.editTitle') : t('admin.loc.addTitle') }}
                                 </h3>
                                 <p v-if="!hasSelection" class="mt-1 text-sm text-gray-500">
-                                    Pick a date on the calendar to enable this form.
+                                    {{ t('admin.loc.pickDate') }}
                                 </p>
                                 <p v-else-if="isPast" class="mt-1 text-sm text-amber-600">
-                                    Past dates are read-only — plan future stops only.
+                                    {{ t('admin.loc.pastReadOnly') }}
                                 </p>
                             </div>
 
@@ -200,55 +200,60 @@ const onPickLocation = ({ lat, lng }) => {
                                 <fieldset :disabled="!editable" class="space-y-4 disabled:opacity-50">
                                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">Date</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.date') }}</label>
                                             <input type="date" v-model="form.schedule_date" readonly
                                                 class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm" />
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">Location name
-                                                *</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.locationName') }} *</label>
                                             <input type="text" v-model="form.location_name" required
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.location_name" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.location_name }}</p>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">Address</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.address') }}</label>
                                             <input type="text" v-model="form.address"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">Landmark note</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.landmarkNote') }}</label>
                                             <input type="text" v-model="form.landmark_note"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">Start time *</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.startTime') }} *</label>
                                             <input type="time" v-model="form.start_time" required
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.start_time" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.start_time }}</p>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">End time *</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.endTime') }} *</label>
                                             <input type="time" v-model="form.end_time" required
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.end_time" class="mt-1 text-sm text-red-600">{{
                                                 form.errors.end_time }}</p>
                                         </div>
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700">Location on
-                                                map</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.onMap') }}</label>
                                             <p class="mt-0.5 text-xs text-gray-500">
-                                                Click the map to set latitude &amp; longitude, or type them below.
+                                                {{ t('admin.loc.onMapHint') }}
                                             </p>
                                             <div class="mt-2 grid grid-cols-1 items-start gap-4 md:grid-cols-2">
                                                 <LocationPicker :latitude="form.latitude" :longitude="form.longitude"
                                                     :disabled="!editable" @update="onPickLocation" />
                                                 <div class="space-y-3">
                                                     <div>
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700">Latitude</label>
+                                                        <label class="block text-sm font-medium text-gray-700">{{
+                                                            t('admin.loc.latitude') }}</label>
                                                         <input type="number" step="any" v-model="form.latitude"
                                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                                         <p v-if="form.errors.latitude"
@@ -256,8 +261,8 @@ const onPickLocation = ({ lat, lng }) => {
                                                                 form.errors.latitude }}</p>
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            class="block text-sm font-medium text-gray-700">Longitude</label>
+                                                        <label class="block text-sm font-medium text-gray-700">{{
+                                                            t('admin.loc.longitude') }}</label>
                                                         <input type="number" step="any" v-model="form.longitude"
                                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                                         <p v-if="form.errors.longitude"
@@ -268,12 +273,14 @@ const onPickLocation = ({ lat, lng }) => {
                                             </div>
                                         </div>
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700">Map pin note</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.mapPinNote') }}</label>
                                             <input type="text" v-model="form.map_pin_note"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
                                         <div class="sm:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700">Transit note</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.transitNote') }}</label>
                                             <input type="text" v-model="form.transit_note"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                         </div>
@@ -282,12 +289,13 @@ const onPickLocation = ({ lat, lng }) => {
                                             <input id="is_event" type="checkbox" v-model="form.is_event"
                                                 class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
                                             <label for="is_event" class="text-sm font-medium text-gray-700">
-                                                This stop is an event
+                                                {{ t('admin.loc.isEvent') }}
                                             </label>
                                         </div>
 
                                         <div v-if="form.is_event" class="sm:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700">Event name *</label>
+                                            <label class="block text-sm font-medium text-gray-700">{{
+                                                t('admin.loc.eventName') }} *</label>
                                             <input type="text" v-model="form.event_name"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                             <p v-if="form.errors.event_name" class="mt-1 text-sm text-red-600">{{
@@ -300,7 +308,7 @@ const onPickLocation = ({ lat, lng }) => {
                                     <button type="submit" :disabled="form.processing"
                                         class="inline-flex items-center rounded-md bg-truck-orange px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-soft disabled:opacity-50">
                                         {{ form.processing ? t('admin.saving') : editingId ? t('admin.saveChanges') :
-                                        t('admin.saveStop') }}
+                                            t('admin.saveStop') }}
                                     </button>
 
                                     <button v-if="editingId && !isCancelled" type="button" @click="cancelStop"

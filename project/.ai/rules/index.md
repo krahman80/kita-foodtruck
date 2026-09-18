@@ -4,5 +4,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 
 | Applies to | Rule file |
 | --- | --- |
+| bootstrap/** | .ai/rules/bootstrap.md |
 | resources/js/** | .ai/rules/js.md |
+| lang/** | .ai/rules/lang.md |
 | app/Http/Middleware/** | .ai/rules/middleware.md |

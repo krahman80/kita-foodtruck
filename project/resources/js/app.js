@@ -8,6 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import 'primeicons/primeicons.css';
+import { initLocale } from './i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,6 +20,10 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
+        // The server is the source of truth for the locale, so the first paint
+        // already matches <html lang> and any validation messages.
+        initLocale(props.initialPage.props.locale);
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)

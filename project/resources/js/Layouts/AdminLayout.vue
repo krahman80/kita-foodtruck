@@ -5,7 +5,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import { i18n, t, toggleLocale } from '@/i18n';
+import { t } from '@/i18n';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -35,12 +35,12 @@ const showingNavigationDropdown = ref(false);
                                         </svg>
                                     </span>
                                     <span class="flex flex-col leading-tight">
-                                        <span class="font-heading text-sm font-bold tracking-tight text-charcoal-brown">
-                                            KITA CHILI DOGS
-                                        </span>
                                         <span
-                                            class="text-[10px] font-semibold uppercase tracking-wider text-truck-orange">
-                                            Admin • Sapporo
+                                            class="font-heading text-sm font-bold tracking-tight whitespace-nowrap text-charcoal-brown">
+                                            キタハラルチリドッグス
+                                        </span>
+                                        <span class="text-[10px] font-semibold tracking-wider text-truck-orange">
+                                            {{ t('admin.brandSub') }}
                                         </span>
                                     </span>
                                 </Link>
@@ -66,13 +66,6 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Language toggle -->
-                            <button id="admin-lang-toggle" type="button" @click="toggleLocale"
-                                class="me-3 inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-truck-orange hover:text-truck-orange"
-                                :aria-label="'Switch language to ' + (i18n.locale === 'ja' ? 'English' : 'Japanese')">
-                                {{ t('toggle.lang') }}
-                            </button>
-
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -142,14 +135,6 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('admin.accounts.*')">
                             {{ t('admin.nav.accounts') }}
                         </ResponsiveNavLink>
-                    </div>
-
-                    <!-- Responsive Language Toggle -->
-                    <div class="border-t border-gray-200 px-4 py-3">
-                        <button id="admin-lang-toggle-mobile" type="button" @click="toggleLocale"
-                            class="inline-flex w-full items-center justify-center rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:border-truck-orange hover:text-truck-orange">
-                            {{ t('toggle.lang') }}
-                        </button>
                     </div>
 
                     <!-- Responsive Settings Options -->

@@ -8,7 +8,8 @@ import { t } from '@/i18n';
             <!-- Brand -->
             <div class="mb-6 flex flex-col items-center text-center">
 
-                <span class="font-heading text-2xl font-bold tracking-tight text-charcoal-brown">KITA CHILI DOGS</span>
+                <span
+                    class="font-heading text-xl font-bold tracking-tight whitespace-nowrap text-charcoal-brown sm:text-2xl">キタハラルチリドッグス</span>
                 <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-truck-orange">{{
                     t('auth.tagline') }}</span>
             </div>

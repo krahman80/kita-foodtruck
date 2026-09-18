@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 
 // NOTE: Public registration is intentionally removed (single-admin system).
 // New admin accounts are created by an existing admin via /admin/accounts.
-Route::middleware('guest')->group(function () {
+// These screens are staff-only, so Japanese is pinned regardless of the
+// public language toggle.
+Route::middleware(['guest', 'force-locale'])->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
@@ -31,7 +33,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'force-locale'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
