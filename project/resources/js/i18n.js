@@ -110,6 +110,71 @@ const messages = {
         'badge.muslimFriendly': 'Muslim Friendly',
         'badge.muslimFriendlyCertified': 'Muslim Friendly Certified',
 
+        // ---- Long-form content: About / Allergen / FAQ ----
+        // One key per sentence. Inline markup is deliberately absent: a tag inside
+        // a sentence cannot survive translation, because word order moves.
+        'about.body1':
+            'Our story began in the winter of 2022 during the Sapporo Snow Festival. Tariq, an architecture graduate student living in Hokkaido, and Kenji, a native Sapporo chef who trained in rustic comfort cooking, stood watching international travelers and Muslim residents search fruitlessly for hearty, warm street food that honored strict dietary principles.',
+        'about.body2':
+            '"In a city famous across the world for rich ramen and winter markets, almost everything contained pork bones, lard, or mirin," recalls Tariq. "We wanted to create a welcoming curb where anyone—Muslim travelers, local families, and chili dog purists alike—could bite into something warm, deeply satisfying, and completely worry-free."',
+        'about.body3':
+            'We restored a 1994 Japanese step van, painted it in warm retro orange with clean white trim, and spent eleven months perfecting our slow-simmered beef chili con carne. We source certified halal beef brisket and Hokkaido cheddar, and pair them with custom-steamed milk buns baked each morning by an artisan bakery in central Sapporo.',
+        'about.body4':
+            'No shortcuts. No industrial fillers. Just patient craftsmanship and honest hospitality on wheels.',
+        'about.captionName': 'Kenji Sato & Tariq Al-Mansoor',
+        'about.captionRole': 'Co-founders & Head Cooks, Kita Halal Chili Dogs Sapporo',
+        'about.photoAlt':
+            'Kenji and Tariq, co-founders and chefs of Kita Halal Chili Dogs inside their Sapporo food truck kitchen',
+        'about.pillar1Value': '100%',
+        'about.pillar1Label': 'Halal Sourced',
+        'about.pillar1Desc': 'Every cut of beef rigorously certified.',
+        'about.pillar2Value': '12 Hrs',
+        'about.pillar2Label': 'Slow Simmer',
+        'about.pillar2Desc': 'Rich depth of cumin, garlic & chilies.',
+        'about.pillar3Value': 'Local',
+        'about.pillar3Label': 'Hokkaido Buns',
+        'about.pillar3Desc': 'Baked fresh daily in Sapporo.',
+
+        'allergen.intro':
+            'We take kitchen integrity and guest safety seriously. Below is an honest breakdown of our sourcing, preparation methods, and allergen management.',
+        'allergen.card1Title': '100% Halal Sourcing Guarantee',
+        'allergen.card1Body':
+            'All beef used in our sausages and chili con carne is procured from licensed Halal-certified suppliers. Prepared using ingredients and seasonings made without pork, lard, or alcohol. We do not use cooking wine, sake, or mirin in any sauces or seasonings.',
+        'allergen.card1Foot': 'Halal certification documents are available at the truck counter upon request.',
+        'allergen.card2Title': 'Gluten & Wheat Buns',
+        'allergen.card2Body':
+            'Our standard brioche buns are made from wheat flour and contain gluten. For guests avoiding gluten, we gladly offer any chili dog served as a "Lettuce-Boat Dog" wrapped in fresh, crisp Hokkaido romaine leaves at no extra charge. Our chili sauce itself is gluten-free.',
+        'allergen.card2Foot': 'Please notify the order window if you require lettuce-wrap preparation.',
+        'allergen.card3Title': 'Dairy & Cheese Allergens',
+        'allergen.card3Body':
+            "Our cheddar melt dog features cheese made with pasteurized Hokkaido cow's milk. In addition, our standard buns are gently toasted with a touch of butter. If you have a dairy allergy or lactose intolerance, simply ask for \"Dairy-Free Preparation\"—we will toast your bun dry or provide a lettuce wrap with dairy-free chili.",
+        'allergen.card3Foot':
+            'The Classic Chili Dog can be prepared without cheese to make it dairy-free.',
+        'allergen.card4Title': 'Nut-Free & Shellfish-Free Kitchen',
+        'allergen.card4Body':
+            'Formulated without peanuts or tree nuts. Seafood and shellfish are not handled on site. Guests with severe allergies are encouraged to speak with staff.',
+        'allergen.card4Foot': 'Frying oil for fries is 100% vegetable oil and never shared with animal proteins.',
+        'allergen.contact':
+            'Have a specific dietary concern not listed above? Please speak directly with our head cook at the window or send an email prior to visiting.',
+
+        'faq.subtitle':
+            'Everything you need to know about finding our truck and enjoying our halal menu in Sapporo.',
+        'faq.q1': 'Where can I find and buy from your food truck?',
+        'faq.a1':
+            'Our food truck operates across designated public spots in central Sapporo from Wednesday through Sunday. Typical regular locations include Odori Park (Block 6), Sapporo Station North Plaza, and Maruyama Park entrance during festival weekends. You can check the live location module at the top of this website or follow our Instagram stories (@kitachilidogs_sapporo), which update at 9:00 AM each morning with the exact GPS pin and opening hours.',
+        'faq.q2': 'What ingredients are used in your chili dogs and buns?',
+        'faq.a2':
+            'Our chili is made from coarse-ground 100% Halal beef brisket, stewed for 12 hours with tomatoes, sweet Hokkaido onions, roasted garlic, toasted cumin, Mexican ancho peppers, and smoked paprika. Our sausages are casing-stuffed 100% halal beef franks. The buns are custom brioche baked daily using wheat flour, water, yeast, a touch of butter, and Hokkaido milk. We do not use pork fat or artificial preservatives.',
+        'faq.q3': 'How is your beef certified Halal?',
+        'faq.a3':
+            'All raw beef cuts are procured with formal Halal compliance certificates issued by Halal Media Japan. All equipment, steamers, and griddles on our truck are dedicated exclusively to halal beef and vegetarian side items.',
+        'faq.q4': 'What payment methods do you accept at the food truck window?',
+        'faq.a4':
+            'We accept Japanese Yen cash (¥), Japanese transit IC cards (Kitaca, Suica, Pasmo, Icoca), PayPay QR payment, and major credit/debit cards (Visa, Mastercard, American Express, JCB) via contactless tap to pay.',
+        'faq.q5': 'Can we book the orange truck for university festivals or private events?',
+        'faq.a5':
+            'Yes! We frequently cater at Hokkaido University events, international cultural fairs, ski lodge pop-ups, and corporate retreats around Sapporo and Otaru. Please reach out via our contact email at least two weeks in advance with your expected guest count.',
+
         // ---- Admin (shared locale) ----
         'admin.nav.dashboard': 'Dashboard',
         'admin.nav.locations': 'Locations',
@@ -292,6 +357,69 @@ const messages = {
         'badge.limitedBatch': '1日限定',
         'badge.muslimFriendly': 'ムスリムフレンドリー',
         'badge.muslimFriendlyCertified': 'ムスリムフレンドリー認証',
+
+        // ---- 長文コンテンツ（ストーリー・アレルギー・FAQ） ----
+        // 一文につき1キー。文中にタグを埋め込むと、語順が変わる言語では
+        // 成立しないため、強調タグは使用しない。
+        'about.body1':
+            '私たちの物語は、2022年の冬、さっぽろ雪まつりの時期に始まりました。北海道で建築を学ぶ大学院生だったタリクと、札幌生まれで家庭料理を修めた料理人のケンジは、海外からの旅行者とムスリムの住民が、厳格な食の決まりを守りながら、温かく食べ応えのある屋台料理を必死に探し続けている姿を見ていました。',
+        'about.body2':
+            '「世界に名高い濃厚なラーメンと冬の市場で知られるこの街で、ほぼすべての料理に豚骨やラード、みりんが使われていました」とタリクは振り返ります。「ムスリムの旅行者も、地元の家族も、チリドッグ好きも、誰もが安心して温かいものを頬張れる。そんな場所をつくりたかったんです」',
+        'about.body3':
+            '私たちは1994年製の日本車ステップバンを再生し、温かみのあるレトロなオレンジと白いトリムで塗り直し、11か月をかけて、じっくり煮込むビーフチリコンカンを仕上げました。ハラル認証の牛ブリスケットと北海道産チェダーを仕入れ、札幌中心部の職人ベーカリーが毎朝焼き上げる特注のミルクバンズと合わせています。',
+        'about.body4':
+            '手抜きはしません。工業的なつなぎも使いません。あるのは、丁寧な仕事と、車輪の上の誠実なおもてなしだけです。',
+        'about.captionName': 'Kenji Sato & Tariq Al-Mansoor',
+        'about.captionRole': 'キタハラルチリドッグス 共同創業者・ヘッドシェフ',
+        'about.photoAlt':
+            '札幌のフードトラックのキッチンに立つ、キタハラルチリドッグスの共同創業者ケンジとタリク',
+        'about.pillar1Value': '100%',
+        'about.pillar1Label': 'ハラル認証',
+        'about.pillar1Desc': '使用する牛肉はすべて厳格に認証。',
+        'about.pillar2Value': '12時間',
+        'about.pillar2Label': 'じっくり煮込み',
+        'about.pillar2Desc': 'クミン・ガーリック・チリの深いコク。',
+        'about.pillar3Value': '地元',
+        'about.pillar3Label': '北海道産バンズ',
+        'about.pillar3Desc': '札幌で毎日焼きたて。',
+
+        'allergen.intro':
+            '私たちは、キッチンの管理体制とお客様の安全を何よりも大切にしています。仕入れ、調理方法、アレルギー対応について、正直にご説明します。',
+        'allergen.card1Title': '100%ハラル調達の保証',
+        'allergen.card1Body':
+            'ソーセージとチリコンカンに使用する牛肉はすべて、ハラル認証を受けた正規サプライヤーから仕入れています。豚肉・ラード・アルコールを使用せずにつくられた食材と調味料を使用しています。ソースや調味料に料理酒、日本酒、みりんは使用していません。',
+        'allergen.card1Foot': 'ハラル認証書は、ご希望があればトラックの窓口でご提示します。',
+        'allergen.card2Title': 'グルテン・小麦について',
+        'allergen.card2Body':
+            '標準のブリオッシュバンズは小麦粉を使用しており、グルテンを含みます。グルテンを避けたいお客様には、どのチリドッグも、北海道産ロメインレタスで包んだ「レタスボートドッグ」に無料でおつくりします。チリソース自体はグルテンフリーです。',
+        'allergen.card2Foot': 'レタス包みをご希望の場合は、ご注文時に窓口へお申し付けください。',
+        'allergen.card3Title': '乳製品・チーズについて',
+        'allergen.card3Body':
+            'チェダーチーズドッグには、北海道産の殺菌済み牛乳でつくられたチーズを使用しています。また、標準のバンズは、バターを少し使って軽くトーストしています。乳アレルギーや乳糖不耐症の方は、「乳製品不使用」とお申し付けください。バンズをバターなしで焼くか、乳製品不使用のチリとレタス包みでご用意します。',
+        'allergen.card3Foot': 'クラシックチリドッグは、チーズを省いて乳製品不使用でご用意できます。',
+        'allergen.card4Title': 'ナッツ・甲殻類を使用しないキッチン',
+        'allergen.card4Body':
+            'ピーナッツおよび木の実類は使用せずに調理しています。魚介類・甲殻類は当キッチンでは取り扱っていません。重度のアレルギーをお持ちのお客様は、スタッフへお申し出ください。',
+        'allergen.card4Foot': 'フライドポテトの揚げ油は100%植物油で、動物性たんぱく質とは共用していません。',
+        'allergen.contact':
+            '上記にない食事のご不安がある場合は、窓口で料理長に直接おたずねいただくか、ご来店前にお問い合わせください。',
+
+        'faq.subtitle': '札幌で当トラックを見つけて、ハラルメニューを楽しむために必要な情報をまとめました。',
+        'faq.q1': 'フードトラックの場所と購入方法を教えてください。',
+        'faq.a1':
+            '当フードトラックは、水曜日から日曜日まで、札幌中心部の指定された公共スペースで営業しています。通常は大通公園（6丁目）、札幌駅北口広場、イベントのある週末は円山公園入口などに出店します。正確な位置情報と営業時間は、毎朝9時に更新される当サイト上部の営業情報、またはInstagramストーリー（@kitachilidogs_sapporo）でご確認いただけます。',
+        'faq.q2': 'チリドッグとバンズには、どんな材料を使っていますか？',
+        'faq.a2':
+            'チリは、粗挽きの100%ハラル認証牛ブリスケットを12時間煮込み、トマト、北海道産の甘い玉ねぎ、ローストガーリック、焙煎クミン、メキシコ産アンチョペッパー、スモークパプリカを加えてつくっています。ソーセージは、100%ハラル認証ビーフのケーシング詰めフランクです。バンズは、小麦粉・水・イースト・少量のバター・北海道産牛乳で毎日焼き上げる特注のブリオッシュです。豚脂や人工保存料は使用していません。',
+        'faq.q3': '牛肉のハラル認証は、どのように取得していますか？',
+        'faq.a3':
+            'すべての牛肉は、Halal Media Japan が発行するハラル適合証明書付きで仕入れています。トラック内の器具、蒸し器、鉄板はすべて、ハラル牛肉とベジタリアン向けサイドメニュー専用です。',
+        'faq.q4': '支払い方法を教えてください。',
+        'faq.a4':
+            '現金（円）、交通系ICカード（Kitaca・Suica・Pasmo・Icoca）、PayPay、および主要なクレジット・デビットカード（Visa・Mastercard・American Express・JCB）のタッチ決済をご利用いただけます。',
+        'faq.q5': '大学祭やイベントにトラックを出店してもらえますか？',
+        'faq.a5':
+            'はい。北海道大学のイベント、国際文化交流フェア、スキー場でのポップアップ、札幌・小樽周辺での企業研修など、これまでも多数ご依頼いただいています。ご希望の人数とあわせて、遅くとも2週間前までにメールでお問い合わせください。',
 
         // ---- Admin (shared locale) ----
         'admin.nav.dashboard': 'ダッシュボード',

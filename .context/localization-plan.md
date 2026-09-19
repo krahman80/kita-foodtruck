@@ -215,7 +215,7 @@ Related terminology drift to resolve at the same time:
 
 ## 9. Open items
 
-1. **The ~1,000 words of new Japanese copy** (FAQ ~600 words, About ~400 words, allergen table). The client must either write this or approve what we draft.
+1. **The ~1,000 words of new Japanese copy** — **drafted and out for client review** in `.context/ja-copy-review.md` (2026-09-19). It carries the JA draft block by block, the EN source beside it, a locked glossary, the terminology conflicts found, and 13 fact-check items. Sprint 4 stays blocked until it returns.
 2. **Allergen and halal certification wording must be reviewed by the client.** These are regulated claims; machine translation is not acceptable for this section.
 
 ---
@@ -466,6 +466,118 @@ The default menu badge read **`Muslin Friendly`** — muslin being a fabric. Cor
 
 ### Still English on the page
 
-About prose, the allergen table and the FAQ — Sprint 4, which remains externally blocked on roughly 1,000 words of Japanese copy and the allergen wording sign-off. If that review has not started, it is now the critical path (§11).
+About prose, the allergen table and the FAQ — Sprint 4. The Japanese copy is now **drafted and out for client review** (`.context/ja-copy-review.md`, 2026-09-19), so this is no longer waiting on us: it is waiting on the client's factual sign-off for the allergen and halal-certification claims. That review is the critical path (§11), and Sprint 5 can proceed in parallel because it has no external dependency.
 
 Also still pending for Sprint 6: the `uppercase tracking-widest` eyebrow treatment on **section** headings. It was deliberately left alone here to keep this sprint a clean text-extraction slice; the header tagline was the only exception, and only because it is header chrome.
+
+---
+
+## 15. Sprint 4 — implementation record
+
+**Outcome delivered:** the "trust" journey reads as Japanese — the About story, the allergen cards, and the full FAQ including every answer.
+
+### Files changed (4)
+
+| File                                 | Change                                                          |
+| ------------------------------------ | --------------------------------------------------------------- |
+| `resources/js/i18n.js`               | 41 new keys per locale (`about.*`, `allergen.*`, `faq.*`)       |
+| `Components/Public/AboutStory.vue`   | 4 prose paragraphs, photo caption, photo `alt`, 3 pillars       |
+| `Components/Public/AllergenInfo.vue` | Intro, 4 cards (heading + body + footnote), bottom contact note |
+| `Components/Public/Faq.vue`          | All 5 Q&A moved out of the component, plus the subtitle         |
+
+### Built before the fact-check answers arrived — **now superseded by §16**
+
+This is the caveat that matters. The sprint was built from the drafted copy in `.context/ja-copy-review.md` **before the client returned answers**, at the developer's direction. These are therefore live and unverified:
+
+| Claim                      | Where it is now published                                                                                                   |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Cheese origin              | About says `十勝のチーズ` while the Hero and menu say `北海道産チェダー` — **the contradiction now exists in Japanese too** |
+| Halal certification bodies | FAQ Q3: `FIANZおよび日本の地域ハラル協会`                                                                                   |
+| Allergy absolutes          | Allergen cards 1 and 4: `一切使用していない`                                                                                |
+| Additive claims            | FAQ Q2: `MSG…人工保存料は一切使用していません`                                                                              |
+| Beef origin, tomato, flour | About ③ and FAQ Q2                                                                                                          |
+| Founder names              | Latin only — no kanji was invented for a real person                                                                        |
+
+**The mitigating fact, stated precisely:** every one of these claims is _already live on the English site_. The Japanese translates existing public statements rather than introducing new ones, so this sprint does not create new exposure. It does double the surface that must be corrected if an answer comes back different.
+
+The four questions in §9 remain the critical path. When they arrive, every correction is confined to `i18n.js` — no component changes will be needed.
+
+### A deliberate structural decision
+
+Allergen cards 2 and 3 wrapped a key term in inline `<strong>` (`"Lettuce-Boat Dog"`, `"Dairy-Free Preparation"`). Those tags were **dropped in both locales**. A tag inside a sentence cannot survive translation, because the emphasised term moves position — Japanese places it mid-clause where English places it at the end. The term is now marked by quotes (`「レタスボートドッグ」` / `"Lettuce-Boat Dog"`), which is the correct convention in each language. Known side effect: English lost that bold emphasis.
+
+### Verified
+
+| Check                  | Result                                                                     |
+| ---------------------- | -------------------------------------------------------------------------- |
+| Key coverage           | every `t()` key in the three components is defined — no raw keys render    |
+| JA/EN key parity       | identical apart from the JA-only `admin.*` keys, which is by design        |
+| About, both locales    | Prose, caption, pillars and `alt` all switch                               |
+| Allergen, both locales | Intro, 4 card titles, bodies, footnotes and bottom note all switch         |
+| FAQ, both locales      | All 5 questions and the subtitle switch; Q1's full Japanese answer renders |
+| Test suite             | 38 passed                                                                  |
+
+### What remains
+
+Sprint 6 only: the `uppercase tracking-widest` eyebrow treatment on section headings, the JA/EN key-parity test, removal of the dead `auth.register*` keys and `Pages/Auth/Register.vue`, and a cross-platform typography check.
+
+`[cite: 1]` markers were stripped from `.context/ja-copy-review.md`. The client's answers arrived separately on 2026-09-19 and are recorded in §16.
+
+---
+
+## 16. Fact-check resolutions (2026-09-19)
+
+The client answered six of the thirteen items. All six were applied to **both locales** in `i18n.js`.
+
+| #   | Instruction                                                | Applied                                                                                                                                                                                                               |
+| --- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Cheese: use 北海道産チェダー                               | About ③ `地元・十勝のチーズ` → `北海道産チェダー`; EN "local Tokachi cheese" → "Hokkaido cheddar". **The cross-section contradiction is resolved** — About, Hero and menu now all say Hokkaido cheddar                |
+| 2   | Halal certifier: Halal Media Japan                         | FAQ A3 names `Halal Media Japan`; the FIANZ and "regional Japan Halal associations" wording is gone from both locales                                                                                                 |
+| 3   | Replace the "100% dairy-free" claim                        | Allergen card 3 footnote → "The Classic Chili Dog can be prepared without cheese to make it dairy-free." / 「…チーズを省いて乳製品不使用でご用意できます。」 — a concrete, checkable statement instead of an absolute |
+| 4   | Remove the MSG claim                                       | FAQ A2 → "We do not use pork fat or artificial preservatives." / 「豚脂や人工保存料は使用していません。」 (also softened "never use" → "do not use", and dropped 一切)                                                |
+| 5   | Remove unverified beef origin / San Marzano / Ebetsu flour | Allergen card 1 → "licensed Halal-certified suppliers"; FAQ A2 → "tomatoes", "wheat flour"                                                                                                                            |
+| 6   | Keep the Latin founder name                                | Photo caption stays `Kenji Sato & Tariq Al-Mansoor` — no kanji invented for a real person                                                                                                                             |
+
+### One judgement call, disclosed
+
+The instruction named _Ebetsu_ flour, but allergen card 2 separately claimed **"local Hokkaido wheat flour"** — the same class of unverifiable provenance claim, which the fact-check table had not asked about. It was changed to plain "wheat flour" / 「小麦粉」 rather than leave two inconsistent flour claims on the same page. **Revert is one line** if Hokkaido flour is genuinely documentable.
+
+Founder names: the caption uses Latin as instructed; running prose keeps katakana (タリク／ケンジ). Katakana is ordinary practice and is not inventing kanji — but if the instruction was meant to cover prose as well, that is two more lines.
+
+### Verified
+
+| Check                                      | Result                                                                                                                                     |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Key coverage and ja/en parity              | unchanged — no keys were added or removed                                                                                                  |
+| Removed-claim scan of the built bundle     | `San Marzano`, `Ebetsu`, `FIANZ`, `Tokachi` → **0 occurrences**                                                                            |
+| 14 assertions in the browser, both locales | all pass: Hokkaido cheddar present, no origin claims, "without cheese" present, no MSG, generic flour, Halal Media Japan present, no FIANZ |
+| Test suite                                 | 38 passed                                                                                                                                  |
+
+### Still unanswered — 6 items
+
+| #     | Item                               | Currently published                                                                                                                                              |
+| ----- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Founding date (2022 Snow Festival) | About ①                                                                                                                                                          |
+| 2     | Van year (1994)                    | About ③                                                                                                                                                          |
+| 3     | Development period (11 months)     | About ③                                                                                                                                                          |
+| **9** | **Allergy absolutes**              | Allergen cards 1 and 4: `一切使用していない`, "exclusively peanut-free", "completely preventing cross-contamination" — plus `zero-pork, zero-lard, zero-alcohol` |
+| 12    | Opening days (Wed–Sun)             | FAQ A1                                                                                                                                                           |
+| 13    | Payment methods                    | FAQ A4                                                                                                                                                           |
+
+**#9 was answered on 2026-09-19 and is resolved.** Both absolute allergy claims were replaced with the client's formulation-based wording:
+
+- **Allergen card 4** → "Formulated without peanuts or tree nuts. Seafood and shellfish are not handled on site. Guests with severe allergies are encouraged to speak with staff."
+- **Allergen card 1** → "Prepared using ingredients and seasonings made without pork, lard, or alcohol."
+
+The word `一切` no longer appears anywhere on the site, and "exclusively"/"completely preventing" are gone. The #9 rows in the tables above are therefore historical.
+
+### Two absolutes survive, outside the six instructions
+
+A scan after the change found two claims of the same class that the client has not yet ruled on:
+
+| Key                  | Text                                                                                                                                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allergen.card4Foot` | "Frying oil for fries is 100% vegetable oil and never shared with animal proteins." / 「フライドポテトの揚げ油は100%植物油で、動物性たんぱく質とは共用していません。」 — sits directly under the rewritten card 4 body |
+| `faq.a3`             | "All equipment, steamers, and griddles on our truck are dedicated exclusively to halal beef and vegetarian side items." / 「…ハラル牛肉とベジタリアン向けサイドメニュー専用です。」                                    |
+
+Both would be softened the same way the client just did — handling/formulation language instead of absolutes. Worth noting that the FAQ sentence is probably _true and commercially valuable_ (dedicated equipment is a real halal selling point), so the fix there is wording rather than removal.

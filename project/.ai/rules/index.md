@@ -8,3 +8,4 @@ Before planning or editing, find the row whose globs match the file's path and r
 | resources/js/** | .ai/rules/js.md |
 | lang/** | .ai/rules/lang.md |
 | app/Http/Middleware/**, app/Http/Middleware/HandleInertiaRequests.php | .ai/rules/middleware.md |
+| resources/js/Components/Public/** | .ai/rules/public.md |

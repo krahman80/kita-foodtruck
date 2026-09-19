@@ -14,18 +14,17 @@ import { t } from '@/i18n';
                 <div class="order-2 lg:order-1 lg:col-span-5">
                     <div id="owner-photo-container"
                         class="group relative overflow-hidden rounded-2xl border border-toasted-tan/35 bg-tan-subtle shadow-sm">
-                        <img id="owner-potrait-img" :src="'/images/about/owner-img.jpg'"
-                            alt="Kenji and Tariq, co-founders and chefs of Kita Halal Chili Dogs inside their Sapporo food truck kitchen"
+                        <img id="owner-potrait-img" :src="'/images/about/owner-img.jpg'" :alt="t('about.photoAlt')"
                             referrerpolicy="no-referrer"
                             class="aspect-[4/5] w-full object-cover object-center transition-transform duration-500 group-hover:scale-102" />
 
                         <!-- Editorial Photo Caption Overlay -->
                         <div class="border-t border-toasted-tan/25 bg-warm-white p-4 text-left">
                             <p class="font-heading text-sm font-bold text-charcoal-brown">
-                                Kenji Sato &amp; Tariq Al-Mansoor
+                                {{ t('about.captionName') }}
                             </p>
                             <p class="mt-0.5 text-xs text-charcoal-brown/70">
-                                Co-founders &amp; Head Cooks, Kita Halal Chili Dogs Sapporo
+                                {{ t('about.captionRole') }}
                             </p>
                         </div>
                     </div>
@@ -45,56 +44,38 @@ import { t } from '@/i18n';
 
                     <div class="space-y-4 text-base leading-relaxed text-charcoal-brown/85">
                         <p>
-                            Our story began in the winter of 2022 during the Sapporo Snow Festival. Tariq, an
-                            architecture
-                            graduate student living in Hokkaido, and Kenji, a native Sapporo chef who trained in
-                            rustic comfort
-                            cooking, stood watching international travelers and Muslim residents search fruitlessly
-                            for hearty,
-                            warm street food that honored strict dietary principles.
+                            {{ t('about.body1') }}
                         </p>
                         <p>
-                            "In a city famous across the world for rich ramen and winter markets, almost everything
-                            contained pork
-                            bones, lard, or mirin," recalls Tariq. "We wanted to create a welcoming curb where
-                            anyone—Muslim
-                            travelers, local families, and chili dog purists alike—could bite into something warm,
-                            deeply
-                            satisfying, and completely worry-free."
+                            {{ t('about.body2') }}
                         </p>
                         <p>
-                            We restored a 1994 Japanese step van, painted it in warm retro orange with clean white
-                            trim, and spent
-                            eleven months perfecting our slow-simmered beef chili con carne. We source certified
-                            halal beef
-                            brisket, local Tokachi cheese, and pair them with custom-steamed milk buns baked each
-                            morning by an
-                            artisan bakery in central Sapporo.
+                            {{ t('about.body3') }}
                         </p>
                         <p class="font-medium text-charcoal-brown">
-                            No shortcuts. No industrial fillers. Just patient craftsmanship and honest hospitality
-                            on wheels.
+                            {{ t('about.body4') }}
                         </p>
                     </div>
 
                     <!-- Key Pillars Row -->
                     <div class="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-3">
                         <div class="rounded-xl border border-toasted-tan/25 bg-tan-subtle p-4">
-                            <span class="block font-heading text-2xl font-bold text-truck-orange">100%</span>
-                            <span class="text-xs font-semibold text-charcoal-brown">Halal Sourced</span>
-                            <p class="mt-1 text-[11px] text-charcoal-brown/70">Every cut of beef rigorously
-                                certified.</p>
+                            <span class="block font-heading text-2xl font-bold text-truck-orange">{{
+                                t('about.pillar1Value') }}</span>
+                            <span class="text-xs font-semibold text-charcoal-brown">{{ t('about.pillar1Label') }}</span>
+                            <p class="mt-1 text-[11px] text-charcoal-brown/70">{{ t('about.pillar1Desc') }}</p>
                         </div>
                         <div class="rounded-xl border border-toasted-tan/25 bg-tan-subtle p-4">
-                            <span class="block font-heading text-2xl font-bold text-truck-orange">12 Hrs</span>
-                            <span class="text-xs font-semibold text-charcoal-brown">Slow Simmer</span>
-                            <p class="mt-1 text-[11px] text-charcoal-brown/70">Rich depth of cumin, garlic &amp;
-                                chilies.</p>
+                            <span class="block font-heading text-2xl font-bold text-truck-orange">{{
+                                t('about.pillar2Value') }}</span>
+                            <span class="text-xs font-semibold text-charcoal-brown">{{ t('about.pillar2Label') }}</span>
+                            <p class="mt-1 text-[11px] text-charcoal-brown/70">{{ t('about.pillar2Desc') }}</p>
                         </div>
                         <div class="rounded-xl border border-toasted-tan/25 bg-tan-subtle p-4">
-                            <span class="block font-heading text-2xl font-bold text-truck-orange">Local</span>
-                            <span class="text-xs font-semibold text-charcoal-brown">Hokkaido Buns</span>
-                            <p class="mt-1 text-[11px] text-charcoal-brown/70">Baked fresh daily in Sapporo.</p>
+                            <span class="block font-heading text-2xl font-bold text-truck-orange">{{
+                                t('about.pillar3Value') }}</span>
+                            <span class="text-xs font-semibold text-charcoal-brown">{{ t('about.pillar3Label') }}</span>
+                            <p class="mt-1 text-[11px] text-charcoal-brown/70">{{ t('about.pillar3Desc') }}</p>
                         </div>
                     </div>
                 </div>

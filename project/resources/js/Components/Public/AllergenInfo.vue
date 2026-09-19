@@ -18,9 +18,7 @@ import { t } from '@/i18n';
                     {{ t('allergen.title') }}
                 </h2>
                 <p class="mt-2 text-base text-charcoal-brown/75">
-                    We take kitchen integrity and guest safety seriously. Below is an honest breakdown of our
-                    sourcing,
-                    preparation methods, and allergen management.
+                    {{ t('allergen.intro') }}
                 </p>
             </div>
 
@@ -36,18 +34,14 @@ import { t } from '@/i18n';
                         </svg>
                     </div>
                     <h3 class="font-heading text-xl font-bold text-charcoal-brown">
-                        100% Halal Sourcing Guarantee
+                        {{ t('allergen.card1Title') }}
                     </h3>
                     <p class="text-sm leading-relaxed text-charcoal-brown/80">
-                        All beef used in our sausages and chili con carne is procured from licensed Halal-certified
-                        suppliers in
-                        New Zealand and Hokkaido. Our kitchen operates under strict zero-pork, zero-lard, and
-                        zero-alcohol
-                        standards. We do not use cooking wine, sake, or mirin in any sauces or seasonings.
+                        {{ t('allergen.card1Body') }}
                     </p>
                     <div class="flex items-center gap-2 pt-2 text-xs font-semibold text-charcoal-brown/70">
                         <span class="h-1.5 w-1.5 rounded-full bg-truck-orange"></span>
-                        Halal certification documents are available at the truck counter upon request.
+                        {{ t('allergen.card1Foot') }}
                     </div>
                 </div>
 
@@ -60,19 +54,14 @@ import { t } from '@/i18n';
                         </svg>
                     </div>
                     <h3 class="font-heading text-xl font-bold text-charcoal-brown">
-                        Gluten &amp; Wheat Buns
+                        {{ t('allergen.card2Title') }}
                     </h3>
                     <p class="text-sm leading-relaxed text-charcoal-brown/80">
-                        Our standard brioche buns are made from local Hokkaido wheat flour and contain gluten. For
-                        guests
-                        avoiding gluten, we gladly offer any chili dog served as a <strong>"Lettuce-Boat
-                            Dog"</strong> wrapped
-                        in fresh, crisp Hokkaido romaine leaves at no extra charge. Our chili sauce itself is
-                        gluten-free.
+                        {{ t('allergen.card2Body') }}
                     </p>
                     <div class="flex items-center gap-2 pt-2 text-xs font-semibold text-charcoal-brown/70">
                         <span class="h-1.5 w-1.5 rounded-full bg-truck-orange"></span>
-                        Please notify the order window if you require lettuce-wrap preparation.
+                        {{ t('allergen.card2Foot') }}
                     </div>
                 </div>
 
@@ -87,20 +76,14 @@ import { t } from '@/i18n';
                         </svg>
                     </div>
                     <h3 class="font-heading text-xl font-bold text-charcoal-brown">
-                        Dairy &amp; Cheese Allergens
+                        {{ t('allergen.card3Title') }}
                     </h3>
                     <p class="text-sm leading-relaxed text-charcoal-brown/80">
-                        Our cheddar melt dog features cheese made with pasteurized Hokkaido cow's milk. In addition,
-                        our
-                        standard buns are gently toasted with a touch of butter. If you have a dairy allergy or
-                        lactose
-                        intolerance, simply ask for <strong>"Dairy-Free Preparation"</strong>—we will toast your bun
-                        dry or
-                        provide a lettuce wrap with dairy-free chili.
+                        {{ t('allergen.card3Body') }}
                     </p>
                     <div class="flex items-center gap-2 pt-2 text-xs font-semibold text-charcoal-brown/70">
                         <span class="h-1.5 w-1.5 rounded-full bg-truck-orange"></span>
-                        Classic Chili Dog can easily be made 100% dairy-free.
+                        {{ t('allergen.card3Foot') }}
                     </div>
                 </div>
 
@@ -114,18 +97,14 @@ import { t } from '@/i18n';
                         </svg>
                     </div>
                     <h3 class="font-heading text-xl font-bold text-charcoal-brown">
-                        Nut-Free &amp; Shellfish-Free Kitchen
+                        {{ t('allergen.card4Title') }}
                     </h3>
                     <p class="text-sm leading-relaxed text-charcoal-brown/80">
-                        Our food truck operates an exclusively peanut-free and tree-nut-free prep area. We also do
-                        not store,
-                        prepare, or fry any shellfish or seafood in our truck, completely preventing
-                        cross-contamination risks
-                        for guests with seafood allergies.
+                        {{ t('allergen.card4Body') }}
                     </p>
                     <div class="flex items-center gap-2 pt-2 text-xs font-semibold text-charcoal-brown/70">
                         <span class="h-1.5 w-1.5 rounded-full bg-truck-orange"></span>
-                        Frying oil for fries is 100% vegetable oil and never shared with animal proteins.
+                        {{ t('allergen.card4Foot') }}
                     </div>
                 </div>
 
@@ -135,9 +114,7 @@ import { t } from '@/i18n';
             <div
                 class="mt-8 flex items-center gap-3 rounded-xl border border-toasted-tan/30 bg-warm-white p-4 text-xs text-charcoal-brown/75">
                 <span class="text-base font-bold text-truck-orange">ℹ</span>
-                <span>Have a specific dietary concern not listed above? Please speak directly with our head cook at
-                    the
-                    window or send an email prior to visiting.</span>
+                <span>{{ t('allergen.contact') }}</span>
             </div>
 
         </div>
