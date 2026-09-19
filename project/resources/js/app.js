@@ -9,6 +9,7 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
 import 'primeicons/primeicons.css';
 import { initLocale } from './i18n';
+import { jaLocale } from './primevue-locale';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -27,7 +28,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .use(PrimeVue, { theme: { preset: Aura } })
+            .use(PrimeVue, { theme: { preset: Aura }, locale: jaLocale })
             .mount(el);
     },
     progress: {

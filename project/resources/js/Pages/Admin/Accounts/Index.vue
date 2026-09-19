@@ -28,7 +28,7 @@ const submit = () => {
 };
 
 const remove = (account) => {
-    if (confirm(`Delete the account "${account.name}" (${account.email})?`)) {
+    if (confirm(t('admin.confirmDelete', { name: account.name, email: account.email }))) {
         router.delete(route('admin.accounts.destroy', account.id));
     }
 };
@@ -36,7 +36,7 @@ const remove = (account) => {
 
 <template>
 
-    <Head title="Accounts" />
+    <Head :title="t('admin.page.accounts')" />
 
     <AdminLayout>
         <template #header>
@@ -53,25 +53,25 @@ const remove = (account) => {
                     <form class="p-6" @submit.prevent="submit">
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <InputLabel for="name" value="Name" />
+                                <InputLabel for="name" :value="t('auth.name')" />
                                 <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required
                                     autofocus />
                                 <InputError class="mt-2" :message="form.errors.name" />
                             </div>
                             <div>
-                                <InputLabel for="email" value="Email" />
+                                <InputLabel for="email" :value="t('auth.email')" />
                                 <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full"
                                     required />
                                 <InputError class="mt-2" :message="form.errors.email" />
                             </div>
                             <div>
-                                <InputLabel for="password" value="Password" />
+                                <InputLabel for="password" :value="t('auth.password')" />
                                 <TextInput id="password" v-model="form.password" type="password"
                                     class="mt-1 block w-full" required autocomplete="new-password" />
                                 <InputError class="mt-2" :message="form.errors.password" />
                             </div>
                             <div>
-                                <InputLabel for="password_confirmation" value="Confirm Password" />
+                                <InputLabel for="password_confirmation" :value="t('auth.confirmPassword')" />
                                 <TextInput id="password_confirmation" v-model="form.password_confirmation"
                                     type="password" class="mt-1 block w-full" required autocomplete="new-password" />
                             </div>
@@ -111,7 +111,7 @@ const remove = (account) => {
                                     {{ account.name }}
                                     <span v-if="account.id === $page.props.auth.user.id"
                                         class="ms-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">{{
-                                        t('admin.you') }}</span>
+                                            t('admin.you') }}</span>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">{{ account.email }}</td>
                                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm">

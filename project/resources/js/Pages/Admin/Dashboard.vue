@@ -6,7 +6,7 @@ import { t } from '@/i18n';
 
 <template>
 
-    <Head title="Dashboard" />
+    <Head :title="t('admin.page.dashboard')" />
 
     <AdminLayout>
         <template #header>

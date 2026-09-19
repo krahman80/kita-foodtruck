@@ -581,3 +581,83 @@ A scan after the change found two claims of the same class that the client has n
 | `faq.a3`             | "All equipment, steamers, and griddles on our truck are dedicated exclusively to halal beef and vegetarian side items." / 「…ハラル牛肉とベジタリアン向けサイドメニュー専用です。」                                    |
 
 Both would be softened the same way the client just did — handling/formulation language instead of absolutes. Worth noting that the FAQ sentence is probably _true and commercially valuable_ (dedicated equipment is a real halal selling point), so the fix there is wording rather than removal.
+
+---
+
+## 17. Sprint 5 implementation record — staff screens
+
+**Scope:** §4C (admin) and §4D (profile) — everything behind `auth`, pinned to Japanese by `ForceLocale`. **Status: complete.**
+
+All staff screens render Japanese. `Register.vue` deleted along with its dead keys.
+
+### 17.1 Files changed
+
+| File                                             | Change                                                                                                                                                                                                                |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Pages/Admin/Menu/Index.vue`                     | 17 edits — index headers, form field labels/placeholders, validation hint, table headers, empty and loading states, action buttons, delete confirmation. Select options reuse `spice.*` rather than duplicating keys. |
+| `Pages/Admin/Accounts/Index.vue`                 | `<Head>` via `t()`, `confirm()` → `t('admin.confirmDelete', { name, email })`, 4 `InputLabel`s.                                                                                                                       |
+| `Pages/Admin/Dashboard.vue`                      | `<Head>` via `t()`.                                                                                                                                                                                                   |
+| `Layouts/AuthenticatedLayout.vue`                | Wordmark → `キタハラルチリドッグス`, `profile.brandSub`, `profile.navDashboard`, `admin.profile`, `admin.logout`.                                                                                                     |
+| `Pages/Auth/ResetPassword.vue`                   | `auth.resetTitle`, `auth.email`, `auth.password`, `auth.confirmPassword`, submit button.                                                                                                                              |
+| `Pages/Auth/ConfirmPassword.vue`                 | `auth.confirmTitle`, `auth.confirmIntro`, `auth.password`, submit button.                                                                                                                                             |
+| `Pages/Auth/VerifyEmail.vue`                     | `auth.verifyTitle`, `auth.verifySent`, `auth.resend`, `auth.logout`.                                                                                                                                                  |
+| `Pages/Profile/Edit.vue` + 3 partials            | `profile.*` keys throughout (JA-only by design).                                                                                                                                                                      |
+| `Pages/Dashboard.vue`, `Pages/Auth/Register.vue` | **Deleted.** 6 dead `auth.register*` keys removed from both locales.                                                                                                                                                  |
+
+### 17.2 Verification
+
+| Check                                                 | Result                                                                                                                     |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`                                       | `✓ built in 16.05s`                                                                                                        |
+| `php artisan test`                                    | 38 passed, 82 assertions                                                                                                   |
+| Every `t()` key used in `resources/js/` is defined    | Empty diff — no undefined keys                                                                                             |
+| Remaining `<Head title="literal">`                    | None                                                                                                                       |
+| Bare capitalized (non-Japanese) text in staff screens | Only inside HTML comments                                                                                                  |
+| `Register.vue` references                             | None dangling                                                                                                              |
+| `/login`                                              | 200 — `おかえりなさい`, `メールアドレス`, `パスワード`, `ログイン状態を保持する`, `パスワードをお忘れですか？`, `ログイン` |
+| `/forgot-password`                                    | 200 — `パスワード再設定リンクを送信`                                                                                       |
+| `/reset-password/{token}`                             | 200 — `パスワード再設定`, `パスワード（確認）`, `パスワードを再設定する`                                                   |
+| Raw key literals visible on those three pages         | None                                                                                                                       |
+| `document.documentElement.lang`                       | `ja` on all three                                                                                                          |
+
+### 17.3 Verification gap — resolved
+
+Those screens return 302 without a session, so the static checks initially stood alone. Resolved by creating a temporary email-verified account, logging in, walking every screen, then deleting it — `User::count()` returned to 1 afterwards.
+
+Gotcha: `email_verified_at` is not mass-assignable, so `updateOrCreate` silently dropped it and the `verified` middleware rejected the login until it was set with `forceFill`. Remember this for future fixtures.
+
+### 17.4 Gated screens — browser-verified
+
+| Screen              | Rendered                                                                                                                                                                                                                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/admin`            | `ダッシュボード`, `ログアウト`                                                                                                                                                                                                                                    |
+| `/admin/menu`       | `メニュー管理`; labels `名前 *`, `価格（¥） *`, `説明 *`, `画像 *`, `画像の代替テキスト *`, `辛さ`, `カテゴリ`, `バッジ`, `表示順`, `ハイライト1/2`, `公開する（サイトに表示）`, `売り切れ`; buttons `アイテムを追加`, `編集`, `非表示`, `おすすめ設定`, `再入荷` |
+| `/admin/accounts`   | `管理者アカウント`, `管理者アカウントを追加`, `登録済みアカウント`; headers `名前`, `メール`, `操作`; `アカウントを追加`, `削除`                                                                                                                                  |
+| `/admin/locations`  | `営業カレンダー`, `営業を追加`; labels `日付`, `場所名 *`, `住所`, `目印`, `開始時刻 *`, `終了時刻 *`, `緯度`, `経度`, `ピンのメモ`, `アクセス`, `この営業はイベント`                                                                                             |
+| `/profile`          | `プロフィール`, `プロフィール情報`, `パスワードの変更`, `アカウントの削除`; `保存する`, `アカウントを削除する`                                                                                                                                                    |
+| `/confirm-password` | `パスワードの確認`, `確認する`                                                                                                                                                                                                                                    |
+| `/verify-email`     | 302 → `/admin` for a verified user (expected)                                                                                                                                                                                                                     |
+
+Remaining Latin across the staff screens is **data or third-party attribution only**: the test account name, the seeded `Chili Dog` category, item slugs, and the Leaflet / OpenStreetMap credits on the map.
+
+### 17.5 English the static checks missed
+
+Browser inspection caught five strings that both key-coverage and text-node sweeps had passed. Fixes applied, rebuilt in 13.30s, suite re-run at 38 passed.
+
+| Location                               | Was                     | Now                                                 |
+| -------------------------------------- | ----------------------- | --------------------------------------------------- |
+| `Admin/Menu/Index.vue` list badge      | `Featured`              | `admin.featured` → おすすめ                         |
+| `Admin/Menu/Index.vue` list badge      | `Sold out`              | reuses `admin.soldOut` → 売り切れ                   |
+| `Admin/Menu/Index.vue` list badge      | `Active` / `Inactive`   | `admin.active` / `admin.inactive` → 公開中 / 非公開 |
+| `Admin/Menu/Index.vue` image picker    | English error text      | `admin.imageReadError`                              |
+| `Admin/Locations/Index.vue` DatePicker | `September`, `Mo Tu We` | Japanese via `primevue-locale.js`                   |
+
+The first four share one cause: the sweep only matched literals sitting directly in element bodies, so it read past anything inside a `{{ }}` ternary or passed as a JS argument. A CI guard for English literals must scan template text nodes **and** quoted strings in `<script>`.
+
+### 17.6 PrimeVue locale
+
+PrimeVue ships English and reads `config.locale.<key>` directly rather than deep-merging, so a partial override risks `undefined` month names. `primevue-locale.js` supplies the full `PrimeVueLocaleOptions` key set in Japanese, wired in `app.js` as `locale: jaLocale`.
+
+It is pinned statically instead of following the app locale because PrimeVue's only use is the admin DatePicker, and every admin route is already pinned to Japanese by `ForceLocale`. `firstDayOfWeek` stays `0` to preserve the existing Sunday-first layout.
+
+Three `new Error(...)` strings in `Admin/Menu/Index.vue` stay English deliberately — they are swallowed by `catch {}` and never rendered.

@@ -108,7 +108,7 @@ const onPickFile = async (e) => {
     } catch {
         form.image = null;
         newImagePreview.value = '';
-        form.setError('image', 'Could not read that image. Please choose a JPG, PNG, or WebP file.');
+        form.setError('image', t('admin.imageReadError'));
     }
 };
 
@@ -179,7 +179,7 @@ const label = (key) =>
 
 <template>
 
-    <Head title="Menu Items" />
+    <Head :title="t('admin.page.menu')" />
 
     <AdminLayout>
         <template #header>
@@ -211,14 +211,16 @@ const label = (key) =>
                         <form class="p-6" @submit.prevent="submit">
                             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Name *</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ t('admin.field.name') }}
+                                        *</label>
                                     <input v-model="form.name" type="text"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                     <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">{{ form.errors.name }}
                                     </p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Price (¥) *</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ t('admin.field.price') }}
+                                        *</label>
                                     <input v-model="form.price_yen" type="number" min="1" step="1"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                     <p v-if="form.errors.price_yen" class="mt-1 text-sm text-red-600">{{
@@ -227,7 +229,8 @@ const label = (key) =>
                                 </div>
 
                                 <div class="sm:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700">Description *</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.description') }} *</label>
                                     <textarea v-model="form.description" rows="2"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange"></textarea>
                                     <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{
@@ -237,24 +240,26 @@ const label = (key) =>
 
                                 <div class="sm:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">
-                                        Image {{ editingId ? '(optional when editing)' : '*' }}
+                                        {{ t('admin.field.image') }}
+                                        {{ editingId ? t('admin.field.imageOptional') : '*' }}
                                     </label>
                                     <input ref="fileInput" type="file" accept="image/*" @change="onPickFile"
                                         class="mt-1 block w-full rounded-md border border-gray-300 bg-white text-sm text-gray-700 shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-truck-orange/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-orange-deep hover:file:bg-truck-orange/20 focus:border-truck-orange focus:ring-truck-orange focus:outline-none" />
                                     <p v-if="form.errors.image" class="mt-1 text-sm text-red-600">{{ form.errors.image
                                         }}</p>
 
-                                    <img v-if="newImagePreview" :src="newImagePreview" alt="Selected image preview"
+                                    <img v-if="newImagePreview" :src="newImagePreview" :alt="t('admin.imagePreviewAlt')"
                                         class="mt-3 h-32 w-48 rounded-md border border-gray-200 object-cover" />
                                     <div v-else-if="editingId && currentImage" class="mt-3 flex items-center gap-3">
-                                        <img :src="currentImage" :alt="form.image_alt_text || 'Current image'"
+                                        <img :src="currentImage"
+                                            :alt="form.image_alt_text || t('admin.currentImageAlt')"
                                             class="h-32 w-48 rounded-md border border-gray-200 object-cover" />
-                                        <span class="text-xs text-gray-500">Current image — pick a new file to replace
-                                            it.</span>
+                                        <span class="text-xs text-gray-500">{{ t('admin.replaceImageHint') }}</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Image alt text *</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.imageAlt') }} *</label>
                                     <input v-model="form.image_alt_text" type="text"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                     <p v-if="form.errors.image_alt_text" class="mt-1 text-sm text-red-600">{{
@@ -262,45 +267,55 @@ const label = (key) =>
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Spice level</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.spiceLevel')
+                                    }}</label>
                                     <select v-model="form.spice_level"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
-                                        <option value="mild">Mild</option>
-                                        <option value="medium">Medium</option>
-                                        <option value="hot">Hot</option>
-                                        <option value="tangy">Tangy</option>
+                                        <option value="mild">{{ t('spice.mild') }}</option>
+                                        <option value="medium">{{ t('spice.medium') }}</option>
+                                        <option value="hot">{{ t('spice.hot') }}</option>
+                                        <option value="tangy">{{ t('spice.tangy') }}</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ t('admin.field.category')
+                                        }}</label>
                                     <select v-model="form.category"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
-                                        <option value="chili_dog">Chili Dog</option>
-                                        <option value="drink">Drink</option>
+                                        <option value="chili_dog">{{ t('admin.option.chiliDog') }}</option>
+                                        <option value="drink">{{ t('admin.option.drink') }}</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Badge</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ t('admin.field.badge')
+                                    }}</label>
                                     <select v-model="form.badge_type"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange">
-                                        <option value="halal_standard">Halal Standard</option>
-                                        <option value="limited_batch">Limited Batch</option>
-                                        <option value="none">None</option>
+                                        <option value="halal_standard">{{ t('admin.option.halalStandard') }}</option>
+                                        <option value="limited_batch">{{ t('admin.option.limitedBatch') }}</option>
+                                        <option value="none">{{ t('admin.option.none') }}</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Display order</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.displayOrder')
+                                    }}</label>
                                     <input v-model="form.display_order" type="number" min="0" step="1"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Highlight tag 1</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.highlightTag1')
+                                    }}</label>
                                     <input v-model="form.highlight_tag_1" type="text"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Highlight tag 2</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{
+                                        t('admin.field.highlightTag2')
+                                    }}</label>
                                     <input v-model="form.highlight_tag_2" type="text"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-truck-orange focus:ring-truck-orange" />
                                 </div>
@@ -309,12 +324,12 @@ const label = (key) =>
                                     <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                                         <input type="checkbox" v-model="form.is_active"
                                             class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
-                                        Active (shown publicly)
+                                        {{ t('admin.field.active') }}
                                     </label>
                                     <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                                         <input type="checkbox" v-model="form.is_sold_out"
                                             class="h-4 w-4 rounded border-gray-300 text-truck-orange focus:ring-truck-orange" />
-                                        Sold out
+                                        {{ t('admin.field.soldOut') }}
                                     </label>
                                 </div>
                             </div>
@@ -354,7 +369,8 @@ const label = (key) =>
                                         <span class="truncate text-sm font-semibold text-gray-900">{{ item.name
                                         }}</span>
                                         <span v-if="item.is_popular"
-                                            class="rounded-full bg-truck-orange/20 px-2 py-0.5 text-[11px] font-semibold text-orange-deep">Featured</span>
+                                            class="rounded-full bg-truck-orange/20 px-2 py-0.5 text-[11px] font-semibold text-orange-deep">{{
+                                            t('admin.featured') }}</span>
                                     </div>
                                     <div
                                         class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
@@ -362,10 +378,12 @@ const label = (key) =>
                                         <span class="font-semibold text-gray-900">¥{{ item.price_yen.toLocaleString()
                                         }}</span>
                                         <span v-if="item.is_sold_out"
-                                            class="rounded bg-orange-100 px-1.5 py-0.5 text-orange-700">Sold out</span>
+                                            class="rounded bg-orange-100 px-1.5 py-0.5 text-orange-700">{{
+                                            t('admin.soldOut')
+                                            }}</span>
                                         <span class="rounded px-1.5 py-0.5"
                                             :class="item.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'">
-                                            {{ item.is_active ? 'Active' : 'Inactive' }}
+                                            {{ item.is_active ? t('admin.active') : t('admin.inactive') }}
                                         </span>
                                     </div>
                                     <p class="mt-0.5 truncate text-xs text-gray-400">{{ item.slug }}</p>

@@ -5,6 +5,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { t } from '@/i18n';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -34,12 +35,12 @@ const showingNavigationDropdown = ref(false);
                                         </svg>
                                     </span>
                                     <span class="flex flex-col leading-tight">
-                                        <span class="font-heading text-sm font-bold tracking-tight text-charcoal-brown">
-                                            KITA CHILI DOGS
-                                        </span>
                                         <span
-                                            class="text-[10px] font-semibold uppercase tracking-wider text-truck-orange">
-                                            Profile • Sapporo
+                                            class="font-heading text-sm font-bold tracking-tight whitespace-nowrap text-charcoal-brown">
+                                            キタハラルチリドッグス
+                                        </span>
+                                        <span class="text-[10px] font-semibold tracking-wider text-truck-orange">
+                                            {{ t('profile.brandSub') }}
                                         </span>
                                     </span>
                                 </Link>
@@ -48,7 +49,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                    {{ t('profile.navDashboard') }}
                                 </NavLink>
                             </div>
                         </div>
@@ -75,10 +76,10 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')">
-                                            Profile
+                                            {{ t('admin.profile') }}
                                         </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            {{ t('admin.logout') }}
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -118,7 +119,7 @@ const showingNavigationDropdown = ref(false);
                 }" class="sm:hidden">
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                            {{ t('profile.navDashboard') }}
                         </ResponsiveNavLink>
                     </div>
 
@@ -135,10 +136,10 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
+                                {{ t('admin.profile') }}
                             </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                {{ t('admin.logout') }}
                             </ResponsiveNavLink>
                         </div>
                     </div>
