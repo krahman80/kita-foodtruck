@@ -661,3 +661,75 @@ PrimeVue ships English and reads `config.locale.<key>` directly rather than deep
 It is pinned statically instead of following the app locale because PrimeVue's only use is the admin DatePicker, and every admin route is already pinned to Japanese by `ForceLocale`. `firstDayOfWeek` stays `0` to preserve the existing Sunday-first layout.
 
 Three `new Error(...)` strings in `Admin/Menu/Index.vue` stay English deliberately — they are swallowed by `catch {}` and never rendered.
+
+---
+
+## 18. Sprint 6 implementation record — hardening
+
+**Scope:** §4E (Japanese typography), §4F (guardrails), §7 phase 5. **Status: complete.**
+
+Sprint 6 corrected one of this plan's own estimates. It budgeted **−10 JA keys** for dead-key removal, but there were **no dead keys left to remove** — Sprint 5 had already consumed them (`Dashboard.vue`, `Register.vue` and 6 `auth.register*` keys per locale). Measured rather than assumed: 256 JA keys and 186 EN keys are defined, and all 256 are referenced by a component.
+
+### 18.1 Files changed
+
+| File                                   | Change                                                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `resources/css/app.css`                | `body:lang(ja)` line-height 1.75 → **1.8**; added `overflow-wrap: break-word`. New `@layer utilities` block neutralizing `uppercase` and wide tracking under `:lang(ja)`. |
+| `tests/Unit/TranslationParityTest.php` | **New.** Four guardrail tests.                                                                                                                                            |
+
+### 18.2 Typography — one rule instead of nineteen edits
+
+`uppercase tracking-widest` appears **19 times across 14 files**. Editing each call site would have been churn, and would have stripped styling that is correct in English. Both are neutralised once, scoped to `:lang(ja)`:
+
+```css
+@layer utilities {
+  :lang(ja) .uppercase {
+    text-transform: none;
+  }
+  :lang(ja) [class*="tracking-"] {
+    letter-spacing: normal;
+  }
+}
+```
+
+`:lang(ja)` supplies the extra specificity needed to beat the plain utility inside the same layer, so no `!important` is required. The attribute selector also catches arbitrary values such as `tracking-[0.18em]`. Because `<html lang>` already follows the locale, the English toggle keeps its original styling for free — verified below.
+
+For long strings, `overflow-wrap: break-word` was chosen over `word-break`: ordinary Japanese already breaks between characters, and the real failure case is a long unbroken Latin or numeric run that has no break opportunity. `break-word` only engages when the text would otherwise overflow.
+
+### 18.3 Verification
+
+| Check                                | Result                                                                                                                                                    |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`                      | `✓ built in 10.80s`                                                                                                                                       |
+| Built CSS contains all three rules   | `:lang(ja) .uppercase{text-transform:none}`, `:lang(ja) [class*=tracking-]{letter-spacing:normal}`, `:lang(ja){overflow-wrap:break-word;line-height:1.8}` |
+| `php artisan test`                   | **42 passed, 102 assertions** (was 38 / 82)                                                                                                               |
+| JA — `<html lang>`                   | `ja`                                                                                                                                                      |
+| JA — body line-height                | `28.8px` at `16px` = **1.8**                                                                                                                              |
+| JA — `overflow-wrap`                 | `break-word`                                                                                                                                              |
+| JA — 5 sampled `.uppercase` eyebrows | all `text-transform: none`, `letter-spacing: normal`                                                                                                      |
+| JA — 5 sampled tracking elements     | all `letter-spacing: normal`                                                                                                                              |
+| JA — Noto Sans JP                    | loaded, and present in the resolved stack                                                                                                                 |
+| EN (toggled) — eyebrow               | `SAPPORO • 100% HALAL` → `uppercase`, `0.275px` — **styling restored**                                                                                    |
+| EN — body line-height                | `24px` at `16px` = 1.5, the Latin default                                                                                                                 |
+| Toggled back to JA                   | `transform: none`, `spacing: normal` again                                                                                                                |
+
+The English half matters as much as the Japanese half: it shows the rule is scoped to the locale rather than a blanket removal of the styling.
+
+### 18.4 The parity guardrail
+
+`tests/Unit/TranslationParityTest.php` asserts four things:
+
+1. Both tables parse to more than 100 keys. Without this floor, every other assertion would pass vacuously if the pattern ever stopped matching the file.
+2. Every key in `en` exists in `ja`.
+3. No key is defined twice in either table, where the later value silently wins.
+4. Every `t('literal')` key used in a component is defined somewhere.
+
+Direction 2 is the one that matters, and only that direction: keys present in `ja` but absent from `en` are **intentional** — admin, profile and the reset/verify half of auth are Japanese-only, pinned by `ForceLocale` — and must not fail the build.
+
+The guardrail was verified by breaking it deliberately. Injecting an `en`-only key, a duplicate key and an undefined usage produced **3 failed, 1 passed**, with the failures naming the offending keys; restoring the files returned the suite to green. A test that has never been observed to fail is not evidence.
+
+### 18.5 Not done, deliberately
+
+- **Moving the FAQ and About prose into `lang/` files** (§4F). That prose is roughly 1,000 words already held in `i18n.js`, which §3 established as the single source of UI strings. Moving it into PHP would mean threading it back through Inertia shared props, for no gain to a translator who can already read `i18n.js`. §8 also rules out new dependencies, which is what a JS test runner would have required. The parity test covers the actual risk.
+- **Cross-platform visual confirmation.** Verified on macOS/Chromium only. The stack declares a candidate per platform (Noto Sans JP, then Hiragino, Yu Gothic, Meiryo) and Noto Sans JP is confirmed loading, but Windows and Android rendering needs the client's own devices.
+- **The brand wordmark's tracking in English.** The wordmark is always `キタハラルチリドッグス` (§6) but carries `tracking-tight`, so in the EN locale it picks up `-0.5px` of Latin-style negative tracking while JA renders it `normal`. That is about 3% at body size and not visible in practice; fixing it would mean a locale exception for a single element.

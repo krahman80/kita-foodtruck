@@ -55,7 +55,15 @@ body {
  utility are tuned alongside their translated copy in the later sprints.
 */
 body:lang(ja) {
-    line-height: 1.75;
+    line-height: 1.8;
+
+    /*
+     Japanese has no inter-word spaces, so a long unbroken run — a URL, a Latin
+     product name, a long address — gives the line-breaker no opportunity and
+     can overflow a narrow column. `break-word` only breaks when the text would
+     otherwise overflow, so ordinary Japanese wrapping is untouched.
+    */
+    overflow-wrap: break-word;
 }
 
 h1,
@@ -77,4 +85,31 @@ h4,
 
 .max-w-layout {
     max-width: 1140px;
+}
+
+/* 5. Japanese typography corrections
+   Latin-first conventions that actively hurt Japanese, neutralised whenever the
+   document is Japanese. `initLocale()` / `toggleLocale()` keep `<html lang>` in
+   sync, so these apply in the JA locale only — the EN toggle keeps its original
+   styling. Specificity beats the plain utility, so both rules win inside the
+   utilities layer without `!important`. */
+@layer utilities {
+    /*
+     `uppercase` cannot affect kana or kanji: it only pays for a text transform
+     that does nothing. Every eyebrow, badge, button and table header in this app
+     now holds Japanese text.
+    */
+    :lang(ja) .uppercase {
+        text-transform: none;
+    }
+
+    /*
+     Wide tracking exists to open up Latin letterforms. Japanese is not
+     letter-spaced, and a wide value visually splits words that should read as a
+     single unit. The attribute selector is deliberate: it also catches the
+     arbitrary values, such as `tracking-[0.18em]`.
+    */
+    :lang(ja) [class*="tracking-"] {
+        letter-spacing: normal;
+    }
 }
