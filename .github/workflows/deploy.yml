@@ -13,12 +13,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Set PHP runner version to 8.4 to match Hostinger
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3"
+          php-version: "8.4"
 
-      # 1. Install PHP dependencies inside GitHub Actions runner
+      # 1. Install PHP dependencies natively for PHP 8.4
       - name: Install PHP Dependencies
         run: composer install --prefer-dist --no-progress --no-interaction --optimize-autoloader
         working-directory: project
@@ -29,14 +30,14 @@ jobs:
         with:
           node-version: "20"
 
-      # 3. Build Vue & Inertia assets (generates project/public/build)
+      # 3. Build Vue & Inertia assets
       - name: Install & Build Assets
         run: |
           npm ci
           npm run build
         working-directory: project
 
-      # 4. Upload build to Hostinger (excluding node_modules and .env)
+      # 4. Upload build to Hostinger
       - name: Sync Files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
