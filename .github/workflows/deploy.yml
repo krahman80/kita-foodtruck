@@ -1,0 +1,56 @@
+name: Deploy to Hostinger Subdomain
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  web-deploy:
+    name: Deploy Subdomain
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      # 1. Install Composer dependencies in GitHub Actions
+      - name: Install PHP Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --optimize-autoloader
+        working-directory: project
+
+      # 2. Setup Node.js in GitHub Actions (Not on Hostinger)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 3. Compile Vue & Inertia assets into static files (project/public/build)
+      - name: Install & Build Assets
+        run: |
+          npm ci
+          npm run build
+        working-directory: project
+
+      # 4. Upload everything (including compiled public/build folder) to Hostinger
+      - name: Sync Files via FTP
+        uses: SamKirsch/ftp-deploy-action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_DIR }} # Your subdomain folder on Hostinger
+          local-dir: ./project/
+          # 1. Removes old unused files from Hostinger
+          dangerous-clean-slate: true
+          # 2. NEVER delete runtime files (like .env or user uploads) on Hostinger
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.env
+            **/storage/app/public/**
+            **/storage/logs/**
