@@ -16,41 +16,42 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.3"
 
-      # 1. Install Composer dependencies in GitHub Actions
+      # 1. Install PHP dependencies inside GitHub Actions runner
       - name: Install PHP Dependencies
         run: composer install --prefer-dist --no-progress --no-interaction --optimize-autoloader
         working-directory: project
 
-      # 2. Setup Node.js in GitHub Actions (Not on Hostinger)
+      # 2. Setup Node.js in GitHub Actions
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      # 3. Compile Vue & Inertia assets into static files (project/public/build)
+      # 3. Build Vue & Inertia assets (generates project/public/build)
       - name: Install & Build Assets
         run: |
           npm ci
           npm run build
         working-directory: project
 
-      # 4. Upload everything (including compiled public/build folder) to Hostinger
+      # 4. Upload build to Hostinger (excluding node_modules and .env)
       - name: Sync Files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_DIR }} # Your subdomain folder on Hostinger
+          server-dir: ${{ secrets.FTP_DIR }}
           local-dir: ./project/
-          # 1. Removes old unused files from Hostinger
-          dangerous-clean-slate: true
-          # 2. NEVER delete runtime files (like .env or user uploads) on Hostinger
+          protocol: ftps
+          port: 21
+          security: strict
           exclude: |
             **/.git*
             **/.git*/**
             **/.env
+            **/node_modules/**
             **/storage/app/public/**
             **/storage/logs/**
