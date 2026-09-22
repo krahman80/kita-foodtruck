@@ -46,6 +46,10 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_DIR }}
           local-dir: ./project/
+          protocol: ftps # Enforces explicit FTPS
+          port: 21 # Sets explicit connection port
+          security: loose # Prevents certificate domain/IP mismatch errors
+          timeout: 60000 # Extends timeout to prevent sudden socket closures
           exclude: |
             **/.git*
             **/.git*/**
@@ -53,3 +57,4 @@ jobs:
             **/node_modules/**
             **/storage/app/public/**
             **/storage/logs/**
+            **/vendor/**
