@@ -23,5 +23,10 @@
         "leaflet": "^1.9.4",
         "primeicons": "^8.0.0",
         "primevue": "^4.5.5"
+    },
+    "overrides": {
+        "vite": {
+            "rollup": "npm:@rollup/wasm-node"
+        }
     }
 }
